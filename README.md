@@ -1,4 +1,4 @@
-# Ticketregognition Web
+# Ticketrecognition Web
 Project developed as part of module "Web Programming" at [Bern University of Applied Sciences BFH](https://www.bfh.ch).
 
 ## Technology used
