@@ -18,7 +18,7 @@ services:
        APACHE_VERSION: ${APACHE_VERSION}
     depends_on:
       - php
-      - mysql
+      - db
     networks:
       - frontend
       - backend
@@ -27,13 +27,13 @@ services:
     volumes:
       - ${PROJECT_ROOT}/:/var/www/html/
     container_name: apache
-  mysql:
+  db:
     image: mysql:${MYSQL_VERSION:-latest}
     restart: always
     ports:
       - "3306:3306"
     volumes:
-            - data:/var/lib/mysql
+      - data:/var/lib/mysql
     networks:
       - backend
     environment:
@@ -41,7 +41,7 @@ services:
       MYSQL_DATABASE: "${DB_NAME}"
       MYSQL_USER: "${DB_USERNAME}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
-    container_name: mysql
+    container_name: db
 networks:
   frontend:
   backend:

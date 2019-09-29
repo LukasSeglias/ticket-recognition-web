@@ -1,9 +1,9 @@
 # Ticketregognition Web
-Project 
+Project developed as part of module "Web Programming" at [Bern University of Applied Sciences BFH](https://www.bfh.ch).
 
 ## Technology used
-* [PHP](https://www.php.net)
-* [JavaScript](https://developer.mozilla.org/de/docs/Web/JavaScript)
+* Server: [PHP](https://www.php.net)
+* Client: [JavaScript](https://developer.mozilla.org/de/docs/Web/JavaScript)
 * Containerization: [Docker](https://www.docker.com/)
 * CSS-Framework: [Bootstrap](http://getbootstrap.com)
 * PHP dependency manager: [Composer](https://getcomposer.org/)

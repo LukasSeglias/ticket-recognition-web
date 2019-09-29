@@ -1,6 +1,6 @@
 <?php
 namespace CTI;
-use \mysqli;
+use \PDO;
 
 require_once './vendor/autoload.php';
 require_once './i18n/i18n.php';
@@ -77,15 +77,16 @@ echo $templatingEngine->render('index.html', [
 ]);
 
 
-$host = 'mysql';
+$host = 'db';
 $user = 'root';
 $pass = 'rootpassword';
-$conn = new mysqli($host, $user, $pass);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} else {
-    echo "Connected to MySQL successfully!";
+try {
+   $dbh = new PDO('mysql:host=db;port=3306', $user, $pass);
+   
+} catch (PDOException $e) {
+   print "Error!: " . $e->getMessage() . "<br/>";
+   die();
 }
 
 ?>
