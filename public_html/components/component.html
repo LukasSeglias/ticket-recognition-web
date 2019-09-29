@@ -1,0 +1,3 @@
+{% macro component(obj) %}
+	{% include obj.template() with obj.context() only %}
+{% endmacro %}

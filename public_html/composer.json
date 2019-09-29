@@ -1,0 +1,8 @@
+{
+    "require": {
+		"php": "^7.0",
+        "twig/twig": "^2.0",
+		"philipp15b/php-i18n": "4.0.1",
+        "twig/extensions": "^1.5"
+    }
+}
