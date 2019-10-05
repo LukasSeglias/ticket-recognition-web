@@ -10,6 +10,10 @@ $i18n->setFilePath('./i18n/lang_{LANGUAGE}.ini');
 $i18n->init();
 
 // 'Change' namespace of L-class to our own
-class_alias('L', '\CTI\L');
+class_alias('L', '\CTI\Texts');
+
+function Texts($key, $args) {
+    return L($key, $args);
+}
 
 ?>

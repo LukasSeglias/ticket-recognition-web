@@ -2,80 +2,60 @@
 namespace CTI;
 use \PDO;
 
-require_once './vendor/autoload.php';
-require_once './i18n/i18n.php';
-require_once './templates/templates.php';
-require_once './crud_mode.php';
-require_once './validation.php';
-require_once './component.php';
-require_once './components/login/login_form.php';
-require_once './components/navigation/navigation.php';
-require_once './components/ticket/ticket_form.php';
-require_once './components/ticket/ticketposition_list.php';
-require_once './model/ticket.php';
-require_once './model/user.php';
+require_once './bootstrap.php';
 
-class InputComponentState {
-	
-	private $value;
-	private $validationResult;
-	private $disabled;
-	
-	function __construct($value, $validationResult, $disabled) {
-		$this->value = $value;
-		$this->validationResult = $validationResult;
-		$this->disabled = $disabled;
-	}
+$path = $_SERVER['PATH_INFO'];
 
-	public function value() {
-		return $this->value;
-	}
-	
-	public function validationResult() {
-		return $this->validationResult;
-	}
-	
-	public function disabled() {
-		return $this->disabled;
-	}
+if($path === '/index.php') {
+
+	// TODO: homepage
+
+} elseif($path === '/tickets.php') {
+
+	require_once './components/ticket/tickets.php';
+	bootstrap('tickets', function ($context) {
+		return new TicketSearchPage($context);
+	});
+
+} elseif($path === '/ticket_detail.php') {
+
+	require_once './components/ticket/ticket_detail.php';
+	bootstrap('tickets', function ($context) {
+		return new TicketDetailPage($context);
+	});
+
+} else if($path === '/designs.php') {
+
+	require_once './components/designer/designs.php';
+	bootstrap('designs', function ($context) {
+		return new DesignSearchPage($context);
+	});
+
+} elseif($path === '/tours.php') {
+
+	require_once './components/tour/tours.php';
+	bootstrap('tours', function ($context) {
+		return new TourSearchPage($context);
+	});
+
+} elseif($path === '/ticketpositions.php') {
+
+	require_once './components/ticketposition/ticketpositions.php';
+	bootstrap('ticketpositions', function ($context) {
+		return new TicketpositionSearchPage($context);
+	});
+
+} elseif($path === '/login.php') {
+
+	require_once './components/login/login.php';
+	bootstrap(NULL, function ($context) {
+		return new LoginPage($context);
+	});
+
+} else {
+
+	// TODO: NOT FOUND PAGE
 }
-
-
-$ticket = new Ticket(1203, 'TO 3B', 'TC765', '2019-09-27', [
-	new TicketPosition("B6123", "Bootsfahrt auf dem Bodensee"),
-	new TicketPosition("C2443", "Romantisches Abendessen"),
-	new TicketPosition("A1236", "Tageskarte Seilbahn")
-]);
-
-$templatingEngine = new \CTI\TemplatingEngine();
-echo $templatingEngine->render('index.html', [
-	'loginForm' => new LoginFormComponent(new LoginFormComponentState(
-		new InputComponentState('', ValidationResult::invalid('Invalid email'), false),
-		new InputComponentState('', ValidationResult::none(), false)
-	)),
-	'ticketFormCreate' => new TicketFormComponent(new TicketFormComponentState(
-		$ticket, CrudMode::create()
-	)),
-	'ticketPositionListCreate' => new TicketPositionListComponent(new TicketPositionListComponentState(
-		$ticket, CrudMode::create()
-	)),
-	'ticketFormView' => new TicketFormComponent(new TicketFormComponentState(
-		$ticket, CrudMode::view()
-	)),
-	'ticketPositionListView' => new TicketPositionListComponent(new TicketPositionListComponentState(
-		$ticket, CrudMode::view()
-	)),
-	'navigation' => new NavigationComponent(new NavigationComponentState(
-		[
-			new NavigationItem('#', L::navigation_designer, true),
-			new NavigationItem('#', L::navigation_tickets, false),
-			new NavigationItem('#', L::navigation_tours, false),
-			new NavigationItem('#', L::navigation_ticketpositions, false)
-		],
-		new User('seglias', 'Lukas', 'Seglias')
-	))
-]);
-
 
 $host = 'db';
 $user = 'root';
@@ -88,5 +68,4 @@ try {
    print "Error!: " . $e->getMessage() . "<br/>";
    die();
 }
-
 ?>

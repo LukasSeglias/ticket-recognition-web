@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<link rel="stylesheet" href="lib/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="lib/open-iconic/font/css/open-iconic-bootstrap.css">
+	
+	<style>
+		/* Source: https://stackoverflow.com/a/49554284 */
+		a.card-link,
+		a.card-link:hover {
+			color: inherit;
+		}
+		
+		a.card-link:hover .card {
+			box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+		}
+		
+		.voucher-card img {
+			height: 10rem;
+		}
+
+	</style>
+
+	{% block head %}
+	{% endblock %}
+</head>
+
+<body>
+	{% block content %}
+	{% endblock %}
+	
+	<script src="lib/jquery-3.4.1.slim.min.js"></script>
+	<script src="lib/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+	{% block scripts %}
+	{% endblock %}
+</body>
+
+</html>

@@ -3,22 +3,22 @@ namespace CTI;
 
 class Ticket {
 	
-	private $nr;
+	private $number;
 	private $touroperator;
 	private $tourcode;
 	private $date;
 	private $positions;
 	
-	function __construct($nr, $touroperator, $tourcode, $date, $positions) {
-		$this->nr = $nr;
+	function __construct($number, $touroperator, $tourcode, $date, $positions) {
+		$this->number = $number;
 		$this->touroperator = $touroperator;
 		$this->tourcode = $tourcode;
 		$this->date = $date;
 		$this->positions = $positions;
 	}
 	
-	public function nr() {
-		return $this->nr;
+	public function number() {
+		return $this->number;
 	}
 	
 	public function touroperator() {
@@ -40,16 +40,16 @@ class Ticket {
 
 class TicketPosition {
 	
-	private $nr;
+	private $number;
 	private $title;
 	
-	function __construct($nr, $title) {
-		$this->nr = $nr;
+	function __construct($number, $title) {
+		$this->number = $number;
 		$this->title = $title;
 	}
 	
-	public function nr() {
-		return $this->nr;
+	public function number() {
+		return $this->number;
 	}
 	
 	public function title() {

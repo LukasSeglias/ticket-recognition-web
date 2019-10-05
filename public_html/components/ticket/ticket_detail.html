@@ -5,34 +5,19 @@
 
 {% block content %}
 	{{ component(navigation) }}
-
+	
 	<main class="mb-3">
 		<div class="container">
 			
-			{{ component(loginForm) }}
-			
-			
 			<div class="row">
 				<div class="col-12">
-					{{ component(ticketFormView) }}
+					{{ component(ticketForm) }}
 				</div>
 			</div>
 			
 			<div class="row">
 				<div class="col-12">
-					{{ component(ticketPositionListView) }}
-				</div>
-			</div>
-			
-			<div class="row">
-				<div class="col-12">
-					{{ component(ticketFormCreate) }}
-				</div>
-			</div>
-			
-			<div class="row">
-				<div class="col-12">
-					{{ component(ticketPositionListCreate) }}
+					{{ component(ticketpositionList) }}
 				</div>
 			</div>
 			

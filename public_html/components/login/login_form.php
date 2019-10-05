@@ -1,19 +1,22 @@
 <?php
 namespace CTI;
 
+require_once './components/component.php';
+require_once './components/state.php';
+
 class LoginFormComponent implements Component {
 	
 	private $state;
 	
-	function __construct($state) {
+	function __construct(LoginFormComponentState $state) {
 		$this->state = $state;
 	}
 	
-	public function template() {
+	public function template() : string {
 		return 'login/login_form.html';
 	}
 	
-	public function context() {
+	public function context() : array {
 		return [
 			'email' => $this->state->email(),
 			'password' => $this->state->password()
@@ -26,16 +29,16 @@ class LoginFormComponentState {
 	private $email;
 	private $password;
 	
-	function __construct($email, $password) {
+	function __construct(InputComponentState $email, InputComponentState $password) {
 		$this->email = $email;
 		$this->password = $password;
 	}
 	
-	public function email() {
+	public function email() : InputComponentState {
 		return $this->email;
 	}
 	
-	public function password() {
+	public function password() : InputComponentState {
 		return $this->password;
 	}
 }

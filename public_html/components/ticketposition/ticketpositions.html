@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% from 'component.html' import component %}
+
+{% block title %}CTI{% endblock %}
+
+{% block content %}
+	{{ component(navigation) }}
+	
+	<main class="mb-3">
+		<div class="container">
+			
+			<div class="row">
+				<div class="col-12">
+					<div class="card my-3">
+						<div class="card-header">
+							Ticketpositions
+						</div>
+						<div class="card-body">
+							<form>
+								<div class="form-row">
+									<div class="form-group col-12 col-sm-6">
+										<label for="code">Code</label>
+										<input type="text" class="form-control" id="code" placeholder="Code">
+									</div>
+								</div>
+								<button type="submit" class="btn btn-primary">Search</button>
+								<button type="reset" class="btn">Reset</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-12">
+					<div class="card mb-3">
+						<div class="card-header">
+							Results
+						</div>
+						
+						<ul class="list-group list-group-flush">
+							<a href="#" class="list-group-item list-group-item-action">
+								Dapibus ac facilisis in
+							</a>
+							<a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+							<a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+							<a href="#" class="list-group-item list-group-item-action" tabindex="-1" aria-disabled="true">Vestibulum at eros</a>
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</main>
+{% endblock %}

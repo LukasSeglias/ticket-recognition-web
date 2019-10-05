@@ -7,7 +7,7 @@
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
 			{% for item in items %}
-				{% set activeClass = item.active() ? 'active' : '' %}
+				{% set activeClass = (item.key == activeKey) ? 'active' : '' %}
 				<li class="nav-item {{ activeClass }}">
 					<a class="nav-link" href="{{ item.href() }}">{{ item.label() }}</a>
 				</li>

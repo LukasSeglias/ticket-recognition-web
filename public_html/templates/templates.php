@@ -17,11 +17,11 @@ class TemplatingEngine {
 			'cache' => './tmp/cache/twig',
 		]);
 		$this->twig->addFilter(new TwigFilter('translated', function ($key, $args = []) {
-			return L($key, $args);
+			return Texts($key, $args);
 		}));
 	}
 	
-	public function render($template, $context) {
+	public function render($template, $context) : string {
 		return $this->twig->render($template, $context);
 	}
 }

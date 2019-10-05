@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% from 'component.html' import component %}
+
+{% block title %}{{ "login_title"|translated }}{% endblock %}
+
+{% block content %}
+
+	<main class="mb-3">
+		<div class="container">
+			{{ component(form) }}
+		</div>
+	</main>
+{% endblock %}

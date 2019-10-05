@@ -11,7 +11,7 @@ class ValidationResult {
 		return new ValidationResult(true, true, null);
 	}
 	
-	public static function invalid($message) {
+	public static function invalid(string $message) {
 		return new ValidationResult(true, false, $message);
 	}
 	
@@ -33,7 +33,7 @@ class ValidationResult {
 		return $this->validated && !$this->valid;
 	}
 	
-	public function message() {
+	public function message() : string {
 		return $this->message;
 	}
 }
