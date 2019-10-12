@@ -18,16 +18,16 @@ class Navigation implements Component {
 
 		$this->component = new NavigationComponent(new NavigationComponentState(
 			[
-				new NavigationItem(self::KEY_DESIGNS, 'designs.php', Texts::navigation_designer, [
+				new NavigationItem(self::KEY_DESIGNS, '/admin/designs.php', Texts::navigation_designer, [
 
 				]),
-				new NavigationItem(self::KEY_TICKETS, 'tickets.php', Texts::navigation_tickets, [
+				new NavigationItem(self::KEY_TICKETS, '/admin/tickets.php', Texts::navigation_tickets, [
 
 				]),
-				new NavigationItem(self::KEY_TOURS, 'tours.php', Texts::navigation_tours, [
+				new NavigationItem(self::KEY_TOURS, '/admin/tours.php', Texts::navigation_tours, [
 
 				]),
-				new NavigationItem(self::KEY_TICKETPOSITIONS, 'ticketpositions.php', Texts::navigation_ticketpositions, [
+				new NavigationItem(self::KEY_TICKETPOSITIONS, '/admin/ticketpositions.php', Texts::navigation_ticketpositions, [
 
 				])
 			],
@@ -72,7 +72,7 @@ class NavigationComponentState {
 	private $activeKey;
 	private $user;
 	
-	function __construct(array $items, string $activeKey, User $user) {
+	function __construct(array $items, $activeKey, User $user) {
 		$this->items = $items;
 		$this->activeKey = $activeKey;
 		$this->user = $user;
@@ -82,7 +82,7 @@ class NavigationComponentState {
 		return $this->items;
 	}
 
-	public function activeKey() : string {
+	public function activeKey() {
 		return $this->activeKey;
 	}
 	

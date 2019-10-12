@@ -14,7 +14,7 @@ class TemplatingEngine {
 	function __construct() {
 		$loader = new FilesystemLoader('./components');
 		$this->twig = new Environment($loader, [
-			'cache' => './tmp/cache/twig',
+			//'cache' => './tmp/cache/twig',
 		]);
 		$this->twig->addFilter(new TwigFilter('translated', function ($key, $args = []) {
 			return Texts($key, $args);

@@ -3,7 +3,7 @@ namespace CTI;
 
 require_once './context.php';
 require_once './components/page.php';
-require_once './templates/templates.php';
+require_once './templates.php';
 
 class App {
 

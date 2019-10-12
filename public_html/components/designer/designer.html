@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% from 'component.html' import component %}
+
+{% block title %}CTI{% endblock %}
+
+{% block content %}
+	{{ component(navigation) }}
+
+	<style>
+
+		#canvas-container {
+			padding: 15px;
+		}
+	
+		canvas {
+			border: 1px solid #000;
+		}
+	
+		#editor-tools {
+			position: absolute;
+			top: 0px; 
+			bottom: 0px;
+			right: 0px;
+			max-height: 100%;
+			overflow: auto;
+			padding-top: 15px;
+			padding-right: 15px;
+		}
+	
+		.editor-buttons {
+			padding: 15px 0px;
+		}
+	
+		</style>
+
+	<main>
+		<div id="canvas-container">
+			<canvas tabindex='1'></canvas>
+		</div>
+		<div id="editor-tools">
+			<div>
+				Upload Configfile: <input type='file' accept="application/json" multiple id="configFileUpload" />
+			</div>
+			<div class="editor-buttons">
+				<button type="button" class="btn btn-primary" id="add-text-button">
+					Add Text
+				</button>
+				<button type="button" class="btn btn-warning" id="cancel-button">
+					Cancel
+				</button>
+				<button type="button" class="btn btn-primary" onclick="downloadOutput()">
+					Download
+				</button>
+			</div>
+
+			<div class="card mb-3">
+				<div class="card-header">
+					Template
+				</div>
+				<div class="card-body">
+					<form class="design-form mb-0">
+						<div class="form-row">
+							<div class="col">
+								<div class="form-group">
+									<label>Key</label>
+									<input type="text" class="form-control" name="key" placeholder="Key" required>
+								</div>
+								<div class="custom-file">
+									<input type="file" class="custom-file-input" id="template-image-upload">
+									<label class="custom-file-label">Choose Image</label>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div class="card mb-3">
+				<div class="card-header">
+					Text
+				</div>
+				<div class="card-body">
+					<form class="text-form mb-0">
+						<div class="form-row">
+							<div class="col">
+								<div class="form-group">
+									<label>Key</label>
+									<input type="text" class="form-control" name="key" placeholder="Key" required disabled>
+								</div>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col">
+								<div class="form-group">
+									<label>X</label>
+									<input type="number" class="form-control" name="x" placeholder="X-Coordinate" required disabled>
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group">
+									<label>Y</label>
+									<input type="number" class="form-control" name="y" placeholder="Y-Coordinate" required disabled>
+								</div>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col">
+								<div class="form-group">
+									<label>Width</label>
+									<input type="number" class="form-control" name="width" placeholder="Width" required disabled>
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group">
+									<label>Height</label>
+									<input type="number" class="form-control" name="height" placeholder="Height" required disabled>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div class="card">
+				<div class="card-header">
+					Texts
+				</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">Cras justo odio</li>
+					<li class="list-group-item">Dapibus ac facilisis in</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+					<li class="list-group-item">Vestibulum at eros</li>
+				</ul>
+			</div>
+
+		</div>
+	</main>
+
+	<script type="module">
+		import {SelectAndMoveMode} from '/components/designer/editor/mode/SelectAndMoveMode.js';
+		import {RectangleDrawingMode} from '/components/designer/editor/mode/RectangleDrawingMode.js';
+		import {TextCreateMode} from '/components/designer/editor/mode/TextCreateMode.js';
+		import {DrawingModeAdapter, DrawingModeListAdapter} from '/components/designer/editor/mode/DrawingModeAdapters.js';
+		import {TextForm} from '/components/designer/editor/input/TextForm.js';
+		import {Editor} from '/components/designer/editor/Editor.js';
+		import {EditorTools} from '/components/designer/editor/EditorTools.js';
+		import {ImageFilesReader} from '/components/designer/io/ImageFilesReader.js';
+		import {FileUploadInput} from '/components/designer/io/FileUploadInput.js';
+		import {FileDownloader} from '/components/designer/io/FileDownloader.js';
+		import {TicketText} from '/components/designer/ticket/TicketText.js';
+		import {TextSerializer} from '/components/designer/ticket/TextSerializer.js';
+		import {DrawingCanvas} from '/components/designer/canvas/DrawingCanvas.js';
+		import {InteractionCanvas} from '/components/designer/canvas/InteractionCanvas.js';
+		import {BoundingBox} from '/components/designer/canvas/primitives/BoundingBox.js';
+		import {RestrictedBoundingBox} from '/components/designer/canvas/primitives/RestrictedBoundingBox.js';
+		import {DrawableImage} from '/components/designer/canvas/drawables/DrawableImage.js';
+		import {DrawableRectangle} from '/components/designer/canvas/drawables/DrawableRectangle.js';
+		
+		function ConfigFilesReader() {
+			
+			this._files = [];
+			
+			this.read = function(files) {
+				var self = this;
+			
+				for(var fileIndex = 0; fileIndex < files.length; fileIndex++) {
+	
+					var reader = new FileReader();
+					reader.onload = function(event) {
+						var jsonObj = JSON.parse(event.target.result);
+						self._files.push(jsonObj);
+						console.dir(jsonObj);
+					}
+	
+					reader.readAsText(files[fileIndex]);
+				}
+			};
+			
+			this.files = function() {
+				return this._files;
+			};
+			
+			this.clear = function() {
+				return this._files = [];
+			};
+		}
+		
+		function createEditor() {
+			var canvas  = document.querySelector("canvas");
+			var canvasContainer = document.getElementById("canvas-container");
+			var templateImageUploadElement = document.getElementById('template-image-upload');
+			var addTextModeButton = document.querySelector('#add-text-button');
+			var cancelButton = document.querySelector('#cancel-button');
+			var editorToolsElement = document.querySelector('#editor-tools');
+			var textFormElement = editorToolsElement.querySelector('.text-form');
+	
+			function resizeCanvas() {
+				var offsetTop = canvasContainer.offsetTop;
+				var padding = 15;
+				var border = 1;
+
+				var canvasContainerHeight = window.innerHeight - offsetTop;
+
+				canvas.width = window.innerWidth - editorToolsElement.clientWidth - 3*padding - 2*border;
+				canvas.height = canvasContainerHeight - 2*padding - 2*border;
+
+				// Canvas' containers height must be set in order to prevent strange issues with subpixel height
+				canvasContainer.style.height = canvasContainerHeight + "px";
+
+				editorToolsElement.style.top = offsetTop + "px";
+			}
+
+			resizeCanvas();
+	
+			window.onresize = function(event) {
+				resizeCanvas();
+			};
+			
+			var drawingCanvas = new DrawingCanvas(canvas);
+			var interactionCanvas = new InteractionCanvas(canvas);
+
+			var textForm = new TextForm(textFormElement);
+			var editorTools = new EditorTools(editorToolsElement, textForm, drawingCanvas);
+			
+			var templateImageUpload = new FileUploadInput(templateImageUploadElement);
+
+			return new Editor(drawingCanvas, interactionCanvas, templateImageUpload, addTextModeButton, cancelButton, editorTools);
+		}
+		
+		function main() {
+			var configFilesReader = new ConfigFilesReader();
+			var configFileUpload = new FileUploadInput(document.getElementById('configFileUpload'), configFilesReader);
+			
+			var editor = createEditor();
+			
+			function animate() {
+				requestAnimationFrame(animate);
+				
+				editor.draw();
+			}
+			animate();
+		}
+		main();
+	</script>
+{% endblock %}
