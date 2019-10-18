@@ -9,13 +9,21 @@ export class DrawingCanvas {
         this._ctx = canvas.getContext("2d");
         this._layers = [ { visible: true, drawables: [] } ];
         this._currentLayerIndex = 0;
-        this._drawableChangeListener = [];
+        this._drawableChangedListener = [];
+        this._drawableAddedListener = [];
+        this._drawableRemovedListener = [];
     }
 
-    addDrawableChangeListener(listener) {
-        if(listener) {
-            this._drawableChangeListener.push(listener);
-        }
+    addDrawableChangedListener(listener) {
+        if(listener) this._drawableChangedListener.push(listener);
+    }
+
+    addDrawableAddedListener(listener) {
+        if(listener) this._drawableAddedListener.push(listener);
+    }
+
+    addDrawableRemovedListener(listener) {
+        if(listener) this._drawableRemovedListener.push(listener);
     }
     
     drawableRectangle(topLeft, bottomRight) {
@@ -47,29 +55,53 @@ export class DrawingCanvas {
     
     add(drawable) {
         this._layers[this._currentLayerIndex].drawables.push(drawable);
+        this._notifyDrawableAdded(drawable);
     }
     
     replace(oldDrawable, newDrawable) {
-    
-        for(let layerIndex = 0; layerIndex < this._layers.length; layerIndex++) {
-            let layer = this._layers[layerIndex];
-            
-            let index = layer.drawables.indexOf(oldDrawable);
-            if (index > -1) {
-                layer.drawables.splice(index, 1, newDrawable);
-                this._notifyDrawableChange(newDrawable);
-                return;
-            }
+        const indices = this._getIndices(oldDrawable);
+        if(indices) {
+            const layer = this._layers[indices.layerIndex];
+            layer.drawables.splice(indices.drawableIndex, 1, newDrawable);
+            this._notifyDrawableChanged(newDrawable);
+        }
+    }
+
+    remove(drawable) {
+        const indices = this._getIndices(drawable);
+        if(indices) {
+            const layer = this._layers[indices.layerIndex];
+            layer.drawables.splice(indices.drawableIndex, 1);
+            this._notifyDrawableRemoved(drawable);
         }
     }
 
     calculateKey(drawable) {
+        const indices = this._getIndices(drawable);
+        if(indices) {
+            return indices.layerIndex + "-" + indices.drawableIndex;
+        }
+    }
+
+    getByKey(key) {
+        if(key) {
+            const parts = key.split('-');
+            const layerIndex = parts[0];
+            const drawableIndex = parts[1];
+            return this._layers[layerIndex].drawables[drawableIndex];
+        }
+    }
+
+    _getIndices(drawable) {
         for(let layerIndex = 0; layerIndex < this._layers.length; layerIndex++) {
             let layer = this._layers[layerIndex];
             
             let index = layer.drawables.indexOf(drawable);
             if (index > -1) {
-                return layerIndex + "-" + index;
+                return {
+                    layerIndex: layerIndex,
+                    drawableIndex: index
+                };
             }
         }
     }
@@ -90,7 +122,7 @@ export class DrawingCanvas {
         if(drawable && drawable.moveBy) {
 
             drawable.moveBy(dx, dy);
-            this._notifyDrawableChange(drawable);
+            this._notifyDrawableChanged(drawable);
         }
     }
 
@@ -99,20 +131,32 @@ export class DrawingCanvas {
         if(drawable && drawable.resizeBy) {
         
             drawable.resizeBy(deltaWidth, deltaHeight);
-            this._notifyDrawableChange(drawable);
+            this._notifyDrawableChanged(drawable);
             
         } else {
             throw new Error('Tried to resize incompatible drawable');
         }
     }
 
-    _notifyDrawableChange(drawable) {
+    _notifyDrawableChanged(drawable) {
         console.log('key: ' + this.calculateKey(drawable));
-        this._drawableChangeListener.forEach(listener => {
+        this._drawableChangedListener.forEach(listener => {
+            if(listener) listener.call(null, drawable);
+        });
+    }
+
+    _notifyDrawableAdded(drawable) {
+        this._drawableAddedListener.forEach(listener => {
             if(listener) listener.call(null, drawable);
         });
     }
     
+    _notifyDrawableRemoved(drawable) {
+        this._drawableRemovedListener.forEach(listener => {
+            if(listener) listener.call(null, drawable);
+        });
+    }
+
     _foreachLayer(fn, backToFront = true) {
         if(backToFront) {
             for(let layerIndex = 0; layerIndex < this._layers.length; layerIndex++) {

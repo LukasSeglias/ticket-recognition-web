@@ -16,3 +16,11 @@ Small project developed as part of the module "Web Programming" at [Bern Univers
 ## Authors
 * [Luca Ritz](https://github.com/LucaRitz)
 * [Lukas Seglias](https://github.com/LukasSeglias)
+
+## Troubleshooting
+If for some reason you get a "File not found.", then it is likely that mounting the volumes to the docker containers did not work. On Windows 10, I regularly have to enter the following command in a PowerShell that I run as admin:
+```
+Set-NetConnectionProfile -interfacealias "vEthernet (DockerNAT)" -NetworkCategory Private
+```
+After that, in the Docker Desktop settings, disable and re-enable shared drives.
+

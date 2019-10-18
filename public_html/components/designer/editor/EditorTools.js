@@ -7,7 +7,7 @@ export class EditorTools  {
         this._drawingCanvas = drawingCanvas;
         this._textForm = textForm;
 
-        this._drawingCanvas.addDrawableChangeListener((drawable) => {
+        this._drawingCanvas.addDrawableChangedListener((drawable) => {
             if(drawable === this.drawable) {
                 this.bindDrawable(drawable);
             }

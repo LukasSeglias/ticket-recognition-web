@@ -7,15 +7,14 @@
 	{{ component(navigation) }}
 
 	<style>
-
 		#canvas-container {
 			padding: 15px;
 		}
-	
+		
 		canvas {
 			border: 1px solid #000;
 		}
-	
+		
 		#editor-tools {
 			position: absolute;
 			top: 0px; 
@@ -26,12 +25,11 @@
 			padding-top: 15px;
 			padding-right: 15px;
 		}
-	
+		
 		.editor-buttons {
 			padding: 15px 0px;
 		}
-	
-		</style>
+	</style>
 
 	<main>
 		<div id="canvas-container">
@@ -125,24 +123,7 @@
 				<div class="card-header">
 					Texts
 				</div>
-				<ul class="list-group list-group-flush">
-					<li class="list-group-item">Cras justo odio</li>
-					<li class="list-group-item">Dapibus ac facilisis in</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
-					<li class="list-group-item">Vestibulum at eros</li>
+				<ul class="list-group list-group-flush" id="tickettext-list-container">
 				</ul>
 			</div>
 
@@ -161,6 +142,7 @@
 		import {FileUploadInput} from '/components/designer/io/FileUploadInput.js';
 		import {FileDownloader} from '/components/designer/io/FileDownloader.js';
 		import {TicketText} from '/components/designer/ticket/TicketText.js';
+		import {TicketTextList} from '/components/designer/ticket/TicketTextList.js';
 		import {TextSerializer} from '/components/designer/ticket/TextSerializer.js';
 		import {DrawingCanvas} from '/components/designer/canvas/DrawingCanvas.js';
 		import {InteractionCanvas} from '/components/designer/canvas/InteractionCanvas.js';
@@ -202,10 +184,11 @@
 			var canvas  = document.querySelector("canvas");
 			var canvasContainer = document.getElementById("canvas-container");
 			var templateImageUploadElement = document.getElementById('template-image-upload');
-			var addTextModeButton = document.querySelector('#add-text-button');
-			var cancelButton = document.querySelector('#cancel-button');
-			var editorToolsElement = document.querySelector('#editor-tools');
+			var addTextModeButton = document.getElementById('add-text-button');
+			var cancelButton = document.getElementById('cancel-button');
+			var editorToolsElement = document.getElementById('editor-tools');
 			var textFormElement = editorToolsElement.querySelector('.text-form');
+			var ticketTextListElement = document.getElementById('tickettext-list-container');
 	
 			function resizeCanvas() {
 				var offsetTop = canvasContainer.offsetTop;
@@ -234,6 +217,7 @@
 
 			var textForm = new TextForm(textFormElement);
 			var editorTools = new EditorTools(editorToolsElement, textForm, drawingCanvas);
+			var ticketTextList = new TicketTextList(ticketTextListElement, drawingCanvas);
 			
 			var templateImageUpload = new FileUploadInput(templateImageUploadElement);
 

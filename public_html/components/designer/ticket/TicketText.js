@@ -52,4 +52,8 @@ export class TicketText {
     boundingBox() {
         return this._rectangle.boundingBox();
     }
+
+    calculateColor() {
+        this._rectangle.calculateColor();
+    }
 }
