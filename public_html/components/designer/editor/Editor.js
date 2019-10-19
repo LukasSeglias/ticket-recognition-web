@@ -51,6 +51,7 @@ export class Editor {
             this._selectMoveMode.select(text);
             addTextModeButton.disabled = false;
             cancelButton.style.display = "none";
+            text.calculateColor();
         });
         
         addTextModeButton.addEventListener('click', () => {
