@@ -11,6 +11,15 @@ services:
     volumes:
       - ${PROJECT_ROOT}/:/var/www/html/
     container_name: php
+  auth:
+    build: 
+      context: './keycloak/'
+    networks:
+      - backend
+    environment:
+      KEYCLOAK_USER: "admin"
+      KEYCLOAK_PASSWORD: "admin"
+    container_name: auth
   apache:
     build:
       context: './apache/'
@@ -19,6 +28,7 @@ services:
     depends_on:
       - php
       - db
+      - auth
     networks:
       - frontend
       - backend

@@ -2,17 +2,23 @@
 namespace CTI;
 
 require_once './bootstrap.php';
+require_once './auth/authorizer.php';
 
 $path = $_SERVER['PATH_INFO'];
+$authorizer = new Authorizer;
 
 if($path === '/index.php') {
-
 	require_once './components/home/home.php';
 	bootstrap(NULL, function ($context) {
 		return new HomePage($context);
 	});
 
 } elseif($path === '/scanner.php') {
+
+	if (!$authorizer->verifyToken('scanner')) {
+		error_log("Token not valid");
+		die();
+	}
 
 	require_once './components/scanner/scanner.php';
 	bootstrap(NULL, function ($context) {
@@ -28,7 +34,10 @@ if($path === '/index.php') {
 
 } elseif(substr($path, 0, strlen("/admin/")) === "/admin/") {
 
-	// TODO: check if logged in etc.
+	if (!$authorizer->verifyToken('admin')) {
+		error_log("Token not valid");
+		die();
+	}
 
 	if($path === '/admin/tickets.php') {
 
