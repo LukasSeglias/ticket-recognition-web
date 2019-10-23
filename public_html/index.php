@@ -3,9 +3,11 @@ namespace CTI;
 
 require_once './bootstrap.php';
 require_once './auth/authorizer.php';
+require_once './service/router.php';
 
 $path = $_SERVER['PATH_INFO'];
 $authorizer = new Authorizer;
+$router = new Router;
 
 if($path === '/index.php') {
 	require_once './components/home/home.php';
@@ -17,7 +19,8 @@ if($path === '/index.php') {
 
 	if (!$authorizer->verifyToken('scanner')) {
 		error_log("Token not valid");
-		die();
+		$router->redirect("/");
+		$router->render();
 	}
 
 	require_once './components/scanner/scanner.php';
@@ -36,7 +39,8 @@ if($path === '/index.php') {
 
 	if (!$authorizer->verifyToken('admin')) {
 		error_log("Token not valid");
-		die();
+		$router->redirect("/");
+		$router->render();
 	}
 
 	if($path === '/admin/tickets.php') {
