@@ -1,6 +1,26 @@
 FROM jboss/keycloak
 
-ADD realm_import.json /opt/jboss/tools/realm_import.json
-ENTRYPOINT [ "/opt/jboss/tools/docker-entrypoint.sh" ]
+USER root
 
-CMD ["-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "-Dkeycloak.import=/opt/jboss/tools/realm_import.json"]
+# Entrypoint
+COPY docker-entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Config import script
+COPY config-import.sh /opt/config-import.sh
+RUN chmod +x /opt/config-import.sh
+
+# Configuration
+COPY config $JBOSS_HOME/config
+RUN chmod -R +x $JBOSS_HOME/config/*.sh
+
+# Permissions
+RUN chgrp -R 0 $JBOSS_HOME && \
+    chmod -R g=u $JBOSS_HOME && \
+    chmod -R g=u /etc/passwd
+
+USER 1000
+
+EXPOSE 8080
+
+ENTRYPOINT [ "/entrypoint.sh" ]
