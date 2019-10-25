@@ -27,7 +27,13 @@
 	</style>
 
 	<script src="http://localhost:90/auth/js/keycloak.js"></script>
-    <script>
+    
+	{% block head %}
+	{% endblock %}
+</head>
+
+<body>
+	<script>
 		const TEN = 10;
         var keycloak = Keycloak({
     		url: 'http://localhost:90/auth',
@@ -35,7 +41,28 @@
     		clientId: 'webserver'
 		});
 		keycloak.onTokenExpired = function() {
-			keycloak.updateToken(5)
+			updateToken();
+		};
+		
+		if (findCookie('ACCESS_TOKEN')) {
+			keycloak.init({ onLoad: 'login-required', token: findCookie('ACCESS_TOKEN'), refreshToken: findCookie('REFRESH_TOKEN'), idToken: findCookie('IDENTITY_TOKEN')})
+				.success(function(authenticated) {
+					updateToken();
+        		})
+		} else {
+			keycloak.init({ onLoad: 'login-required'})
+				.success(function(authenticated) {
+					if (authenticated) {
+						updateAccessTokenCookie(keycloak.token);
+					}
+				})
+				.error(function() {
+					resetAccessTokenCookie();
+				});
+		}
+		
+		function updateToken() {
+			keycloak.updateToken()
 				.success(function(refreshed) {
 					if (refreshed) {
 						updateAccessTokenCookie(keycloak.token);
@@ -44,33 +71,25 @@
 				.error(function() {
 					resetAccessTokenCookie();
 				});
-		};
-        keycloak.init({ onLoad: 'login-required', checkLoginIframe: false })
-			.success(function(authenticated) {
-				if (authenticated) {
-            		updateAccessTokenCookie(keycloak.token);
-				}
-        	})
-			.error(function() {
-            	resetAccessTokenCookie();
-        	});
+		}
 
 		function updateAccessTokenCookie(accessToken) {
 			document.cookie = "ACCESS_TOKEN=" + keycloak.token + "; path=/";
 			document.cookie = "REFRESH_TOKEN=" + keycloak.refreshToken + "; path=/";
+			document.cookie = "IDENTITY_TOKEN=" + keycloak.idToken + "; path=/";
 		}
 
 		function resetAccessTokenCookie() {
 			document.cookie = "ACCESS_TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
 			document.cookie = "REFRESH_TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+			document.cookie = "IDENTITY_TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+		}
+
+		function findCookie(name) {
+  			var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  			if (match) return match[2];
 		}
     </script>
-
-	{% block head %}
-	{% endblock %}
-</head>
-
-<body>
 	{% block content %}
 	{% endblock %}
 	

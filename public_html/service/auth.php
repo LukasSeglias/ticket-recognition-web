@@ -65,17 +65,23 @@ class AuthService {
             return false;
         }
 
-        $fetcher = new JWKKeycloakFetcher('http://auth:8080/auth/realms/cti/protocol/openid-connect/certs');
+        try {
+             $fetcher = new JWKKeycloakFetcher('http://auth:8080/auth/realms/cti/protocol/openid-connect/certs');
 
-        $config = [
-            'supported_algs' => [$parsed->{'keys'}[0]->{'alg'}],
-            'valid_audiences' => ['account'],
-            'authorized_iss' => ['http://localhost:90/auth/realms/cti'],
-            'jwks_path' => ['protocol/openid-connect/certs']
-        ];
+            $config = [
+                'supported_algs' => [$parsed->{'keys'}[0]->{'alg'}],
+                'valid_audiences' => ['account'],
+                'authorized_iss' => ['http://localhost:90/auth/realms/cti'],
+                'jwks_path' => ['protocol/openid-connect/certs']
+            ];
 
-        $verifier = new JWTVerifier($config, $fetcher);
-        $decoded_token = $verifier->verifyAndDecode($_COOKIE['ACCESS_TOKEN']);
+            $verifier = new JWTVerifier($config, $fetcher);
+            $decoded_token = $verifier->verifyAndDecode($_COOKIE['ACCESS_TOKEN']);
+        } catch(CoreException $e) {
+            error_log("Exception verifying jwt-token: " . $e);
+            return false;
+        }
+
 		return true;
    }
 }
