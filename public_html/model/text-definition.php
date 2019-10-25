@@ -33,7 +33,7 @@ class TextDefinition {
 		return $this->description;
 	}
 	
-	public function rectangle() {
+	public function rectangle() : Rectangle {
 		return $this->rectangle;
 	}
 }
