@@ -1,4 +1,4 @@
-import {BoundingBox} from '/components/designer/canvas/primitives/BoundingBox.js';
+import {BoundingBox} from '/public/designer/canvas/primitives/BoundingBox.js';
 
 export class TicketTextForm {
 

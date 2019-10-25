@@ -1,4 +1,4 @@
-import {TicketText} from '/components/designer/ticket/TicketText.js';
+import {TicketText} from '/public/designer/ticket/TicketText.js';
 
 export class TicketTextList  {
 	

@@ -1,6 +1,6 @@
-import {DrawableRectangle} from '/components/designer/canvas/drawables/DrawableRectangle.js';
-import {BoundingBox} from '/components/designer/canvas/primitives/BoundingBox.js';
-import {RestrictedBoundingBox} from '/components/designer/canvas/primitives/RestrictedBoundingBox.js';
+import {DrawableRectangle} from '/public/designer/canvas/drawables/DrawableRectangle.js';
+import {BoundingBox} from '/public/designer/canvas/primitives/BoundingBox.js';
+import {RestrictedBoundingBox} from '/public/designer/canvas/primitives/RestrictedBoundingBox.js';
 
 export class DrawingCanvas {
 	

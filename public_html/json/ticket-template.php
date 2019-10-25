@@ -11,10 +11,14 @@ class TicketTemplateJsonMapper {
 		
 	}
 
-	public function toJson($templates) : string {
-		return json_encode($this->mapList($templates, function($item) {
-			return $this->mapTemplate($item);
-		}));
+	public function toJson($arg) : string {
+		if(is_array($arg)){
+			return json_encode($this->mapList($arg, function($item) {
+				return $this->mapTemplate($item);
+			}));
+		} else {
+			return json_encode($this->mapTemplate($arg));
+		}
 	}
 
 	private function mapTemplate(TicketTemplate $template) {

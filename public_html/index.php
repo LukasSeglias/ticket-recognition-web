@@ -8,7 +8,7 @@ require_once './service/router.php';
 $path = $_SERVER['PATH_INFO'];
 $authorizer = new AuthService;
 $router = new Router;
-if($path === '/index.php') {
+if($path === '/') {
 	require_once './components/home/home.php';
 	page(NULL, function ($context) {
 		return new HomePage($context);
@@ -63,12 +63,6 @@ if($path === '/index.php') {
 			return new DesignerPage($context);
 		});
 	
-	} else if(substr($path, 0, strlen("/admin/rest/ticket-template.php")) === "/admin/rest/ticket-template.php") {
-	
-		bootstrap(function ($context) {
-			echo $context->ticketTemplateResource()->process();
-		});
-	
 	} elseif($path === '/admin/tours.php') {
 	
 		require_once './components/tour/tours.php';
@@ -90,6 +84,22 @@ if($path === '/index.php') {
 	} else {
 
 		// TODO: NOT FOUND PAGE
+	}
+
+} elseif(substr($path, 0, strlen("/rest/admin/")) === "/rest/admin/") {
+
+	if (!$authorizer->verifyToken('admin')) {
+		error_log("Token not valid");
+		$router->redirect("/");
+		$router->render();
+	}
+
+	if(substr($path, 0, strlen("/rest/admin/ticket-templates")) === "/rest/admin/ticket-templates") {
+		
+		bootstrap(function ($context) {
+			echo $context->ticketTemplateResource()->process();
+		});
+	
 	}
 
 } else {

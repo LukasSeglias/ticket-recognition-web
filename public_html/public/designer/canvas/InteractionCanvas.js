@@ -1,4 +1,4 @@
-import {DrawingModeAdapter, DrawingModeListAdapter} from '/components/designer/editor/mode/DrawingModeAdapters.js';
+import {DrawingModeAdapter, DrawingModeListAdapter} from '/public/designer/editor/mode/DrawingModeAdapters.js';
 
 class NoopDrawingMode {}
 

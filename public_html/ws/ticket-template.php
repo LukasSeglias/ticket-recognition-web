@@ -14,9 +14,30 @@ class TicketTemplateResource {
 		$this->mapper = $mapper;
 	}
 
-	public function process() : string {
-		$templates = $this->service->findAll();
-		return $this->mapper->toJson($templates);
+	public function process() {
+
+		$id = $this->getId();
+		if($id) {
+			$template = $this->findById($id);
+			return $this->mapper->toJson($template);
+		}
+		http_response_code(404);
+		die();
+	}
+
+	private function findById($id) {
+		
+		$template = $this->service->findById($id);
+		if($template === NULL) {
+			http_response_code(404);
+			die();
+		}
+		return $template;
+	}
+
+	private function getId() : string {
+		$pathSegments = explode('/', strtok(getenv('REQUEST_URI'), '?'));
+		return $pathSegments[count($pathSegments) - 1];
 	}
 
 }

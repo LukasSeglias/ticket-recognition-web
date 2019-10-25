@@ -1,7 +1,7 @@
-import {DrawableImage} from '/components/designer/canvas/drawables/DrawableImage.js';
-import {SelectAndMoveMode} from '/components/designer/editor/mode/SelectAndMoveMode.js';
-import {TextCreateMode} from '/components/designer/editor/mode/TextCreateMode.js';
-import {ImageFilesReader} from '/components/designer/io/ImageFilesReader.js';
+import {DrawableImage} from '/public/designer/canvas/drawables/DrawableImage.js';
+import {SelectAndMoveMode} from '/public/designer/editor/mode/SelectAndMoveMode.js';
+import {TextCreateMode} from '/public/designer/editor/mode/TextCreateMode.js';
+import {ImageFilesReader} from '/public/designer/io/ImageFilesReader.js';
 
 export class Editor {
     

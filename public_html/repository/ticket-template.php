@@ -15,7 +15,7 @@ class TicketTemplateRepository {
 		$this->touroperatorRepository = $touroperatorRepository;
 	}
 	
-	public function findById($id) : TicketTemplate {
+	public function findById($id) {
 		$statement = $this->databaseService->pdo()->prepare("SELECT * FROM TICKET_TEMPLATE where ID = :id");
 		$statement->execute(array(':id' => $id));
 		while($row = $statement->fetch()) {
