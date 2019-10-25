@@ -2,13 +2,12 @@
 namespace CTI;
 
 require_once './bootstrap.php';
-require_once './auth/authorizer.php';
+require_once './service/auth.php';
 require_once './service/router.php';
 
 $path = $_SERVER['PATH_INFO'];
-$authorizer = new Authorizer;
+$authorizer = new AuthService;
 $router = new Router;
-
 if($path === '/index.php') {
 	require_once './components/home/home.php';
 	bootstrap(NULL, function ($context) {
@@ -26,13 +25,6 @@ if($path === '/index.php') {
 	require_once './components/scanner/scanner.php';
 	bootstrap(NULL, function ($context) {
 		return new ScannerPage($context);
-	});
-
-} elseif($path === '/login.php') {
-
-	require_once './components/login/login.php';
-	bootstrap(NULL, function ($context) {
-		return new LoginPage($context);
 	});
 
 } elseif(substr($path, 0, strlen("/admin/")) === "/admin/") {

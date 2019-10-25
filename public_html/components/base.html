@@ -28,6 +28,7 @@
 
 	<script src="http://localhost:90/auth/js/keycloak.js"></script>
     <script>
+		const TEN = 10;
         var keycloak = Keycloak({
     		url: 'http://localhost:90/auth',
     		realm: 'cti',
@@ -37,22 +38,32 @@
 			keycloak.updateToken(5)
 				.success(function(refreshed) {
 					if (refreshed) {
-						document.cookie = "ACCESS_TOKEN=" + keycloak.token + "; expires=Fri, 19 Jun 2020 20:47:11 UTC; path=/";
+						updateAccessTokenCookie(keycloak.token);
 					}
 				})
 				.error(function() {
-					document.cookie = "ACCESS_TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+					resetAccessTokenCookie();
 				});
 		};
         keycloak.init({ onLoad: 'login-required', checkLoginIframe: false })
 			.success(function(authenticated) {
 				if (authenticated) {
-            		document.cookie = "ACCESS_TOKEN=" + keycloak.token + "; expires=Fri, 19 Jun 2020 20:47:11 UTC; path=/";
+            		updateAccessTokenCookie(keycloak.token);
 				}
         	})
 			.error(function() {
-            	document.cookie = "ACCESS_TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+            	resetAccessTokenCookie();
         	});
+
+		function updateAccessTokenCookie(accessToken) {
+			document.cookie = "ACCESS_TOKEN=" + keycloak.token + "; path=/";
+			document.cookie = "REFRESH_TOKEN=" + keycloak.refreshToken + "; path=/";
+		}
+
+		function resetAccessTokenCookie() {
+			document.cookie = "ACCESS_TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+			document.cookie = "REFRESH_TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+		}
     </script>
 
 	{% block head %}

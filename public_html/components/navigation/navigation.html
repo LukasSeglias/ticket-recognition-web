@@ -19,9 +19,17 @@
 					{{ user.displayName() }}
 				</a>
 				<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-					<a class="dropdown-item" href="#">{{ "navigation_logout"|translated }}</a>
+					<a class="dropdown-item" href="javascript:logout()">{{ "navigation_logout"|translated }}</a>
 				</div>
 			</li>
 		</ul>
 	</div>
+
+	<script>
+		function logout() {
+			document.cookie = "ACCESS_TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+			document.cookie = "REFRESH_TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+			keycloak.logout();
+		}
+	</script>
 </nav>
