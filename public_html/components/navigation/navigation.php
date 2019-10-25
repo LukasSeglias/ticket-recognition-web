@@ -10,7 +10,7 @@ class Navigation implements Component {
 	const KEY_DESIGNS = 'designs';
 	const KEY_TICKETS = 'tickets';
 	const KEY_TOURS = 'tours';
-	const KEY_TICKETPOSITIONS = 'ticketpositions';
+	const KEY_TOURPOSITIONS = 'tourpositions';
 
 	private $component;
 
@@ -27,7 +27,7 @@ class Navigation implements Component {
 				new NavigationItem(self::KEY_TOURS, '/admin/tours.php', Texts::navigation_tours, [
 
 				]),
-				new NavigationItem(self::KEY_TICKETPOSITIONS, '/admin/ticketpositions.php', Texts::navigation_ticketpositions, [
+				new NavigationItem(self::KEY_TOURPOSITIONS, '/admin/tour-positions.php', Texts::navigation_tourpositions, [
 
 				])
 			],

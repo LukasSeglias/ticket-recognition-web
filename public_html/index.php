@@ -70,11 +70,11 @@ if($path === '/index.php') {
 			return new TourSearchPage($context);
 		});
 	
-	} elseif($path === '/admin/ticketpositions.php') {
+	} elseif($path === '/admin/tour-positions.php') {
 	
-		require_once './components/ticketposition/ticketpositions.php';
-		bootstrap('ticketpositions', function ($context) {
-			return new TicketpositionSearchPage($context);
+		require_once './components/tour-positions/tour-positions.php';
+		bootstrap('tourpositions', function ($context) {
+			return new TourpositionSearchPage($context);
 		});
 	
 	} elseif($path === '/admin/process.php') {
