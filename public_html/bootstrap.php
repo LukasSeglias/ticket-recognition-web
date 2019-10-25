@@ -11,9 +11,11 @@ require_once './service/ticket-template.php';
 require_once './repository/tour-operator.php';
 require_once './repository/text-definition.php';
 require_once './repository/ticket-template.php';
+require_once './json/ticket-template.php';
+require_once './ws/ticket-template.php';
 require_once './components/navigation/navigation.php';
 
-function bootstrap($activeKey, $pageConstructionFunction) {
+function bootstrap($callback) {
 
 	$dbConfig = parse_ini_file("/etc/opt/ticket-recognition-web/db.ini");
 	$databaseService = new DatabaseService($dbConfig);
@@ -25,17 +27,26 @@ function bootstrap($activeKey, $pageConstructionFunction) {
 	$touroperatorRepository = new TouroperatorRepository($databaseService);
 	$ticketTemplateRepository = new TicketTemplateRepository($databaseService, $textDefinitionRepository, $touroperatorRepository);
 	$ticketTemplateService = new TicketTemplateService($ticketTemplateRepository);
+	$ticketTemplateJsonMapper = new TicketTemplateJsonMapper();
+	$ticketTemplateResource = new TicketTemplateResource($ticketTemplateService, $ticketTemplateJsonMapper);
 	$context = new Context($router, $authService, $ticketService, $databaseService,
 		$textDefinitionRepository, $touroperatorRepository, $ticketTemplateRepository,
-		$ticketTemplateService
+		$ticketTemplateService,
+		$ticketTemplateJsonMapper,
+		$ticketTemplateResource
 	);
-	$navigation = new Navigation($context, $activeKey);
-
-	$page = $pageConstructionFunction($context);
-	$app = new App($context, $page, [
-		'navigation' => $navigation
-	]);
-	$app->update();
-	echo $app->render();
+	$callback($context);
 }
+
+function page($activeKey, $pageConstructionFunction) {
+	bootstrap(function($context) use (&$activeKey, &$pageConstructionFunction) {
+		$navigation = new Navigation($context, $activeKey);
+		$page = $pageConstructionFunction($context);
+		$app = new App($context, $page, [
+			'navigation' => $navigation
+		]);
+		$app->update();
+		echo $app->render();
+	});
+};
 ?>

@@ -1,7 +1,7 @@
 <?php
 namespace CTI;
 
-require_once './components/validation.php';
+require_once './validation/validation-result.php';
 
 class InputComponentState {
 	

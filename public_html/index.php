@@ -10,7 +10,7 @@ $authorizer = new AuthService;
 $router = new Router;
 if($path === '/index.php') {
 	require_once './components/home/home.php';
-	bootstrap(NULL, function ($context) {
+	page(NULL, function ($context) {
 		return new HomePage($context);
 	});
 
@@ -23,7 +23,7 @@ if($path === '/index.php') {
 	}
 
 	require_once './components/scanner/scanner.php';
-	bootstrap(NULL, function ($context) {
+	page(NULL, function ($context) {
 		return new ScannerPage($context);
 	});
 
@@ -38,42 +38,48 @@ if($path === '/index.php') {
 	if($path === '/admin/tickets.php') {
 
 		require_once './components/ticket/tickets.php';
-		bootstrap('tickets', function ($context) {
+		page('tickets', function ($context) {
 			return new TicketSearchPage($context);
 		});
 	
 	} elseif($path === '/admin/ticket_detail.php') {
 	
 		require_once './components/ticket/ticket_detail.php';
-		bootstrap('tickets', function ($context) {
+		page('tickets', function ($context) {
 			return new TicketDetailPage($context);
 		});
 	
 	} else if($path === '/admin/designs.php') {
 	
 		require_once './components/designer/designs.php';
-		bootstrap('designs', function ($context) {
+		page('designs', function ($context) {
 			return new DesignSearchPage($context);
 		});
 	
 	} else if($path === '/admin/designer.php') {
 	
 		require_once './components/designer/designer.php';
-		bootstrap('designer', function ($context) {
+		page('designer', function ($context) {
 			return new DesignerPage($context);
+		});
+	
+	} else if(substr($path, 0, strlen("/admin/rest/ticket-template.php")) === "/admin/rest/ticket-template.php") {
+	
+		bootstrap(function ($context) {
+			echo $context->ticketTemplateResource()->process();
 		});
 	
 	} elseif($path === '/admin/tours.php') {
 	
 		require_once './components/tour/tours.php';
-		bootstrap('tours', function ($context) {
+		page('tours', function ($context) {
 			return new TourSearchPage($context);
 		});
 	
 	} elseif($path === '/admin/ticketpositions.php') {
 	
 		require_once './components/ticketposition/ticketpositions.php';
-		bootstrap('ticketpositions', function ($context) {
+		page('ticketpositions', function ($context) {
 			return new TicketpositionSearchPage($context);
 		});
 	
