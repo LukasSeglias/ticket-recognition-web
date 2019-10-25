@@ -24,6 +24,37 @@ class TourPositionRepository {
 		}
 		return $results;
     }
+
+    public function get($id) {
+        $statement = $this->databaseService->pdo()->prepare('SELECT * FROM TOUR_POSITION WHERE ID = :id');
+		$statement->execute([':id' => $id]);
+        $entity;
+		if($row = $statement->fetch()) {
+			$entity = $this->map($row);
+		}
+        return $entity;
+    }
+
+    public function create($entity) {
+        $statement = $this->databaseService->pdo()->prepare('INSERT INTO TOUR_POSITION (DESCRIPTION,CODE) VALUES (:description,:code)');
+		$statement->execute([':description' => $entity->description(), ':code' => $entity->code()]);
+        $statement = $this->databaseService->pdo()->prepare('SELECT LAST_INSERT_ID()');
+        $statement->execute([]);
+        if ($row = $statement->fetch()) {
+            return $row['LAST_INSERT_ID()'];
+        }
+        return -1;
+    }
+
+    public function update($entity) {
+        $statement = $this->databaseService->pdo()->prepare('UPDATE TOUR_POSITION SET DESCRIPTION = :description, CODE = :code WHERE ID = :id');
+		$statement->execute([':id' => $entity->id(),':description' => $entity->description(), ':code' => $entity->code()]);
+    }
+
+    public function delete($id) {
+        $statement = $this->databaseService->pdo()->prepare('DELETE FROM TOUR_POSITION WHERE ID = :id');
+		$statement->execute([':id' => $id]);
+    }
 	
 	private function map($row) : TourPosition {
 		return new TourPosition(

@@ -77,6 +77,12 @@ if($path === '/index.php') {
 			return new TourpositionSearchPage($context);
 		});
 	
+	} elseif($path === '/admin/tour-position.php') {
+		
+		require_once './components/tour-positions/tour-position.php';
+		bootstrap('tourposition', function ($context) {
+			return new TourpositionDetailPage($context);
+		});
 	} elseif($path === '/admin/process.php') {
 	
 		echo file_get_contents($_FILES['files']['tmp_name'][0]);

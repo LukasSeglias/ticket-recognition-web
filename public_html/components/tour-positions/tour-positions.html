@@ -50,7 +50,8 @@
 						
 						<ul class="list-group list-group-flush">
 							{% for item in items %}
-								<a href="#" class="list-group-item list-group-item-action">
+								<!-- FIXME: Use path param -->
+								<a href="tour-position.php?id={{ item.id() }}" class="list-group-item list-group-item-action">
 									<div class="row">
 										<div class="col-3">
 											{{ item.code() }}
