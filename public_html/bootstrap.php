@@ -7,6 +7,9 @@ require_once './service/database.php';
 require_once './service/router.php';
 require_once './service/auth.php';
 require_once './service/ticket.php';
+require_once './repository/tour-operator.php';
+require_once './repository/text-definition.php';
+require_once './repository/ticket-template.php';
 require_once './components/navigation/navigation.php';
 
 function bootstrap($activeKey, $pageConstructionFunction) {
@@ -17,7 +20,12 @@ function bootstrap($activeKey, $pageConstructionFunction) {
 	$router = new Router();
 	$authService = new AuthService();
 	$ticketService = new TicketService($databaseService);
-	$context = new Context($router, $authService, $ticketService, $databaseService);
+	$textDefinitionRepository = new TextDefinitionRepository($databaseService);
+	$touroperatorRepository = new TouroperatorRepository($databaseService);
+	$ticketTemplateRepository = new TicketTemplateRepository($databaseService, $textDefinitionRepository, $touroperatorRepository);
+	$context = new Context($router, $authService, $ticketService, $databaseService,
+		$textDefinitionRepository, $touroperatorRepository, $ticketTemplateRepository
+	);
 	$navigation = new Navigation($context, $activeKey);
 
 	$page = $pageConstructionFunction($context);

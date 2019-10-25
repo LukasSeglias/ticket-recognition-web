@@ -3,57 +3,38 @@ namespace CTI;
 
 class Ticket {
 	
-	private $number;
-	private $touroperator;
-	private $tourcode;
-	private $date;
+	private $id;
+	private $template;
+	private $tour;
+	private $scanDate;
 	private $positions;
 	
-	function __construct($number, $touroperator, $tourcode, $date, $positions) {
-		$this->number = $number;
-		$this->touroperator = $touroperator;
-		$this->tourcode = $tourcode;
-		$this->date = $date;
+	function __construct($id, $template, $tour, $scanDate, $positions) {
+		$this->id = id;
+		$this->template = $template;
+		$this->tour = $tour;
+		$this->scanDate = $scanDate;
 		$this->positions = $positions;
 	}
 	
-	public function number() {
-		return $this->number;
+	public function id() {
+		return $this->id;
 	}
 	
-	public function touroperator() {
-		return $this->touroperator;
+	public function template() {
+		return $this->template;
 	}
 	
-	public function tourcode() {
-		return $this->tourcode;
+	public function tour() {
+		return $this->tour;
 	}
 	
-	public function date() {
-		return $this->date;
+	public function scanDate() {
+		return $this->scanDate;
 	}
 	
 	public function positions() {
 		return $this->positions;
-	}
-}
-
-class TicketPosition {
-	
-	private $number;
-	private $title;
-	
-	function __construct($number, $title) {
-		$this->number = $number;
-		$this->title = $title;
-	}
-	
-	public function number() {
-		return $this->number;
-	}
-	
-	public function title() {
-		return $this->title;
 	}
 }
 ?>
