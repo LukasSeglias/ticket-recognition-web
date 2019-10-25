@@ -5,7 +5,7 @@ import {ImageFilesReader} from '/components/designer/io/ImageFilesReader.js';
 
 export class Editor {
     
-    constructor(drawingCanvas, interactionCanvas, templateImageUpload, addTextModeButton, cancelButton, editorTools) {
+    constructor(drawingCanvas, interactionCanvas, templateImageUpload, ticketTextEditor) {
 		
         this._drawingCanvas = drawingCanvas;
         
@@ -37,27 +37,35 @@ export class Editor {
         this._interactionCanvas.setMode(this._selectMoveMode);
 
         this._selectMoveMode.onSelectedDrawableChange(function(selectedDrawable) {
-            editorTools.bindDrawable(selectedDrawable);
-        });
-
-        cancelButton.addEventListener('click', () => {
-            this._interactionCanvas.setMode(this._selectMoveMode);
-            addTextModeButton.disabled = false;
-            cancelButton.style.display = "none";
+            ticketTextEditor.value = selectedDrawable;
         });
 
         this._textCreateMode.onFinish((text) => {
+            console.log('finished text, switch mode');
             this._interactionCanvas.setMode(this._selectMoveMode);
             this._selectMoveMode.select(text);
-            addTextModeButton.disabled = false;
-            cancelButton.style.display = "none";
             text.calculateColor();
         });
-        
-        addTextModeButton.addEventListener('click', () => {
+
+        ticketTextEditor.onSelect((key) => {
+            let list = this._drawingCanvas.find((drawable) => {
+                console.log('drawable');
+                console.dir(drawable);
+
+                if(drawable.key){
+                    console.log(' drawable key is ' + drawable.key());
+                }
+                return drawable.key && drawable.key() === key;
+            });
+            console.log('found ' + list.length + ' entries that match key : ' + key);
+            if(list.length > 0) {
+                this._interactionCanvas.setMode(this._selectMoveMode);
+                this._selectMoveMode.select(list[0]);
+            }
+        });
+
+        ticketTextEditor.onAdd(() => {
             this._interactionCanvas.setMode(this._textCreateMode);
-            addTextModeButton.disabled = true;
-            cancelButton.style.display = "initial";
         });
     }
 

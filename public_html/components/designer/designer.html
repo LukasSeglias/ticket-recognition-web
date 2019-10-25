@@ -25,9 +25,9 @@
 			padding-top: 15px;
 			padding-right: 15px;
 		}
-		
-		.editor-buttons {
-			padding: 15px 0px;
+
+		.cursor-pointer {
+			cursor: pointer;
 		}
 	</style>
 
@@ -36,24 +36,14 @@
 			<canvas tabindex='1'></canvas>
 		</div>
 		<div id="editor-tools">
-			<div>
-				Upload Configfile: <input type='file' accept="application/json" multiple id="configFileUpload" />
-			</div>
-			<div class="editor-buttons">
-				<button type="button" class="btn btn-primary" id="add-text-button">
-					Add Text
-				</button>
-				<button type="button" class="btn btn-warning" id="cancel-button">
-					Cancel
-				</button>
-				<button type="button" class="btn btn-primary" onclick="downloadOutput()">
-					Download
-				</button>
-			</div>
-
 			<div class="card mb-3">
-				<div class="card-header">
+				<div class="card-header d-flex justify-content-between align-items-center">
 					Template
+					<div>
+						<button type="button" class="btn btn-primary" onclick="downloadOutput()">
+							Download
+						</button>
+					</div>
 				</div>
 				<div class="card-body">
 					<form class="design-form mb-0">
@@ -63,9 +53,17 @@
 									<label>Key</label>
 									<input type="text" class="form-control" name="key" placeholder="Key" required>
 								</div>
-								<div class="custom-file">
-									<input type="file" class="custom-file-input" id="template-image-upload">
-									<label class="custom-file-label">Choose Image</label>
+								<div class="form-group">
+									<div class="custom-file">
+										<input type="file" class="custom-file-input" accept="image/*" id="template-image-upload">
+										<label class="custom-file-label">Choose Image</label>
+									</div>
+								</div>
+								<div class="form-group mb-0">
+									<div class="custom-file">
+										<input type="file" class="custom-file-input" accept="application/json" id="configFileUpload">
+										<label class="custom-file-label">Choose Configfile</label>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -74,8 +72,16 @@
 			</div>
 
 			<div class="card mb-3">
-				<div class="card-header">
+				<div class="card-header d-flex justify-content-between align-items-center">
 					Text
+					<div>
+						<button type="button" class="btn btn-primary" id="add-text-button">
+							Add Text
+						</button>
+						<button type="button" class="btn btn-danger" id="delete-button" disabled>
+							Delete
+						</button>
+					</div>
 				</div>
 				<div class="card-body">
 					<form class="text-form mb-0">
@@ -135,9 +141,10 @@
 		import {RectangleDrawingMode} from '/components/designer/editor/mode/RectangleDrawingMode.js';
 		import {TextCreateMode} from '/components/designer/editor/mode/TextCreateMode.js';
 		import {DrawingModeAdapter, DrawingModeListAdapter} from '/components/designer/editor/mode/DrawingModeAdapters.js';
-		import {TextForm} from '/components/designer/editor/input/TextForm.js';
+		import {TicketTextForm} from '/components/designer/editor/input/TicketTextForm.js';
 		import {Editor} from '/components/designer/editor/Editor.js';
 		import {EditorTools} from '/components/designer/editor/EditorTools.js';
+		import {TicketTextEditor} from '/components/designer/editor/TicketTextEditor.js';
 		import {ImageFilesReader} from '/components/designer/io/ImageFilesReader.js';
 		import {FileUploadInput} from '/components/designer/io/FileUploadInput.js';
 		import {FileDownloader} from '/components/designer/io/FileDownloader.js';
@@ -185,7 +192,7 @@
 			var canvasContainer = document.getElementById("canvas-container");
 			var templateImageUploadElement = document.getElementById('template-image-upload');
 			var addTextModeButton = document.getElementById('add-text-button');
-			var cancelButton = document.getElementById('cancel-button');
+			var deleteButton = document.getElementById('delete-button');
 			var editorToolsElement = document.getElementById('editor-tools');
 			var textFormElement = editorToolsElement.querySelector('.text-form');
 			var ticketTextListElement = document.getElementById('tickettext-list-container');
@@ -215,13 +222,14 @@
 			var drawingCanvas = new DrawingCanvas(canvas);
 			var interactionCanvas = new InteractionCanvas(canvas);
 
-			var textForm = new TextForm(textFormElement);
-			var editorTools = new EditorTools(editorToolsElement, textForm, drawingCanvas);
+			var textForm = new TicketTextForm(textFormElement, drawingCanvas);
 			var ticketTextList = new TicketTextList(ticketTextListElement, drawingCanvas);
 			
 			var templateImageUpload = new FileUploadInput(templateImageUploadElement);
 
-			return new Editor(drawingCanvas, interactionCanvas, templateImageUpload, addTextModeButton, cancelButton, editorTools);
+			var ticketTextEditor = new TicketTextEditor(textForm, ticketTextList, addTextModeButton, deleteButton, drawingCanvas);
+
+			return new Editor(drawingCanvas, interactionCanvas, templateImageUpload, ticketTextEditor);
 		}
 		
 		function main() {

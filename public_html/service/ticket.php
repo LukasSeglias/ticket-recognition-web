@@ -5,8 +5,10 @@ require_once './model/ticket.php';
 
 class TicketService {
 	
-	function __construct() {
-		
+	private $databaseService; 
+
+	function __construct($databaseService) {
+		$this->databaseService = $databaseService;
 	}
 	
 	public function ticket($ticketNumber) : Ticket {
@@ -18,6 +20,12 @@ class TicketService {
 				new TicketPosition("A1236", "Tageskarte Seilbahn")
 			]);
 		} else {
+			$statement = $context->pdo()->prepare("SELECT * FROM TOUR_OPERATOR");
+			$statement->execute(array());
+			echo "ROWCOUNT: ". $statement->rowCount();
+			while($row = $statement->fetch()) {
+				echo "ROW: "." ".$row['ID'];
+			}
 			return NULL;
 		}
 	}

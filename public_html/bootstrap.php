@@ -16,7 +16,7 @@ function bootstrap($activeKey, $pageConstructionFunction) {
 
 	$router = new Router();
 	$authService = new AuthService();
-	$ticketService = new TicketService();
+	$ticketService = new TicketService($databaseService);
 	$context = new Context($router, $authService, $ticketService, $databaseService);
 	$navigation = new Navigation($context, $activeKey);
 
