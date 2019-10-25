@@ -11,6 +11,16 @@ export class BoundingBox {
         this._bottomRight = bottomRight;
     }
 
+    static ofRectangle(x, y , width, height) {
+        return new BoundingBox({
+            x: x,
+            y: y
+        }, {
+            x: x + width,
+            y: y + height
+        });
+    }
+
     containsPoint(point) {
         return this._topLeft.x <= point.x
             && this._topLeft.y <= point.y

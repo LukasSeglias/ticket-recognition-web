@@ -25,13 +25,16 @@ export class DrawingCanvas {
     addDrawableRemovedListener(listener) {
         if(listener) this._drawableRemovedListener.push(listener);
     }
+
+    get boundingBox() {
+        return new BoundingBox({ x: 0, y: 0 }, { x: this.width(), y: this.height() });
+    }
     
     drawableRectangle(topLeft, bottomRight) {
         let minSize = 10; // TODO: move somewhere else
-        let canvasBoundingBox = new BoundingBox({ x: 0, y: 0 }, { x: this.width(), y: this.height() });
-        let boundingBox = new RestrictedBoundingBox(topLeft, bottomRight, minSize, canvasBoundingBox);
+        let boundingBox = new RestrictedBoundingBox(topLeft, bottomRight, minSize, this.boundingBox);
 
-        if(canvasBoundingBox.containsBoundingBox(boundingBox)) {
+        if(this.boundingBox.containsBoundingBox(boundingBox)) {
             return new DrawableRectangle(boundingBox);
         }
         return null;
@@ -205,5 +208,15 @@ export class DrawingCanvas {
                 }
             }
         }, backToFront);
+    }
+
+    find(predicate) {
+        let list = [];
+        this._foreachDrawable((index, drawable) => {
+            if(predicate.call(null, drawable)) {
+                list.push(drawable);
+            }
+        });
+        return list;
     }
 }

@@ -20,6 +20,7 @@ export class TextCreateMode {
     mousedown(mouse) {
         this._lastMouse = mouse;
         this._mousedown = true;
+        console.log('textcreate: mousedown');
     }
 
     mouseup(mouse) {

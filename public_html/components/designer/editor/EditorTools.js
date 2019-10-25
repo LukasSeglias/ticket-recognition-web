@@ -2,10 +2,11 @@ import {TicketText} from '/components/designer/ticket/TicketText.js';
 
 export class EditorTools  {
 	
-    constructor(element, textForm, drawingCanvas) {
+    constructor(element, textForm, ticketTextList, drawingCanvas) {
 
         this._drawingCanvas = drawingCanvas;
         this._textForm = textForm;
+        this._ticketTextList = ticketTextList;
 
         this._drawingCanvas.addDrawableChangedListener((drawable) => {
             if(drawable === this.drawable) {
@@ -13,7 +14,7 @@ export class EditorTools  {
             }
         });
 
-        this._textForm.onChange((newValue) => {
+        this._textForm.onChange((oldValue, newValue) => {
             
             // TODO: check if is text
             let newRectangle = this._drawingCanvas.drawableRectangle({
@@ -26,6 +27,13 @@ export class EditorTools  {
 
             if(newRectangle) {
                 let newText = new TicketText(newValue.key, newRectangle);
+
+                if(this.drawable && this.drawable.key()) {
+                    ticketTextList.removeText(this.drawable.key());
+                }
+                if(newValue.key) {
+                    ticketTextList.addText(newValue.key);
+                }
 
                 if(this.drawable) {
                     this._drawingCanvas.replace(this.drawable, newText);

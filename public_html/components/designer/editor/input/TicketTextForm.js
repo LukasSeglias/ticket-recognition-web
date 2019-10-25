@@ -1,10 +1,13 @@
+import {BoundingBox} from '/components/designer/canvas/primitives/BoundingBox.js';
 
-export class TextForm {
+export class TicketTextForm {
 
-    constructor(form) {
+    constructor(form, drawingCanvas) {
         
         this._form = form;
         this._changeListeners = [];
+        this._drawingCanvas = drawingCanvas;
+        this._oldValue = {};
         
         this._keyInput = this._getInputElementByName('key');
         this._xInput = this._getInputElementByName('x');
@@ -58,7 +61,10 @@ export class TextForm {
             && value.x != null
             && value.y != null
             && value.width != null
-            && value.height != null;
+            && value.height != null
+            && this._drawingCanvas.boundingBox.containsBoundingBox(BoundingBox.ofRectangle(
+                value.x, value.y, value.width, value.height
+            ));
     }
 
     _addEventListeners() {
@@ -74,8 +80,9 @@ export class TextForm {
         if(this.validate()) {
             let newValue = this.getValue();
             this._changeListeners.forEach(listener => {
-                if(listener) listener.call(null, newValue);
+                if(listener) listener.call(null, this._oldValue, newValue);
             });
+            this._oldValue = newValue;
         }
     }
 
