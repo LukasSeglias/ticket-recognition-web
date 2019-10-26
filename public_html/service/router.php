@@ -3,18 +3,14 @@ namespace CTI;
 
 class Router {
 
-	private $redirectedLocation;
-
 	function redirect(string $location) {
-		$this->redirectedLocation = $location;
+		header('Location: ' . $location);
+		die();
 	}
 
-	function redirectRequested() {
-		return $this->redirectedLocation !== NULL;
-	}
-
-	function render() : string {
-		header('Location: ' . $this->redirectedLocation);
+	function notFound() {
+		http_response_code(404);
+		die();
 	}
 }
 ?>

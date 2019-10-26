@@ -232,7 +232,21 @@
 			return new Editor(drawingCanvas, interactionCanvas, templateImageUpload, ticketTextEditor);
 		}
 		
+		async function getTicketTemplate() {
+			var urlParams = new URLSearchParams(window.location.search);
+			if(urlParams.has('id')) {
+				let response = await fetch(`/rest/admin/ticket-templates/${urlParams.get('id')}`);
+				let data = await response.json();
+				return data;
+			}
+		}
+
 		function main() {
+			getTicketTemplate()
+				.then((template) => {
+					console.dir(template);
+				});
+
 			var configFilesReader = new ConfigFilesReader();
 			var configFileUpload = new FileUploadInput(document.getElementById('configFileUpload'), configFilesReader);
 			

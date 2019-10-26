@@ -1,15 +1,18 @@
 <?php
 namespace CTI;
 
+require_once './service/router.php';
 require_once './json/ticket-template.php';
 require_once './service/ticket-template.php';
 
 class TicketTemplateResource {
 
+	private $router;
 	private $service;
 	private $mapper;
 
-	function __construct(TicketTemplateService $service, TicketTemplateJsonMapper $mapper) {
+	function __construct(Router $router, TicketTemplateService $service, TicketTemplateJsonMapper $mapper) {
+		$this->router = $router;
 		$this->service = $service;
 		$this->mapper = $mapper;
 	}
@@ -21,23 +24,21 @@ class TicketTemplateResource {
 			$template = $this->findById($id);
 			return $this->mapper->toJson($template);
 		}
-		http_response_code(404);
-		die();
+		$this->router->notFound();
 	}
 
 	private function findById($id) {
 		
 		$template = $this->service->findById($id);
 		if($template === NULL) {
-			http_response_code(404);
-			die();
+			$this->router->notFound();
 		}
 		return $template;
 	}
 
 	private function getId() : string {
-		$pathSegments = explode('/', strtok(getenv('REQUEST_URI'), '?'));
-		return $pathSegments[count($pathSegments) - 1];
+		$url = explode('/', getenv('REQUEST_URI'));
+        return end($url);
 	}
 
 }

@@ -22,13 +22,8 @@ class App {
 	}
 
 	function render() : string {
-		$router = $this->context->router();
-		if($router->redirectRequested()) {
-			return $router->render();
-		} else {
-			$templatingEngine = new TemplatingEngine();
-			return $templatingEngine->render($this->page->template(), $this->context());
-		}
+		$templatingEngine = new TemplatingEngine();
+		return $templatingEngine->render($this->page->template(), $this->context());
 	}
 
 	function context() : array {

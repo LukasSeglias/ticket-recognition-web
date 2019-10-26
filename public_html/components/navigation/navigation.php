@@ -10,7 +10,8 @@ class Navigation implements Component {
 	const KEY_DESIGNS = 'designs';
 	const KEY_TICKETS = 'tickets';
 	const KEY_TOURS = 'tours';
-	const KEY_TICKETPOSITIONS = 'ticketpositions';
+	const KEY_TOURPOSITIONS = 'tourpositions';
+	const KEY_USERS = 'users';
 
 	private $component;
 
@@ -18,18 +19,11 @@ class Navigation implements Component {
 
 		$this->component = new NavigationComponent(new NavigationComponentState(
 			[
-				new NavigationItem(self::KEY_DESIGNS, '/admin/designs.php', Texts::navigation_designer, [
-
-				]),
-				new NavigationItem(self::KEY_TICKETS, '/admin/tickets.php', Texts::navigation_tickets, [
-
-				]),
-				new NavigationItem(self::KEY_TOURS, '/admin/tours.php', Texts::navigation_tours, [
-
-				]),
-				new NavigationItem(self::KEY_TICKETPOSITIONS, '/admin/ticketpositions.php', Texts::navigation_ticketpositions, [
-
-				])
+				new NavigationItem(self::KEY_DESIGNS, '/admin/designs.php', Texts::navigation_designer, []),
+				new NavigationItem(self::KEY_TICKETS, '/admin/tickets.php', Texts::navigation_tickets, []),
+				new NavigationItem(self::KEY_TOURS, '/admin/tours.php', Texts::navigation_tours, []),
+				new NavigationItem(self::KEY_TOURPOSITIONS, '/admin/tour-positions', Texts::navigation_tourpositions, []),
+				new NavigationItem(self::KEY_USERS, '/auth/', Texts::navigation_users, [])
 			],
 			$activeKey,
 			$context->authService()->currentUser()

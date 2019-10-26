@@ -10,7 +10,7 @@ class Ticket {
 	private $positions;
 	
 	function __construct($id, $template, $tour, $scanDate, $positions) {
-		$this->id = id;
+		$this->id = $id;
 		$this->template = $template;
 		$this->tour = $tour;
 		$this->scanDate = $scanDate;

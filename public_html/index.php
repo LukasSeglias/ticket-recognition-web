@@ -9,17 +9,17 @@ $path = $_SERVER['PATH_INFO'];
 $authorizer = new AuthService;
 $router = new Router;
 if($path === '/') {
+
 	require_once './components/home/home.php';
 	page(NULL, function ($context) {
 		return new HomePage($context);
 	});
 
-} elseif($path === '/scanner.php') {
+} elseif($path === '/scanner') {
 
 	if (!$authorizer->verifyToken('scanner')) {
 		error_log("Token not valid");
 		$router->redirect("/");
-		$router->render();
 	}
 
 	require_once './components/scanner/scanner.php';
@@ -32,7 +32,6 @@ if($path === '/') {
 	if (!$authorizer->verifyToken('admin')) {
 		error_log("Token not valid");
 		$router->redirect("/");
-		$router->render();
 	}
 
 	if($path === '/admin/tickets.php') {
@@ -70,13 +69,20 @@ if($path === '/') {
 			return new TourSearchPage($context);
 		});
 	
-	} elseif($path === '/admin/ticketpositions.php') {
-	
-		require_once './components/ticketposition/ticketpositions.php';
-		page('ticketpositions', function ($context) {
-			return new TicketpositionSearchPage($context);
+	} elseif($path === '/admin/tour-positions') {
+		
+		require_once './components/tour-positions/tour-positions.php';
+		page('tourpositions', function ($context) {
+			return new TourpositionSearchPage($context);
 		});
 	
+	} elseif(substr($path, 0, strlen("/admin/tour-position")) === "/admin/tour-position") {
+		
+		require_once './components/tour-positions/tour-position.php';
+		page('tourposition', function ($context) {
+			return new TourpositionDetailPage($context);
+		});
+
 	} elseif($path === '/admin/process.php') {
 	
 		echo file_get_contents($_FILES['files']['tmp_name'][0]);
@@ -91,7 +97,6 @@ if($path === '/') {
 	if (!$authorizer->verifyToken('admin')) {
 		error_log("Token not valid");
 		$router->redirect("/");
-		$router->render();
 	}
 
 	if(substr($path, 0, strlen("/rest/admin/ticket-templates")) === "/rest/admin/ticket-templates") {

@@ -26,7 +26,7 @@ class TicketDetailPage implements Page {
 				$this->state = new TicketDetailComponentState($ticket, CrudMode::edit());
 
 			} else {
-				$this->context->router()->redirect('/tickets.php');
+				$this->context->router()->redirect('/admin/tickets.php');
 			}
 		} else {
 			$this->state = new TicketDetailComponentState($ticket, CrudMode::create());

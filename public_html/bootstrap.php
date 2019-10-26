@@ -11,6 +11,7 @@ require_once './service/ticket-template.php';
 require_once './repository/tour-operator.php';
 require_once './repository/text-definition.php';
 require_once './repository/ticket-template.php';
+require_once './repository/tour-position.php';
 require_once './json/ticket-template.php';
 require_once './ws/ticket-template.php';
 require_once './components/navigation/navigation.php';
@@ -25,12 +26,14 @@ function bootstrap($callback) {
 	$ticketService = new TicketService($databaseService);
 	$textDefinitionRepository = new TextDefinitionRepository($databaseService);
 	$touroperatorRepository = new TouroperatorRepository($databaseService);
+	$tourPositionRepository = new TourPositionRepository($databaseService);
 	$ticketTemplateRepository = new TicketTemplateRepository($databaseService, $textDefinitionRepository, $touroperatorRepository);
 	$ticketTemplateService = new TicketTemplateService($ticketTemplateRepository);
 	$ticketTemplateJsonMapper = new TicketTemplateJsonMapper();
-	$ticketTemplateResource = new TicketTemplateResource($ticketTemplateService, $ticketTemplateJsonMapper);
+	$ticketTemplateResource = new TicketTemplateResource($router, $ticketTemplateService, $ticketTemplateJsonMapper);
 	$context = new Context($router, $authService, $ticketService, $databaseService,
 		$textDefinitionRepository, $touroperatorRepository, $ticketTemplateRepository,
+		$tourPositionRepository,
 		$ticketTemplateService,
 		$ticketTemplateJsonMapper,
 		$ticketTemplateResource
