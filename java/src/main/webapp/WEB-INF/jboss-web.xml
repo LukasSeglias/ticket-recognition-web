@@ -1,0 +1,3 @@
+<jboss-web>
+    <context-root>ticket-recognition</context-root>
+</jboss-web>

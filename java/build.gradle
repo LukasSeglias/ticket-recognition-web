@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'war'
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = 'http://repo.maven.apache.org/maven2'
+    }
+}
+
+dependencies {
+    providedCompile 'jakarta.enterprise:jakarta.enterprise.cdi-api:2.0.2'
+    providedCompile 'org.jboss.spec.javax.annotation:jboss-annotations-api_1.3_spec:2.0.1.Final'
+    providedCompile 'org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.1_spec:2.0.1.Final'
+}
+
+group = 'ticket-recognition'
+version = '1.0.0-SNAPSHOT'
+description = 'Ticketrecognition Web'
+sourceCompatibility = '1.8'
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+        }
+    }
+}

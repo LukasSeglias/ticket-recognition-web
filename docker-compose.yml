@@ -56,6 +56,15 @@ services:
       MYSQL_USER: "${DB_USERNAME}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
     container_name: db
+  java:
+    build:
+      context: './java/'
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+    container_name: java
 networks:
   frontend:
   backend:
