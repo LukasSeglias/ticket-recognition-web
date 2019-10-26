@@ -8,9 +8,15 @@ services:
        PHP_VERSION: ${PHP_VERSION}
     networks:
       - backend
+    environment:
+      DB_CONNECTION: "pgsql:host=db;port=5432;dbname=${DB_NAME}"
+      DB_USER: "${DB_USERNAME}"
+      DB_PASSWORD_FILE: /run/secrets/db_password
     volumes:
       - ${PROJECT_ROOT}/:/var/www/html/
     container_name: php
+    secrets:
+      - db_password
   auth:
     build: 
       context: './keycloak/'
@@ -39,23 +45,24 @@ services:
     container_name: apache
   db:
     build:
-      context: './mysql/'
+      context: './db/'
       args:
-       MYSQL_VERSION: ${MYSQL_VERSION}
+       POSTGRES_VERSION: ${POSTGRES_VERSION}
     restart: always
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - data:/var/lib/mysql
-      - ./mysql/scripts:/docker-entrypoint-initdb.d
+      - data:/var/lib/postgresql/data
+      - ./db/scripts:/docker-entrypoint-initdb.d
     networks:
       - backend
     environment:
-      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
-      MYSQL_DATABASE: "${DB_NAME}"
-      MYSQL_USER: "${DB_USERNAME}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: "${DB_NAME}"
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
     container_name: db
+    secrets:
+      - db_password
   java:
     build:
       context: './java/'
@@ -70,3 +77,6 @@ networks:
   backend:
 volumes:
     data:
+secrets:
+  db_password:
+    file: ./db/dev_password.txt

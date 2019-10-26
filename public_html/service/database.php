@@ -5,9 +5,9 @@ class DatabaseService {
 
 	private $pdo;
 
-	function __construct($config) {
+	function __construct($connection, $user, $password) {
 		try {
-			$this->pdo = new \PDO($config['dsn'], $config['username'], $config['password']);
+			$this->pdo = new \PDO($connection, $user, $password);
 		} catch (PDOException $e) {
 			print "Error!: " . $e->getMessage() . "<br/>";
 			die();

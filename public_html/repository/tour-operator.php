@@ -11,8 +11,8 @@ class TouroperatorRepository {
 		$this->databaseService = $databaseService;
 	}
 	
-	public function findById($id) : Touroperator {
-		$statement = $this->databaseService->pdo()->prepare("SELECT * FROM TOUR_OPERATOR where ID = :id");
+	public function findById($id) {
+		$statement = $this->databaseService->pdo()->prepare("SELECT * FROM tour_operator where id = :id");
 		$statement->execute(array(':id' => $id));
 		while($row = $statement->fetch()) {
 			return $this->map($row);
@@ -21,7 +21,7 @@ class TouroperatorRepository {
 	}
 
 	public function findAll() : Array {
-		$statement = $this->databaseService->pdo()->prepare("SELECT * FROM TOUR_OPERATOR");
+		$statement = $this->databaseService->pdo()->prepare("SELECT * FROM tour_operator");
 		$statement->execute(array());
 		$results = array();
 		while($row = $statement->fetch()) {
@@ -31,7 +31,7 @@ class TouroperatorRepository {
 	}
 
 	private function map($row) : Touroperator {
-		return new Touroperator($row['ID'], $row['NAME']);
+		return new Touroperator($row['id'], $row['name']);
 	}
 
 }

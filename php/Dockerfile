@@ -5,6 +5,6 @@ FROM php:${PHP_VERSION:+${PHP_VERSION}-}fpm-alpine
 RUN apk update; \
     apk upgrade;
 
-COPY db.ini /etc/opt/ticket-recognition-web/db.ini
-
-RUN docker-php-ext-install pdo_mysql
+# See: https://github.com/docker-library/php/issues/221
+RUN apk --no-cache add postgresql-dev; \
+    docker-php-ext-install pdo_pgsql;

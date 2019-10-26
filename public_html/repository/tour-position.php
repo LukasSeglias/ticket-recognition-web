@@ -26,7 +26,7 @@ class TourPositionRepository {
     }
 
     public function get($id) {
-        $statement = $this->databaseService->pdo()->prepare('SELECT * FROM TOUR_POSITION WHERE ID = :id');
+        $statement = $this->databaseService->pdo()->prepare('SELECT * FROM tour_position WHERE id = :id');
 		$statement->execute([':id' => $id]);
         $entity;
 		if($row = $statement->fetch()) {
@@ -36,29 +36,27 @@ class TourPositionRepository {
     }
 
     public function create($entity) {
-        $statement = $this->databaseService->pdo()->prepare('INSERT INTO TOUR_POSITION (DESCRIPTION,CODE) VALUES (:description,:code)');
+        $statement = $this->databaseService->pdo()->prepare('INSERT INTO tour_position (description,code) VALUES (:description,:code) RETURNING id');
 		$statement->execute([':description' => $entity->description(), ':code' => $entity->code()]);
-        $statement = $this->databaseService->pdo()->prepare('SELECT LAST_INSERT_ID()');
-        $statement->execute([]);
         if ($row = $statement->fetch()) {
-            return $row['LAST_INSERT_ID()'];
+            return $row['id'];
         }
         return -1;
     }
 
     public function update($entity) {
-        $statement = $this->databaseService->pdo()->prepare('UPDATE TOUR_POSITION SET DESCRIPTION = :description, CODE = :code WHERE ID = :id');
+        $statement = $this->databaseService->pdo()->prepare('UPDATE tour_position SET description = :description, code = :code WHERE id = :id');
 		$statement->execute([':id' => $entity->id(),':description' => $entity->description(), ':code' => $entity->code()]);
     }
 
     public function delete($id) {
-        $statement = $this->databaseService->pdo()->prepare('DELETE FROM TOUR_POSITION WHERE ID = :id');
+        $statement = $this->databaseService->pdo()->prepare('DELETE FROM tour_position WHERE id = :id');
 		$statement->execute([':id' => $id]);
     }
 	
 	private function map($row) : TourPosition {
 		return new TourPosition(
-			$row['ID'], $row['DESCRIPTION'], $row['CODE']
+			$row['id'], $row['description'], $row['code']
 		);
 	}
 

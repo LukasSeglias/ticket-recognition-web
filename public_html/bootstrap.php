@@ -18,8 +18,8 @@ require_once './components/navigation/navigation.php';
 
 function bootstrap($callback) {
 
-	$dbConfig = parse_ini_file("/etc/opt/ticket-recognition-web/db.ini");
-	$databaseService = new DatabaseService($dbConfig);
+	$dbPassword = file_get_contents(getenv('DB_PASSWORD_FILE'));
+	$databaseService = new DatabaseService(getenv('DB_CONNECTION'), getenv('DB_USER'), $dbPassword);
 
 	$router = new Router();
 	$authService = new AuthService();
