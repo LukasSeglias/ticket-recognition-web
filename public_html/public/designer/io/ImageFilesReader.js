@@ -1,24 +1,31 @@
 
 export class ImageFilesReader {
-            
-    constructor(callback) {
-        this._callback = callback;
+
+    async read(files) {
+
+        let promises = [];
+        
+        for(let fileIndex = 0; fileIndex < files.length; fileIndex++) {
+            promises.push(this._readImageFile(files[fileIndex]));
+        }
+
+        return Promise.all(promises);
     }
 
-    read(files) {
-
-        for(let fileIndex = 0; fileIndex < files.length; fileIndex++) {
+    async _readImageFile(file) {
+        
+        return new Promise((resolve, reject) => {
 
             let reader = new FileReader();
             reader.onload = (event) => {
                 let img = new Image();
                 img.src = event.target.result;
-                img.onload = () => {
-                    this._callback.call(null, img);
-                };
+                img.onload = () => resolve({
+                    image: img,
+                    file: file
+                });
             }
-
-            reader.readAsDataURL(files[fileIndex]);
-        }
-    };
+            reader.readAsDataURL(file);
+        });
+    }
 }

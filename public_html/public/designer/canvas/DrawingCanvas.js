@@ -7,8 +7,8 @@ export class DrawingCanvas {
     constructor(canvas) {
         this._canvas = canvas;
         this._ctx = canvas.getContext("2d");
-        this._layers = [ { visible: true, drawables: [] } ];
-        this._currentLayerIndex = 0;
+        this._layers = this._initLayers(2);
+        this._currentLayerIndex = 1;
         this._drawableChangedListener = [];
         this._drawableAddedListener = [];
         this._drawableRemovedListener = [];
@@ -56,9 +56,16 @@ export class DrawingCanvas {
         });
     }
     
-    add(drawable) {
-        this._layers[this._currentLayerIndex].drawables.push(drawable);
+    add(drawable, layer) {
+        layer = this._normalizedLayer(layer);
+        this._layers[layer].drawables.push(drawable);
         this._notifyDrawableAdded(drawable);
+    }
+
+    _normalizedLayer(layer) {
+        layer = layer == undefined ? this._currentLayerIndex : layer;
+        layer = Math.max(Math.min(layer, this._layers.length - 1), 0);
+        return layer;
     }
     
     replace(oldDrawable, newDrawable) {
@@ -93,6 +100,14 @@ export class DrawingCanvas {
             const drawableIndex = parts[1];
             return this._layers[layerIndex].drawables[drawableIndex];
         }
+    }
+
+    _initLayers(number) {
+        let layers = [];
+        for(let i = 0; i < number; i++) {
+            layers.push({ visible: true, drawables: [] });
+        }
+        return layers;
     }
 
     _getIndices(drawable) {
@@ -142,7 +157,6 @@ export class DrawingCanvas {
     }
 
     _notifyDrawableChanged(drawable) {
-        console.log('key: ' + this.calculateKey(drawable));
         this._drawableChangedListener.forEach(listener => {
             if(listener) listener.call(null, drawable);
         });

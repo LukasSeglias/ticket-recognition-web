@@ -16,7 +16,7 @@ export class TicketTextEditor  {
 
         this._drawingCanvas.addDrawableChangedListener((drawable) => {
             if(drawable === this._drawable) {
-                this.value = drawable;
+                this.selectedDrawable = drawable;
             }
         });
 
@@ -26,64 +26,122 @@ export class TicketTextEditor  {
                 addButton.disabled = false;
                 ticketTextList.disabled = false;
 
-                let text = this._textForm.getValue();
+                let textDefinition = this._textForm.value;
 
-                if(this._drawable && this._drawable.key()) {
-                    this._ticketTextList.remove(this._drawable.key());
-                }
-                this._ticketTextList.add(text.key);
-
-                this._onTextFormChange(newValue);
+                this._updateTextDefinition(this._selectedKey, textDefinition);
+                this._onTextFormChange(textDefinition);
+                this._selectedKey = textDefinition.key;
             } else {
                 addButton.disabled = true;
                 ticketTextList.disabled = true;
             }
         });
 
-        ticketTextList.onSelect((key) => {
-            console.log('selected key ' + key);
+        this._textForm.textDefinitionExistsCheck = (key) => {
+            if(this._selectedKey != undefined && this._selectedKey == key) {
+                return false;
+            }
+            return this._findTextDefinitionIndex(key) >= 0;
+        }
 
+        ticketTextList.onSelect((key) => {
             this._selectListeners.forEach((listener) => {
                 if(listener) listener(key);
             });
         });
         
         addButton.addEventListener('click', () => {
-            this._drawable = undefined;
-
-            this.value = {};
-
-            this._addListeners.forEach((listener) => {
-                if(listener) listener();
-            });
+            this._add();
         });
 
         deleteButton.addEventListener('click', () => {
-            
-            this._drawingCanvas.remove(this._drawable);
-            
-            if(this._drawable.key()) {
-                ticketTextList.remove(this._drawable.key());
-            }
-
-            this.value = undefined;
-
-            this._deleteListeners.forEach((listener) => {
-                if(listener) listener();
-            });
+            this._delete();
         });
     }
 
-    get value() {
+    validate() {
+        return this._textForm.validate();
+    }
+
+    _add() {
+        this._drawable = undefined;
+        this._selectedKey = undefined;
+
+        this.selectedDrawable = {};
+
+        this._addListeners.forEach((listener) => {
+            if(listener) listener();
+        });
+    }
+
+    _delete() {
+
+        this._drawingCanvas.remove(this._drawable);
+        
+        if(this._selectedKey) {
+            this._removeTextDefinition(this._selectedKey);
+        }
+
+        this._drawable = undefined;
+        this._selectedKey = undefined;
+        this.selectedDrawable = undefined;
+        this._textForm.reset();
+
+        this._deleteListeners.forEach((listener) => {
+            if(listener) listener();
+        });
+    }
+
+    _updateTextDefinition(key, textDefinition) {
+        // Remove old entry
+        let oldIndex = this._findTextDefinitionIndex(key);
+        if(oldIndex >= 0) {
+            this._textDefinitions.splice(oldIndex, 1);
+        }
+        // Add new entry
+        if(textDefinition.key) {
+            this._textDefinitions.push(textDefinition);
+        }
+
+        // Remove old entry
+        if(this._ticketTextList.contains(key)) {
+            this._ticketTextList.remove(key);
+        }
+        // Add new entry
+        if(textDefinition.key) {
+            this._ticketTextList.add(textDefinition.key);
+        }
+    }
+
+    _removeTextDefinition(key) {
+        let index = this._findTextDefinitionIndex(key);
+        if(index >= 0) {
+            this._textDefinitions.splice(index, 1);
+        }
+        ticketTextList.remove(key);
+    }
+
+    _findTextDefinitionIndex(key) {
+        for(let i = 0; i < this._textDefinitions.length; i++) {
+            if(this._textDefinitions[i].key === key) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    get selectedDrawable() {
         return this._drawable;
     }
 
-    set value(drawable) {
-        this._drawable = drawable;
+    set selectedDrawable(drawable) {
 
         if(drawable && drawable instanceof TicketText) {
 
+            this._drawable = drawable;
+            this._selectedKey = drawable.key();
             this._textForm.setValue(drawable);
+            this._updateTextDefinition(this._selectedKey, this._textForm.value);
             this._textForm.setDisabled(false);
             this._ticketTextList.disabled = !this._textForm.validate();
             this._addButton.disabled = !this._textForm.validate();
@@ -94,12 +152,36 @@ export class TicketTextEditor  {
             }
 
         } else {
+            this._drawable = undefined;
+            this._selectedKey = undefined;
             this._textForm.setValue();
             this._textForm.setDisabled(true);
             this._ticketTextList.disabled = false;
             this._addButton.disabled = false;
             this._deleteButton.disabled = true;
         }
+    }
+
+    get value() {
+        return this._textDefinitions;
+    }
+
+    set value(textDefinitions) {
+        textDefinitions = textDefinitions || [];
+        this._textDefinitions = textDefinitions;
+        this._ticketTextList.value = textDefinitions;
+
+        textDefinitions.forEach((textDefinition) => {
+
+            let newRectangle = this._convertRectangle(textDefinition.rectangle);
+            if(newRectangle) {
+                let newText = new TicketText(textDefinition.key, textDefinition.description, newRectangle);
+                this._drawingCanvas.add(newText);
+            } else {
+                console.error('TextDefinition has invalid rectangle');
+                console.dir(textDefinition);
+            }
+        });
     }
 
     onAdd(fn) {
@@ -120,17 +202,9 @@ export class TicketTextEditor  {
             if(listener) listener();
         });
 
-        // TODO: check if is text
-        let newRectangle = this._drawingCanvas.drawableRectangle({
-            x: newValue.x,
-            y: newValue.y
-        },{
-            x: newValue.x + newValue.width,
-            y: newValue.y + newValue.height
-        });
-
+        let newRectangle = this._convertRectangle(newValue.rectangle);
         if(newRectangle) {
-            let newText = new TicketText(newValue.key, newRectangle);
+            let newText = new TicketText(newValue.key, newValue.description, newRectangle);
 
             if(this._drawable) {
                 this._drawingCanvas.replace(this._drawable, newText);
@@ -139,5 +213,16 @@ export class TicketTextEditor  {
             }
             this._drawable = newText;
         }
+    }
+
+    _convertRectangle(rectangle) {
+        rectangle = rectangle || {};
+        return this._drawingCanvas.drawableRectangle({
+            x: rectangle.x,
+            y: rectangle.y
+        },{
+            x: rectangle.x + rectangle.width,
+            y: rectangle.y + rectangle.height
+        });
     }
 }

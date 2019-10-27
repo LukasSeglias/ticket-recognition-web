@@ -6,14 +6,17 @@ services:
       context: './php/'
       args:
        PHP_VERSION: ${PHP_VERSION}
+       CTI_IMAGE_DIRECTORY: ${CTI_IMAGE_DIRECTORY}
     networks:
       - backend
     environment:
       DB_CONNECTION: "pgsql:host=db;port=5432;dbname=${DB_NAME}"
       DB_USER: "${DB_USERNAME}"
       DB_PASSWORD_FILE: /run/secrets/db_password
+      CTI_IMAGE_DIRECTORY: ${CTI_IMAGE_DIRECTORY}
     volumes:
       - ${PROJECT_ROOT}/:/var/www/html/
+      - images:${CTI_IMAGE_DIRECTORY}
     container_name: php
     secrets:
       - db_password
@@ -77,6 +80,7 @@ networks:
   backend:
 volumes:
     data:
+    images:
 secrets:
   db_password:
     file: ./db/dev_password.txt

@@ -1,8 +1,9 @@
 
 export class TicketText {
 		
-    constructor(key, rectangle) {
+    constructor(key, description, rectangle) {
         this._key = key;
+        this._description = description;
         this._rectangle = rectangle;
     }
 
@@ -27,6 +28,10 @@ export class TicketText {
 
     key() {
         return this._key;
+    }
+
+    description() {
+        return this._description;
     }
 
     x() {

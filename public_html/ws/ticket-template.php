@@ -21,10 +21,46 @@ class TicketTemplateResource {
 
 		$id = $this->getId();
 		if($id) {
-			$template = $this->findById($id);
-			return $this->mapper->toJson($template);
+
+			if($_SERVER['REQUEST_METHOD'] === 'GET') {
+				// Get
+				$template = $this->findById($id);
+				return $this->mapper->toJson($template);
+
+			} elseif($_SERVER['REQUEST_METHOD'] === 'POST') {
+				// Update
+				$filename = $this->saveTemplateImage($id);
+
+				// TODO: implement
+
+				return;
+
+			} elseif($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+				// Delete
+
+				// TODO: implement
+			}
+		} else {
+
+			if($_SERVER['REQUEST_METHOD'] === 'POST') {
+				// Create
+				$filename = $this->saveTemplateImage($id);
+
+				// TODO: implement
+
+				return;
+			}
+
 		}
 		$this->router->notFound();
+	}
+
+	private function saveTemplateImage($id) {
+		$uploadedFile = $_FILES['templateImage'];
+		$extension = pathinfo($uploadedFile['name'])['extension'];
+		$filename = $id.".".$extension;
+		move_uploaded_file($uploadedFile['tmp_name'], getenv('CTI_IMAGE_DIRECTORY').$filename);
+		return $filename;
 	}
 
 	private function findById($id) {

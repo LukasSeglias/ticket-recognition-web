@@ -37,7 +37,7 @@ class TicketTemplateRepository {
 	private function map($row) : TicketTemplate {
 		$touroperator = $this->touroperatorRepository->findById($row['tour_operator_id']);
 		$textDefinitions = $this->textDefinitionRepository->findByTemplateId($row['id']);
-		return new TicketTemplate($row['id'], $row['key'], $touroperator, $textDefinitions);
+		return new TicketTemplate($row['id'], $row['key'], $touroperator, $textDefinitions, $row['image_file_name']);
 	}
 
 }

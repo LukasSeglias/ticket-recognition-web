@@ -17,7 +17,7 @@
 		
 		#editor-tools {
 			position: absolute;
-			top: 0px; 
+			top: 56px; 
 			bottom: 0px;
 			right: 0px;
 			max-height: 100%;
@@ -32,37 +32,47 @@
 	</style>
 
 	<main>
+		<div style="position: absolute; bottom: 15px; left: 15px;">
+
+			<div class="toast" id="toast-save-successful" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+				<div class="toast-body">
+					{{ "designer_save_successfull"|translated }}
+				</div>
+			</div>
+
+		</div>
+
 		<div id="canvas-container">
 			<canvas tabindex='1'></canvas>
 		</div>
 		<div id="editor-tools">
 			<div class="card mb-3">
 				<div class="card-header d-flex justify-content-between align-items-center">
-					Template
+					{{ "designer_template"|translated }}
 					<div>
-						<button type="button" class="btn btn-primary" onclick="downloadOutput()">
+						<button type="button" class="btn btn-primary" id="download-button">
 							Download
+						</button>
+						<button type="button" class="btn btn-success ml-2" id="save-template-button">
+							<span class="oi oi-check"></span>
+						</button>
+						<button type="button" class="btn btn-danger ml-2" id="delete-template-button" disabled>
+							<span class="oi oi-trash"></span>
 						</button>
 					</div>
 				</div>
 				<div class="card-body">
-					<form class="design-form mb-0">
+					<form class="mb-0" id="design-form">
 						<div class="form-row">
 							<div class="col">
 								<div class="form-group">
-									<label>Key</label>
-									<input type="text" class="form-control" name="key" placeholder="Key" required>
+									<label>{{ "designer_key"|translated }}</label>
+									<input type="text" class="form-control" name="key" placeholder="{{ 'designer_key'|translated }}" required>
 								</div>
 								<div class="form-group">
 									<div class="custom-file">
-										<input type="file" class="custom-file-input" accept="image/*" id="template-image-upload">
-										<label class="custom-file-label">Choose Image</label>
-									</div>
-								</div>
-								<div class="form-group mb-0">
-									<div class="custom-file">
-										<input type="file" class="custom-file-input" accept="application/json" id="configFileUpload">
-										<label class="custom-file-label">Choose Configfile</label>
+										<input type="file" class="custom-file-input" accept="image/*" name="image" id="template-image-upload">
+										<label class="custom-file-label">{{ "designer_choose_image"|translated }}</label>
 									</div>
 								</div>
 							</div>
@@ -73,51 +83,59 @@
 
 			<div class="card mb-3">
 				<div class="card-header d-flex justify-content-between align-items-center">
-					Text
+					{{ "designer_textdefinition"|translated }}
 					<div>
 						<button type="button" class="btn btn-primary" id="add-text-button">
-							Add Text
+							<span class="oi oi-plus"></span>
 						</button>
-						<button type="button" class="btn btn-danger" id="delete-button" disabled>
-							Delete
+						<button type="button" class="btn btn-danger ml-2" id="delete-text-button" disabled>
+							<span class="oi oi-trash"></span>
 						</button>
 					</div>
 				</div>
 				<div class="card-body">
-					<form class="text-form mb-0">
+					<form class="mb-0" id="text-form">
 						<div class="form-row">
 							<div class="col">
 								<div class="form-group">
-									<label>Key</label>
-									<input type="text" class="form-control" name="key" placeholder="Key" required disabled>
+									<label>{{ "designer_key"|translated }}</label>
+									<input type="text" class="form-control" name="key" placeholder="{{ 'designer_key'|translated }}" required disabled>
 								</div>
 							</div>
 						</div>
 						<div class="form-row">
 							<div class="col">
 								<div class="form-group">
-									<label>X</label>
-									<input type="number" class="form-control" name="x" placeholder="X-Coordinate" required disabled>
-								</div>
-							</div>
-							<div class="col">
-								<div class="form-group">
-									<label>Y</label>
-									<input type="number" class="form-control" name="y" placeholder="Y-Coordinate" required disabled>
+									<label>{{ "designer_description"|translated }}</label>
+									<input type="text" class="form-control" name="description" placeholder="{{ 'designer_description'|translated }}" required disabled>
 								</div>
 							</div>
 						</div>
 						<div class="form-row">
 							<div class="col">
 								<div class="form-group">
-									<label>Width</label>
-									<input type="number" class="form-control" name="width" placeholder="Width" required disabled>
+									<label>{{ "designer_x"|translated }}</label>
+									<input type="number" class="form-control" name="x" placeholder="{{ 'designer_x'|translated }}" required disabled>
 								</div>
 							</div>
 							<div class="col">
 								<div class="form-group">
-									<label>Height</label>
-									<input type="number" class="form-control" name="height" placeholder="Height" required disabled>
+									<label>{{ "designer_y"|translated }}</label>
+									<input type="number" class="form-control" name="y" placeholder="{{ 'designer_y'|translated }}" required disabled>
+								</div>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col">
+								<div class="form-group">
+									<label>{{ "designer_width"|translated }}</label>
+									<input type="number" class="form-control" name="width" placeholder="{{ 'designer_width'|translated }}" required disabled>
+								</div>
+							</div>
+							<div class="col">
+								<div class="form-group">
+									<label>{{ "designer_height"|translated }}</label>
+									<input type="number" class="form-control" name="height" placeholder="{{ 'designer_height'|translated }}" required disabled>
 								</div>
 							</div>
 						</div>
@@ -127,13 +145,14 @@
 
 			<div class="card">
 				<div class="card-header">
-					Texts
+					{{ "designer_textdefinitions"|translated }}
 				</div>
 				<ul class="list-group list-group-flush" id="tickettext-list-container">
 				</ul>
 			</div>
 
 		</div>
+				
 	</main>
 
 	<script type="module">
@@ -142,12 +161,12 @@
 		import {TextCreateMode} from '/public/designer/editor/mode/TextCreateMode.js';
 		import {DrawingModeAdapter, DrawingModeListAdapter} from '/public/designer/editor/mode/DrawingModeAdapters.js';
 		import {TicketTextForm} from '/public/designer/editor/input/TicketTextForm.js';
+		import {TicketTemplateForm} from '/public/designer/editor/input/TicketTemplateForm.js';
 		import {Editor} from '/public/designer/editor/Editor.js';
-		import {EditorTools} from '/public/designer/editor/EditorTools.js';
 		import {TicketTextEditor} from '/public/designer/editor/TicketTextEditor.js';
+		import {TicketTemplateEditor} from '/public/designer/editor/TicketTemplateEditor.js';
 		import {ImageFilesReader} from '/public/designer/io/ImageFilesReader.js';
 		import {FileUploadInput} from '/public/designer/io/FileUploadInput.js';
-		import {FileDownloader} from '/public/designer/io/FileDownloader.js';
 		import {TicketText} from '/public/designer/ticket/TicketText.js';
 		import {TicketTextList} from '/public/designer/ticket/TicketTextList.js';
 		import {TextSerializer} from '/public/designer/ticket/TextSerializer.js';
@@ -158,43 +177,17 @@
 		import {DrawableImage} from '/public/designer/canvas/drawables/DrawableImage.js';
 		import {DrawableRectangle} from '/public/designer/canvas/drawables/DrawableRectangle.js';
 		
-		function ConfigFilesReader() {
-			
-			this._files = [];
-			
-			this.read = function(files) {
-				var self = this;
-			
-				for(var fileIndex = 0; fileIndex < files.length; fileIndex++) {
-	
-					var reader = new FileReader();
-					reader.onload = function(event) {
-						var jsonObj = JSON.parse(event.target.result);
-						self._files.push(jsonObj);
-						console.dir(jsonObj);
-					}
-	
-					reader.readAsText(files[fileIndex]);
-				}
-			};
-			
-			this.files = function() {
-				return this._files;
-			};
-			
-			this.clear = function() {
-				return this._files = [];
-			};
-		}
-		
 		function createEditor() {
 			var canvas  = document.querySelector("canvas");
 			var canvasContainer = document.getElementById("canvas-container");
 			var templateImageUploadElement = document.getElementById('template-image-upload');
 			var addTextModeButton = document.getElementById('add-text-button');
-			var deleteButton = document.getElementById('delete-button');
+			var deleteTextButton = document.getElementById('delete-text-button');
+			var saveTemplateButton = document.getElementById('save-template-button');
+			var deleteTemplateButton = document.getElementById('delete-template-button');
 			var editorToolsElement = document.getElementById('editor-tools');
-			var textFormElement = editorToolsElement.querySelector('.text-form');
+			var textFormElement = document.getElementById('text-form');
+			var templateFormElement = document.getElementById('design-form');
 			var ticketTextListElement = document.getElementById('tickettext-list-container');
 	
 			function resizeCanvas() {
@@ -202,7 +195,7 @@
 				var padding = 15;
 				var border = 1;
 
-				var canvasContainerHeight = window.innerHeight - offsetTop;
+				var canvasContainerHeight = window.innerHeight - offsetTop - 1;
 
 				canvas.width = window.innerWidth - editorToolsElement.clientWidth - 3*padding - 2*border;
 				canvas.height = canvasContainerHeight - 2*padding - 2*border;
@@ -219,38 +212,56 @@
 				resizeCanvas();
 			};
 			
-			var drawingCanvas = new DrawingCanvas(canvas);
-			var interactionCanvas = new InteractionCanvas(canvas);
+			let drawingCanvas = new DrawingCanvas(canvas);
+			let interactionCanvas = new InteractionCanvas(canvas);
 
-			var textForm = new TicketTextForm(textFormElement, drawingCanvas);
-			var ticketTextList = new TicketTextList(ticketTextListElement, drawingCanvas);
+			let textForm = new TicketTextForm(textFormElement, drawingCanvas);
+			let ticketTextList = new TicketTextList(ticketTextListElement, drawingCanvas);
+			let ticketTextEditor = new TicketTextEditor(textForm, ticketTextList, addTextModeButton, deleteTextButton, drawingCanvas);
 			
-			var templateImageUpload = new FileUploadInput(templateImageUploadElement);
+			let templateForm = new TicketTemplateForm(templateFormElement, drawingCanvas);
+			let ticketTemplateEditor = new TicketTemplateEditor(templateForm, saveTemplateButton, deleteTemplateButton, drawingCanvas);
+			let templateImageUpload = new FileUploadInput(templateImageUploadElement);
 
-			var ticketTextEditor = new TicketTextEditor(textForm, ticketTextList, addTextModeButton, deleteButton, drawingCanvas);
-
-			return new Editor(drawingCanvas, interactionCanvas, templateImageUpload, ticketTextEditor);
+			return new Editor(drawingCanvas, interactionCanvas, templateImageUpload, ticketTextEditor, ticketTemplateEditor);
 		}
-		
-		async function getTicketTemplate() {
-			var urlParams = new URLSearchParams(window.location.search);
-			if(urlParams.has('id')) {
-				let response = await fetch(`/rest/admin/ticket-templates/${urlParams.get('id')}`);
-				let data = await response.json();
-				return data;
-			}
+
+		import {FileDownloader} from '/public/designer/io/FileDownloader.js';
+		function cti_debug(editor) {
+			
+			document.getElementById('download-button').addEventListener('click', (event) => {
+				// Generate a txt-file whose content looks like this:
+				// template_id T1
+				// image resources/images/test.png
+				// text tourcode;100,0;200,50
+
+				function renderTexts(textDefinitions) {
+					let out = "";
+					textDefinitions.forEach((text) => {
+						out += `text ${text.key};${text.rectangle.x};${text.rectangle.y};${text.rectangle.x + text.rectangle.width};${text.rectangle.y + text.rectangle.height}\n`;
+					});
+					return out;
+				}
+
+				let value = editor.value;
+				
+				let imageExtension = value.imageFile.name.split('.').pop();
+				let content = `template_id ${value.key}\nimage resources/images/${value.key}.${imageExtension}\n${renderTexts(value.textDefinitions)}`;
+
+				let filename = value.key + ".txt";
+
+				let downloader = FileDownloader.TEXT_UTF8;
+				downloader.download(filename, content);
+			});
 		}
 
 		function main() {
-			getTicketTemplate()
-				.then((template) => {
-					console.dir(template);
-				});
-
-			var configFilesReader = new ConfigFilesReader();
-			var configFileUpload = new FileUploadInput(document.getElementById('configFileUpload'), configFilesReader);
-			
 			var editor = createEditor();
+
+			var urlParams = new URLSearchParams(window.location.search);
+			editor.init(urlParams.get('id'));
+
+			cti_debug(editor);
 			
 			function animate() {
 				requestAnimationFrame(animate);

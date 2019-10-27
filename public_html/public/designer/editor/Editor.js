@@ -1,35 +1,13 @@
-import {DrawableImage} from '/public/designer/canvas/drawables/DrawableImage.js';
 import {SelectAndMoveMode} from '/public/designer/editor/mode/SelectAndMoveMode.js';
 import {TextCreateMode} from '/public/designer/editor/mode/TextCreateMode.js';
-import {ImageFilesReader} from '/public/designer/io/ImageFilesReader.js';
 
 export class Editor {
     
-    constructor(drawingCanvas, interactionCanvas, templateImageUpload, ticketTextEditor) {
+    constructor(drawingCanvas, interactionCanvas, templateImageUpload, ticketTextEditor, ticketTemplateEditor) {
 		
         this._drawingCanvas = drawingCanvas;
-        
-        templateImageUpload.setReader(new ImageFilesReader((img) => {
-            let image = new DrawableImage(img);
-            this._drawingCanvas.add(image);
-
-            // TODO: cleanup
-            console.dir(templateImageUpload.files);
-            const formData = new FormData();
-
-            for (let i = 0; i < templateImageUpload.files.length; i++) {
-                let file = templateImageUpload.files[i]
-        
-                formData.append('files[]', file)
-            }
-        
-            fetch('/admin/process.php', {
-                method: 'POST',
-                body: formData,
-            }).then(response => {
-                
-            })
-        }));
+        this._ticketTemplateEditor = ticketTemplateEditor;
+        this._ticketTextEditor = ticketTextEditor;
         
         this._interactionCanvas = interactionCanvas;
         this._textCreateMode = new TextCreateMode(this._drawingCanvas);
@@ -37,11 +15,10 @@ export class Editor {
         this._interactionCanvas.setMode(this._selectMoveMode);
 
         this._selectMoveMode.onSelectedDrawableChange(function(selectedDrawable) {
-            ticketTextEditor.value = selectedDrawable;
+            ticketTextEditor.selectedDrawable = selectedDrawable;
         });
 
         this._textCreateMode.onFinish((text) => {
-            console.log('finished text, switch mode');
             this._interactionCanvas.setMode(this._selectMoveMode);
             this._selectMoveMode.select(text);
             text.calculateColor();
@@ -49,15 +26,8 @@ export class Editor {
 
         ticketTextEditor.onSelect((key) => {
             let list = this._drawingCanvas.find((drawable) => {
-                console.log('drawable');
-                console.dir(drawable);
-
-                if(drawable.key){
-                    console.log(' drawable key is ' + drawable.key());
-                }
                 return drawable.key && drawable.key() === key;
             });
-            console.log('found ' + list.length + ' entries that match key : ' + key);
             if(list.length > 0) {
                 this._interactionCanvas.setMode(this._selectMoveMode);
                 this._selectMoveMode.select(list[0]);
@@ -67,9 +37,91 @@ export class Editor {
         ticketTextEditor.onAdd(() => {
             this._interactionCanvas.setMode(this._textCreateMode);
         });
+
+        ticketTemplateEditor.onSave(() => {
+            this._save();
+        });
+
+        ticketTemplateEditor.onDelete(() => {
+            this._delete();
+        });
     }
 
     draw() {
         this._drawingCanvas.draw();
+    }
+
+    set value(value) {
+
+        this._id = value.id;
+        this._ticketTemplateEditor.value = value;
+        this._ticketTextEditor.value = value.textDefinitions;
+    }
+
+    get value() {
+        let template = this._ticketTemplateEditor.value;
+        template.textDefinitions = this._ticketTextEditor.value;
+        return template;
+    }
+
+    init(id) {
+        this.getTicketTemplate(id)
+        .then((template) => {
+            this.value = template;
+        });
+    }
+
+    validate() {
+        return this._ticketTemplateEditor.validate()
+            && this._ticketTextEditor.validate();
+    }
+
+    _save() {
+        if(this.validate()) {
+            let template = this.value;
+
+            let imageFile = new File([template.imageFile], template.imageFile.name);
+            delete template.imageFile;
+
+            const formData = new FormData();
+            formData.append('templateImage', imageFile);
+            formData.append('template', JSON.stringify(template));
+            
+            let url = this._id != undefined ? `/rest/admin/ticket-templates/${this._id}` : `/rest/admin/ticket-templates`;
+
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+            }).then(response => {
+                if(response.ok) {
+                    $("#toast-save-successful").toast('show');
+                }
+                // TODO: handle error
+            });
+        }
+    }
+
+    _delete() {
+        if(this._id !== undefined) {
+            fetch(`/rest/admin/ticket-templates/${this._id}`, {
+                method: 'DELETE'
+            })
+            .then(res => {
+                if(res.ok) {
+                    window.location.href = "/admin/designs.php";
+                } else {
+                    console.error('Error occured on template delete');
+                }
+            });
+        }
+    }
+
+    async getTicketTemplate(id) {
+        if(id !== undefined) {
+            let response = await fetch(`/rest/admin/ticket-templates/${id}`);
+            let data = await response.json();
+            return data;
+        }
+        return {};
     }
 }

@@ -83,10 +83,15 @@ if($path === '/') {
 			return new TourpositionDetailPage($context);
 		});
 
-	} elseif($path === '/admin/process.php') {
-	
-		echo file_get_contents($_FILES['files']['tmp_name'][0]);
+	} elseif(substr($path, 0, strlen("/admin/images/ticket-template/")) === "/admin/images/ticket-template/") {
 		
+		// TODO: rewrite this to be safer in regard of relative paths etc.
+		$filename = end(explode('/', getenv('REQUEST_URI')));
+		$filepath = getenv('CTI_IMAGE_DIRECTORY').$filename;
+		$mimetype = mime_content_type($filepath);
+		header('content-type: '.$mimetype);
+		echo readfile($filepath);
+
 	} else {
 
 		// TODO: NOT FOUND PAGE

@@ -4,7 +4,7 @@ export class DrawableRectangle {
     constructor(boundingBox) {
         this._boundingBox = boundingBox;
         this.frame = 0;
-        this.color = 'white';
+        this.color = 'black';
         this._recalculateColor = false;
     }
 

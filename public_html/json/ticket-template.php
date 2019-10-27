@@ -28,7 +28,8 @@ class TicketTemplateJsonMapper {
 			'touroperator' => $this->mapTourOperator($template->touroperator()),
 			'textDefinitions' => $this->mapList($template->textDefinitions(), function($item) {
 				return $this->mapTextDefinition($item);
-			})
+			}),
+			'imageFilename' => $template->imageFilename()
 		];
 	}
 

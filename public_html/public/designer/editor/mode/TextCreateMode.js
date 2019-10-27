@@ -20,7 +20,6 @@ export class TextCreateMode {
     mousedown(mouse) {
         this._lastMouse = mouse;
         this._mousedown = true;
-        console.log('textcreate: mousedown');
     }
 
     mouseup(mouse) {
@@ -46,7 +45,7 @@ export class TextCreateMode {
             });
 
             if(newRectangle) {
-                let newText = new TicketText('', newRectangle);
+                let newText = new TicketText('', '', newRectangle);
 
                 if(this._currentText) {
                     this._drawingCanvas.replace(this._currentText, newText);
