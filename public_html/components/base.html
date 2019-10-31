@@ -27,7 +27,7 @@
 
 	</style>
 
-	<script src="http://localhost:90/auth/js/keycloak.js"></script>
+	<script src="../auth/js/keycloak.js"></script>
     
 	{% block head %}
 	{% endblock %}
@@ -37,7 +37,7 @@
 	<script>
 		const TEN = 10;
         var keycloak = Keycloak({
-    		url: 'http://localhost:90/auth',
+    		url: '/auth',
     		realm: 'cti',
     		clientId: 'webserver'
 		});

@@ -1,0 +1,4 @@
+embed-server --server-config=standalone.xml --std-out=echo
+run-batch --file=cli/application-config.cli
+run-batch --file=cli/application-security-domain.cli
+stop-embedded-server

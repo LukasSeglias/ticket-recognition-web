@@ -6,6 +6,7 @@ use \Auth0\SDK\JWTVerifier;
 use \Auth0\SDK\Exception\CoreException;
 use \Auth0\SDK\Exception\InvalidTokenException;
 use \Auth0\SDK\Helpers\JWKFetcher;
+use Firebase\JWT\JWT;
 
 class AuthService {
 	private $client;
@@ -66,18 +67,27 @@ class AuthService {
         }
 
         try {
-             $fetcher = new JWKKeycloakFetcher('http://auth:8080/auth/realms/cti/protocol/openid-connect/certs');
-
+            $fetcher = new JWKKeycloakFetcher('http://auth:8080/auth/realms/cti/protocol/openid-connect/certs');
+            $token = $_COOKIE['ACCESS_TOKEN'];
+            $tks = explode('.', $token);
+            if (count($tks) !== 3) {
+                throw new InvalidTokenException('Wrong number of segments');
+            }
+            $body = JWT::jsonDecode(JWT::urlsafeB64Decode($tks[1]));
+            
             $config = [
                 'supported_algs' => [$parsed->{'keys'}[0]->{'alg'}],
                 'valid_audiences' => ['account'],
-                'authorized_iss' => ['http://localhost:90/auth/realms/cti'],
+                'authorized_iss' => [$body->iss],
                 'jwks_path' => ['protocol/openid-connect/certs']
             ];
 
             $verifier = new JWTVerifier($config, $fetcher);
             $decoded_token = $verifier->verifyAndDecode($_COOKIE['ACCESS_TOKEN']);
         } catch(CoreException $e) {
+            error_log("Exception verifying jwt-token: " . $e);
+            return false;
+        } catch(InvalidTokenException $e) {
             error_log("Exception verifying jwt-token: " . $e);
             return false;
         }

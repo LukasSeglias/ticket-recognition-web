@@ -1,0 +1,2 @@
+/subsystem=security/security-domain=application-security/:add
+/subsystem=security/security-domain=application-security/authentication=classic:add(login-modules=[{"code"=>"org.keycloak.adapters.jboss.KeycloakLoginModule", "flag"=>"required"}])
