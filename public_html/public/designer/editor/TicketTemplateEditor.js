@@ -32,6 +32,7 @@ export class TicketTemplateEditor  {
 
     set value(value) {
         value = value || {};
+        let touroperator = value.touroperator || {};
         this._id = value.id;
 
         if(value.id) {
@@ -40,6 +41,10 @@ export class TicketTemplateEditor  {
                 this._templateForm.value = {
                     id: value.id,
                     key: value.key,
+                    touroperator: {
+                        id: touroperator.id,
+                        name: touroperator.name
+                    },
                     image: image.image,
                     imageFile: image.file
                 };

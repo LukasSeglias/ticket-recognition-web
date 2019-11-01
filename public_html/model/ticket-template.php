@@ -7,14 +7,14 @@ class TicketTemplate {
 	private $key;
 	private $touroperator;
 	private $textDefinitions;
-	private $imageFilename;
+	private $imageFileExtension;
 	
-	function __construct($id, $key, $touroperator, $textDefinitions, $imageFilename) {
+	function __construct($id, $key, $touroperator, $textDefinitions, $imageFileExtension) {
 		$this->id = $id;
 		$this->key = $key;
 		$this->touroperator = $touroperator;
 		$this->textDefinitions = $textDefinitions;
-		$this->imageFilename = $imageFilename;
+		$this->imageFileExtension = $imageFileExtension;
 	}
 	
 	public function id() {
@@ -33,8 +33,12 @@ class TicketTemplate {
 		return $this->textDefinitions;
 	}
 
+	public function imageFileExtension() {
+		return $this->imageFileExtension;
+	}
+
 	public function imageFilename() {
-		return $this->imageFilename;
+		return $this->id . "." . $this->imageFileExtension;
 	}
 }
 ?>

@@ -19,6 +19,18 @@ class TicketTemplateService {
 		return $this->repository->findAll();
 	}
 
+	public function delete($id) {
+		return $this->repository->delete($id);
+	}
+
+	public function create($entity) {
+		return $this->repository->create($entity);
+	}
+
+	public function update($entity) {
+		return $this->repository->update($entity);
+	}
+
 }
 
 ?>

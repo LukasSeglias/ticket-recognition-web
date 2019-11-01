@@ -34,10 +34,96 @@ class TicketTemplateRepository {
 		return $results;
 	}
 
+	public function delete($id) {
+		$pdo = $this->databaseService->pdo();
+		try {
+			$pdo->beginTransaction();
+
+			$pdo->prepare("DELETE FROM text_definition where ticket_template_id = :id")->execute(array(":id" => $id));
+			$pdo->prepare("DELETE FROM ticket_template where id = :id")->execute(array(":id" => $id));
+		
+			$pdo->commit();
+		} 
+		catch (\Exception $e) {
+			if ($pdo->inTransaction()) {
+				$pdo->rollback();
+			}
+			throw $e;
+		}
+	}
+
+	public function create($entity) {
+		$pdo = $this->databaseService->pdo();
+		try {
+			$pdo->beginTransaction();
+
+			$statement = $pdo->prepare("INSERT INTO ticket_template(key, image_file_extension, tour_operator_id) VALUES(:key, :imageFileExtension, :tourOperatorId) RETURNING id");
+			$statement->execute(array(
+				':key' => $entity->key(), 
+				':imageFileExtension' => $entity->imageFileExtension(),
+				':tourOperatorId' => $entity->touroperator()->id())
+			);
+			$this->insertTextDefinitions($pdo, $entity->id(), $entity->textDefinitions());
+
+			$pdo->commit();
+
+			if ($row = $statement->fetch()) {
+				return $row['id'];
+			}
+			return -1;
+		} 
+		catch (\Exception $e) {
+			if ($pdo->inTransaction()) {
+				$pdo->rollback();
+			}
+			throw $e;
+		}
+	}
+
+	public function update($entity) {
+		$pdo = $this->databaseService->pdo();
+		try {
+			$pdo->beginTransaction();
+
+			$pdo->prepare("DELETE FROM text_definition where ticket_template_id = :ticketTemplateId")->execute(array(":ticketTemplateId" => $entity->id()));
+			$updateStatement = $pdo->prepare("UPDATE ticket_template SET key = :key, image_file_extension = :imageFileExtension, tour_operator_id = :tourOperatorId where id = :id");
+			$updateStatement->execute(array(
+				":id" => $entity->id(), 
+				':key' => $entity->key(), 
+				':imageFileExtension' => $entity->imageFileExtension(),
+				':tourOperatorId' => $entity->touroperator()->id())
+			);
+			$this->insertTextDefinitions($pdo, $entity->id(), $entity->textDefinitions());
+		
+			$pdo->commit();
+		} 
+		catch (\Exception $e) {
+			if ($pdo->inTransaction()) {
+				$pdo->rollback();
+			}
+			throw $e;
+		}
+	}
+
+	private function insertTextDefinitions($pdo, $ticketTemplateId, $textDefinitions) {
+		foreach($textDefinitions as &$textDefinition) {
+			$statement = $pdo->prepare("INSERT INTO text_definition(ticket_template_id, key, description, x, y, width, height) VALUES (:ticketTemplateId, :key, :description,:x, :y, :width, :height)");
+			$statement->execute(array(
+				":ticketTemplateId" => $textDefinition->ticketTemplateId(), 
+				':key' => $textDefinition->key(), 
+				':description' => $textDefinition->description(), 
+				':x' => $textDefinition->rectangle()->x(), 
+				':y' => $textDefinition->rectangle()->y(), 
+				':width' => $textDefinition->rectangle()->width(),
+				':height' => $textDefinition->rectangle()->height())
+			);
+		}
+	}
+
 	private function map($row) : TicketTemplate {
 		$touroperator = $this->touroperatorRepository->findById($row['tour_operator_id']);
 		$textDefinitions = $this->textDefinitionRepository->findByTemplateId($row['id']);
-		return new TicketTemplate($row['id'], $row['key'], $touroperator, $textDefinitions, $row['image_file_name']);
+		return new TicketTemplate($row['id'], $row['key'], $touroperator, $textDefinitions, $row['image_file_extension']);
 	}
 
 }

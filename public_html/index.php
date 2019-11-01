@@ -55,7 +55,7 @@ if($path === '/') {
 			return new DesignSearchPage($context);
 		});
 	
-	} else if($path === '/admin/designer.php') {
+	} else if(substr($path, 0, strlen("/admin/designer")) === "/admin/designer") {
 	
 		require_once './components/designer/designer.php';
 		page('designer', function ($context) {
@@ -85,8 +85,8 @@ if($path === '/') {
 
 	} elseif(substr($path, 0, strlen("/admin/images/ticket-template/")) === "/admin/images/ticket-template/") {
 		
-		// TODO: rewrite this to be safer in regard of relative paths etc.
 		$filename = end(explode('/', getenv('REQUEST_URI')));
+		$filename = basename($filename);
 		$filepath = getenv('CTI_IMAGE_DIRECTORY').$filename;
 		$mimetype = mime_content_type($filepath);
 		header('content-type: '.$mimetype);

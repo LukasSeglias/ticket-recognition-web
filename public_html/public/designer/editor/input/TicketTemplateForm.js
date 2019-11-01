@@ -1,6 +1,7 @@
 import {DrawableImage} from '/public/designer/canvas/drawables/DrawableImage.js';
 import {FileUploadInput} from '/public/designer/io/FileUploadInput.js';
 import {ImageFilesReader} from '/public/designer/io/ImageFilesReader.js';
+import {FormInput} from '/public/designer/editor/input/FormInput.js';
 
 export class TicketTemplateForm {
 
@@ -11,9 +12,13 @@ export class TicketTemplateForm {
         this._drawingCanvas = drawingCanvas;
         this._oldValue = {};
         
-        this._keyInput = this._getInputElementByName('key');
+        this._keyInput = new FormInput(this._getInputElementByName('key'));
+        this._keyInput.validator = (value) => this._validateKey(value);
+        this._touroperatorInput = new FormInput(this._getInputElementByName('touroperator'));
+        this._touroperatorInput.validator = (value) => this._validateTouroperator(value);
         this._imageInput = this._getInputElementByName('image');
         this._imageUpload = new FileUploadInput(this._imageInput);
+        this._imageUpload.validator = (value) => !!this._imageFile;
         
         this._addEventListeners();
     }
@@ -21,25 +26,33 @@ export class TicketTemplateForm {
     get value() {
         let id = this._id;
         let key = this._keyInput.value;
+        let touroperatorId = this._touroperatorInput.value;
         let imageFile = this._imageFile;
 
         return {
             id: id,
             key: key,
+            touroperator: {
+                id: touroperatorId,
+                name: ''
+            },
             imageFile: imageFile
         };
     }
 
     set value(template) {
         template = template || {};
+        let touroperator = template.touroperator || {};
         this._id = template.id;
-        this._keyInput.value = template.key;
+        this._keyInput.value = template.key ? template.key : "";
+        this._touroperatorInput.value = touroperator.id ? touroperator.id : "";
         this._setImage(template.image);
         this._imageFile = template.imageFile;
     }
 
     setDisabled(disabled) {
         this._keyInput.disabled = disabled;
+        this._touroperatorInput.disabled = disabled;
         this._imageInput.disabled = disabled;
     }
     
@@ -48,14 +61,23 @@ export class TicketTemplateForm {
     }
 
     validate() {
+        let valid = this._keyInput.validate();
+        valid &= this._touroperatorInput.validate();
+        valid &= this._imageUpload.validate();
+
         let value = this.value;
-        return value
+
+        return valid
+            && value
             && value.key
+            && value.touroperator
+            && value.touroperator.id
             && value.imageFile;
     }
 
     _addEventListeners() {
-        this._keyInput.addEventListener('change', (newValue) => this._notifyChange());
+        this._keyInput.addChangeListener((newValue) => this._notifyChange());
+        this._touroperatorInput.addChangeListener((newValue) => this._notifyChange());
         this._imageUpload.addFileUploadListener((files) => {
             let reader = new ImageFilesReader();
             reader.read(files)
@@ -88,7 +110,7 @@ export class TicketTemplateForm {
     _notifyChange() {
         
         if(this.validate()) {
-            let newValue = this.getValue();
+            let newValue = this.value;
             this._changeListeners.forEach(listener => {
                 if(listener) listener.call(null, this._oldValue, newValue);
             });
@@ -103,6 +125,20 @@ export class TicketTemplateForm {
                 return element;
             }
         }
+    }
+
+    _validateKey(value) {
+        let nonEmpty = !!value;
+        let notTooLong = value && value.length <= 50;
+        return {
+            valid: nonEmpty && notTooLong
+        };
+    }
+
+    _validateTouroperator(value) {
+        return {
+            valid: !!value
+        };
     }
 
 }

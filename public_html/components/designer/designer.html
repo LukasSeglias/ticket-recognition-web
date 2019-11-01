@@ -62,7 +62,7 @@
 					</div>
 				</div>
 				<div class="card-body">
-					<form class="mb-0" id="design-form">
+					<form class="mb-0" id="design-form" onsubmit="return false;">
 						<div class="form-row">
 							<div class="col">
 								<div class="form-group">
@@ -70,6 +70,15 @@
 									<input type="text" class="form-control" name="key" placeholder="{{ 'designer_key'|translated }}" required>
 								</div>
 								<div class="form-group">
+									<label>{{ "touroperator"|translated }}</label>
+									<select class="form-control" name="touroperator" required>
+										{% for touroperator in touroperators %}
+										<option value="{{ touroperator.id() }}" {{ touroperator.id() == selectedTouroperatorId ? "selected" : "" }}>{{ touroperator.name() }}</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="form-group">
+									<label>{{ "designer_tickettemplate_image"|translated }}</label>
 									<div class="custom-file">
 										<input type="file" class="custom-file-input" accept="image/*" name="image" id="template-image-upload">
 										<label class="custom-file-label">{{ "designer_choose_image"|translated }}</label>
@@ -94,7 +103,7 @@
 					</div>
 				</div>
 				<div class="card-body">
-					<form class="mb-0" id="text-form">
+					<form class="mb-0" id="text-form" onsubmit="return false;">
 						<div class="form-row">
 							<div class="col">
 								<div class="form-group">
@@ -256,10 +265,10 @@
 		}
 
 		function main() {
-			var editor = createEditor();
+			let editor = createEditor();
 
-			var urlParams = new URLSearchParams(window.location.search);
-			editor.init(urlParams.get('id'));
+			let id = "{{ id }}"; // Inject id of template via TWIG-Templating engine
+			editor.init(id);
 
 			cti_debug(editor);
 			

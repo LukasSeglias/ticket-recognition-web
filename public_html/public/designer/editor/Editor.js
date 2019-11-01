@@ -52,7 +52,6 @@ export class Editor {
     }
 
     set value(value) {
-
         this._id = value.id;
         this._ticketTemplateEditor.value = value;
         this._ticketTextEditor.value = value.textDefinitions;
@@ -117,7 +116,7 @@ export class Editor {
     }
 
     async getTicketTemplate(id) {
-        if(id !== undefined) {
+        if(id !== undefined && id !== '') {
             let response = await fetch(`/rest/admin/ticket-templates/${id}`);
             let data = await response.json();
             return data;

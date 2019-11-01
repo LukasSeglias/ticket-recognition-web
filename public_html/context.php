@@ -15,13 +15,15 @@ class Context {
 	private $ticketTemplateService;
 	private $ticketTemplateJsonMapper;
 	private $ticketTemplateResource;
+	private $ticketTemplateImageRepository;
 
 	function __construct($router, $authService, $ticketService, $databaseService, 
 		$textDefinitionRepository, $touroperatorRepository, $ticketTemplateRepository,
 		$tourPositionRepository,
 		$ticketTemplateService,
 		$ticketTemplateJsonMapper,
-		$ticketTemplateResource) {
+		$ticketTemplateResource,
+		$ticketTemplateImageRepository) {
 			
 		$this->router = $router;
 		$this->authService = $authService;
@@ -35,6 +37,7 @@ class Context {
 		$this->ticketTemplateService = $ticketTemplateService;
 		$this->ticketTemplateJsonMapper = $ticketTemplateJsonMapper;
 		$this->ticketTemplateResource = $ticketTemplateResource;
+		$this->ticketTemplateImageRepository = $ticketTemplateImageRepository;
 	}
 
 	function router() {
@@ -79,6 +82,10 @@ class Context {
 
 	function ticketTemplateResource() {
 		return $this->ticketTemplateResource;
+	}
+
+	function ticketTemplateImageRepository() {
+		return $this->ticketTemplateImageRepository;
 	}
 }
 ?>

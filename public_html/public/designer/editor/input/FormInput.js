@@ -40,7 +40,7 @@ export class FormInput {
     }
 
     get invalid() {
-        element.classList.contains("is-invalid");
+        this._inputElement.classList.contains("is-invalid");
     }
 
     set invalid(invalid) {
