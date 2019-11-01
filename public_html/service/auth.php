@@ -24,8 +24,8 @@ class AuthService {
 		$lastname = '?';
 
 		$decoded_token;
-		$success = $this->decodeToken($decoded_token);
-
+        $success = $this->decodeToken($decoded_token);
+        
 		if ($success) {
 			$username = $decoded_token->{'preferred_username'};
 			$firstname = $decoded_token->{'given_name'};
@@ -83,7 +83,7 @@ class AuthService {
             ];
 
             $verifier = new JWTVerifier($config, $fetcher);
-            $decoded_token = $verifier->verifyAndDecode($_COOKIE['ACCESS_TOKEN']);
+            $decoded_token = $verifier->verifyAndDecode($token);
         } catch(CoreException $e) {
             error_log("Exception verifying jwt-token: " . $e);
             return false;

@@ -118,7 +118,7 @@ export class TicketTextEditor  {
         if(index >= 0) {
             this._textDefinitions.splice(index, 1);
         }
-        ticketTextList.remove(key);
+        this._ticketTextList.remove(key);
     }
 
     _findTextDefinitionIndex(key) {
