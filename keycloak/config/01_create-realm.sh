@@ -33,3 +33,7 @@ $KCADM add-roles -r cti --rname admin --cclientid realm-management --rolename ma
 # Client public
 CID1=$($KCADM create clients -r cti -s clientId=webserver -s enabled=true \
     -s publicClient=true -s directAccessGrantsEnabled=true -s "protocol=openid-connect" -s "redirectUris=[\"/*\"]" -i)
+	
+# Client java
+CID2=$($KCADM create clients -r cti -s clientId=cti-service -s enabled=true \
+    -s bearerOnly=true -s "protocol=openid-connect" -i)

@@ -1,0 +1,7 @@
+{
+  "realm": "cti",
+  "bearer-only": true,
+  "auth-server-url": "/auth",
+  "ssl-required": "none",
+  "resource": "cti-service"
+}
