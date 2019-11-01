@@ -1,4 +1,4 @@
-FROM jboss/keycloak:5.0.0
+FROM jboss/keycloak:7.0.0
 
 USER root
 
@@ -26,6 +26,17 @@ RUN chmod -R +x $JBOSS_HOME/config/*.sh && \
 RUN chgrp -R 0 $JBOSS_HOME && \
     chmod -R g=u $JBOSS_HOME && \
     chmod -R g=u /etc/passwd
+
+USER 1000
+WORKDIR $JBOSS_HOME
+
+ADD dist/cli /opt/jboss/keycloak/cli
+RUN ./bin/jboss-cli.sh --file=cli/app-standalone-config.cli \
+    && rm -rf /opt/jboss/keycloak/standalone/configuration/standalone_xml_history
+
+USER root
+RUN chgrp -R 0 $JBOSS_HOME && \
+    chmod -R g=u $JBOSS_HOME
 
 USER 1000
 
