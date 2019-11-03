@@ -21,8 +21,8 @@ class Navigation implements Component {
 		$this->component = new NavigationComponent(new NavigationComponentState(
 			[
 				new NavigationItem(self::KEY_DESIGNS, '/admin/designs.php', Texts::navigation_designer, []),
-				new NavigationItem(self::KEY_TICKETS, '/admin/tickets.php', Texts::navigation_tickets, []),
-				new NavigationItem(self::KEY_TOURS, '/admin/tours.php', Texts::navigation_tours, []),
+				new NavigationItem(self::KEY_TICKETS, '/admin/tickets', Texts::navigation_tickets, []),
+				new NavigationItem(self::KEY_TOURS, '/admin/tours', Texts::navigation_tours, []),
 				new NavigationItem(self::KEY_TOURPOSITIONS, '/admin/tour-positions', Texts::navigation_tourpositions, []),
 				new NavigationItem(self::KEY_TOUROPERATORS, '/admin/tour-operators', Texts::navigation_touroperators, []),
 				new NavigationItem(self::KEY_USERS, '/auth/', Texts::navigation_users, [])

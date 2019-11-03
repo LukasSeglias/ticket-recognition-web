@@ -31,6 +31,16 @@ class TouroperatorRepository {
 			return $this->map($row);
 		}
 		return NULL;
+    }
+    
+    public function findAll() : Array {
+		$statement = $this->databaseService->pdo()->prepare("SELECT * FROM tour_operator");
+		$statement->execute(array());
+		$results = array();
+		while($row = $statement->fetch()) {
+			$results[] = $this->map($row);
+		}
+		return $results;
 	}
 
 	public function create($entity) {
@@ -50,20 +60,7 @@ class TouroperatorRepository {
     public function delete($id) {
         $statement = $this->databaseService->pdo()->prepare('DELETE FROM tour_operator WHERE id = :id');
 		$statement->execute([':id' => $id]);
-		echo "TEST";
-		var_dump($statement->errorCode());
-		var_dump($statement->errorInfo());
     }
-
-	public function findAll() : Array {
-		$statement = $this->databaseService->pdo()->prepare("SELECT * FROM tour_operator");
-		$statement->execute(array());
-		$results = array();
-		while($row = $statement->fetch()) {
-			$results[] = $this->map($row);
-		}
-		return $results;
-	}
 
 	private function map($row) : Touroperator {
 		return new Touroperator($row['id'], $row['name']);

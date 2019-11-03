@@ -34,7 +34,7 @@
 								<a class="btn btn-info" href="/admin/tour-operators" role="button">
 									<span class="oi oi-chevron-left"></span>
 								</a>
-								<span class="title">{{ "touroperators_title"|translated }}</span>
+								<span class="title">{{ "touroperator_title"|translated }}</span>
 							</div>
 							<div>
 								{% if state.mode.isEdit() %}
@@ -52,7 +52,7 @@
 							<form method="POST" id="form">
 								<div class="form-row">
 									<div class="form-group col-12 col-sm-6">
-										<label for="name">{{ "touroperators_name"|translated }}</label>
+										<label for="name">{{ "touroperator_name"|translated }}</label>
 										<input type="text" name="name" class="form-control" id="name" placeholder="Name" value="{{state.entity.name()}}">
 									</div>
 								</div>

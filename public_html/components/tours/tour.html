@@ -21,8 +21,16 @@
 				});
 			}
 
+			function deletePositionById(positionId) {
+				fetch(`${window.location.href}/tourposition/${positionId}`, {
+					method: 'delete'
+				}).then((response) => {
+					window.location.reload();
+				});
+			}
+
 			function goBack() {
-				window.location.href = '/admin/tour-positions';
+				window.location.href = '/admin/tours';
 			}
 		</script>
 		<div class="container my-3">
@@ -31,10 +39,10 @@
 					<div class="card">
 						<div class="card-header d-flex justify-content-between align-items-center">
 							<div>
-								<a class="btn btn-info" href="/admin/tour-positions" role="button">
+								<a class="btn btn-info" href="/admin/tours" role="button">
 									<span class="oi oi-chevron-left"></span>
 								</a>
-								<span class="title">{{ "tourposition_title"|translated }}</span>
+								<span class="title">{{ "tour_title"|translated }}</span>
 							</div>
 							<div>
 								{% if state.mode.isEdit() %}
@@ -52,11 +60,11 @@
 							<form method="POST" id="form">
 								<div class="form-row">
 									<div class="form-group col-12 col-sm-3">
-										<label for="code">{{ "tourpositions_code"|translated }}</label>
+										<label for="code">{{ "tour_code"|translated }}</label>
 										<input type="text" name="code" class="form-control" id="code" placeholder="Code" value="{{state.entity.code()}}">
 									</div>
 									<div class="form-group col-12 col-sm-6">
-										<label for="description">{{ "tourpositions_description"|translated }}</label>
+										<label for="description">{{ "tour_description"|translated }}</label>
 										<input type="text" name="description" class="form-control" id="description" placeholder="Description" value="{{state.entity.description()}}">
 									</div>
 								</div>
@@ -64,7 +72,44 @@
 						</div>
 					</div>
 				</div>
-            </div>
+			</div>
+			
+			<div class="row mt-3">
+				<div class="col-12">
+					<div class="card mb-3">
+						<div class="card-header d-flex justify-content-between align-items-center">
+							<span class="title">{{ "tour_tourpositions"|translated }}</span>
+							<div>
+								<a class="btn btn-primary" href="/admin/tour/{{state.entity.id()}}/tourposition" role="button">
+									<span class="oi oi-plus"></span>
+								</a>
+							</div>
+						</div>
+						<ul class="list-group list-group-flush">
+							{% for tourposition in state.entity.tourpositions %}
+								<div class="list-group-item list-group-item-action">
+									<div class="row">
+										<div class="col-3">
+											{{ tourposition.code() }}
+										</div>
+										<div class="col-8">
+											{{ tourposition.description() }}
+										</div>
+										<div class="col-1">
+											<span class="float-right">
+												<button class="btn btn-danger" onclick="deletePositionById({{ tourposition.id() }})" type="button">
+													<span class="oi oi-trash"></span>
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+
 		</div>
     </main>
 {% endblock %}

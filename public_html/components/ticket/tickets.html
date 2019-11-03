@@ -7,60 +7,62 @@
 	{{ component(navigation) }}
 	
 	<main class="mb-3">
+		<script>
+			function onClear() {
+				document.getElementById('tourcode').value = "";
+				document.getElementById('touroperator').value = "";
+			}
+		</script>
 		<div class="container">
 			
 			<div class="row">
 				<div class="col-12">
 					<div class="card my-3">
 						<div class="card-header">
-							<span class="title">Tickets</span>
+							<span class="title">{{ "tickets_title"|translated }}</span>
 						</div>
 						<div class="card-body">
 							<form>
 								<div class="form-row">
 									<div class="form-group col-12 col-sm-6">
-										<label for="touroperator">Touroperator</label>
-										<input type="text" class="form-control" id="touroperator" placeholder="Tour operator">
-									</div>
-									<div class="form-group col-12 col-sm-6">
-										<label for="tourcode">Tourcode</label>
-										<input type="text" class="form-control" id="tourcode" placeholder="Tourcode">
-									</div>
-									<div class="form-group col-12 col-sm-6">
-										<label for="datefrom">Date from</label>
-										<input type="date" class="form-control" id="datefrom" placeholder="dd.MM.yyyy">
-									</div>
-									<div class="form-group col-12 col-sm-6">
-										<label for="dateto">Date to</label>
-										<input type="date" class="form-control" id="dateto" placeholder="dd.MM.yyyy">
+										<label for="tourcode">{{ 'ticket_tourcode'|translated }}</label>
+										<input type="text" class="form-control" id="tourcode" placeholder="{{ 'ticket_tourcode'|translated }}" value="{{state.filter.code}}">
 									</div>
 								</div>
-								<button type="submit" class="btn btn-primary">Search</button>
-								<button type="reset" class="btn">Reset</button>
+								<button type="submit" class="btn btn-primary">{{ "search"|translated }}</button>
+								<button type="button" class="btn" onclick="onClear()">{{ "reset"|translated }}</button>
 							</form>
 						</div>
 					</div>
 				</div>
 			</div>
 			
+			{% if state.items is not empty %}
 			<div class="row">
 				<div class="col-12">
 					<div class="card mb-3">
 						<div class="card-header">
-							Results
+							{{ "searchresults"|translated }}
 						</div>
 						
 						<ul class="list-group list-group-flush">
-							<a href="ticket_detail.php?number=1203" class="list-group-item list-group-item-action">
-								Dapibus ac facilisis in
-							</a>
-							<a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
-							<a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
-							<a href="#" class="list-group-item list-group-item-action" tabindex="-1" aria-disabled="true">Vestibulum at eros</a>
+							{% for item in state.items %}
+								<a href="ticket/{{ item.id() }}" class="list-group-item list-group-item-action">
+									<div class="row">
+										<div class="col-3">
+											{{ item.tour().code() }}
+										</div>
+										<div class="col-9">
+											{{ item.template().key() }}
+										</div>
+									</div>
+								</a>
+							{% endfor %}
 						</ul>
 					</div>
 				</div>
 			</div>
+			{% endif %}
 			
 		</div>
 	</main>

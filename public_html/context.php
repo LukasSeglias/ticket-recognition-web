@@ -10,6 +10,8 @@ class Context {
 	private $messageService;
 
 	private $textDefinitionRepository;
+	private $tourRepository;
+	private $tourValidator;
 	
 	private $touroperatorRepository;
 	private $touroperatorValidator;
@@ -26,6 +28,8 @@ class Context {
 	function __construct($router, $authService, $ticketService, $databaseService, 
 		$messageService,
 		$textDefinitionRepository, 
+		$tourRepository,
+		$tourValidator,
 		$touroperatorRepository, 
 		$touroperatorValidator,
 		$ticketTemplateRepository,
@@ -44,6 +48,8 @@ class Context {
 		$this->messageService = $messageService;
 
 		$this->textDefinitionRepository = $textDefinitionRepository;
+		$this->tourRepository = $tourRepository;
+		$this->tourValidator = $tourValidator;
 		$this->touroperatorRepository = $touroperatorRepository;
 		$this->touroperatorValidator = $touroperatorValidator;
 
@@ -120,6 +126,14 @@ class Context {
 
 	function exceptionMapper() {
 		return $this->exceptionMapper;
+	}
+
+	function tourRepository() {
+		return $this->tourRepository;
+	}
+
+	function tourValidator() {
+		return $this->tourValidator;
 	}
 }
 ?>

@@ -9,7 +9,8 @@
 	<main class="mb-3">
 		<script>
 			function onClear() {
-				document.getElementById('name').value = "";
+				document.getElementById('code').value = "";
+				document.getElementById('description').value = "";
 			}
 		</script>
 		<div class="container">
@@ -18,9 +19,9 @@
 				<div class="col-12">
 					<div class="card my-3">
 						<div class="card-header d-flex justify-content-between align-items-center">
-							<span class="title">{{ "touroperators_title"|translated }}</span>
+							<span class="title">{{ "tours_title"|translated }}</span>
 							<div>
-								<a class="btn btn-primary" href="/admin/tour-operator" role="button">
+								<a class="btn btn-primary" href="/admin/tour" role="button">
 									<span class="oi oi-plus"></span>
 								</a>
 							</div>
@@ -29,8 +30,12 @@
 							<form method="POST">
 								<div class="form-row">
 									<div class="form-group col-12 col-sm-6">
-										<label for="name">{{ "touroperator_name"|translated }}</label>
-										<input type="text" name="name" class="form-control" id="name" placeholder="{{ 'touroperator_name'|translated }}" value="{{state.filter.name}}">
+										<label for="code">{{ "tour_code"|translated }}</label>
+										<input type="text" name="code" class="form-control" id="code" placeholder="{{ 'tour_code'|translated }}" value="{{state.filter.code}}">
+									</div>
+									<div class="form-group col-12 col-sm-6">
+										<label for="description">{{ "tour_description"|translated }}</label>
+										<input type="text" name="description" class="form-control" id="description" placeholder="{{ 'tour_description'|translated }}" value="{{state.filter.description}}">
 									</div>
 								</div>
 								<button type="submit" class="btn btn-primary">{{ "search"|translated }}</button>
@@ -51,10 +56,13 @@
 						
 						<ul class="list-group list-group-flush">
 							{% for item in state.items %}
-								<a href="tour-operator/{{ item.id() }}" class="list-group-item list-group-item-action">
+								<a href="tour/{{ item.id() }}" class="list-group-item list-group-item-action">
 									<div class="row">
-										<div class="col-12">
-											{{ item.name() }}
+										<div class="col-3">
+											{{ item.code() }}
+										</div>
+										<div class="col-9">
+											{{ item.description() }}
 										</div>
 									</div>
 								</a>

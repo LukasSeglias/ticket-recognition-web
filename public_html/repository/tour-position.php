@@ -35,6 +35,16 @@ class TourPositionRepository {
         return $entity;
     }
 
+    public function findByTourId($tourId) : array {
+        $statement = $this->databaseService->pdo()->prepare('SELECT * FROM tour_position AS tp JOIN tour_tour_position AS ttp ON tp.id = ttp.tour_position_id WHERE ttp.tour_id = :tourId');
+		$statement->execute([':tourId' => $tourId]);
+        $results = array();
+		while($row = $statement->fetch()) {
+			$results[] = $this->map($row);
+		}
+		return $results;
+    }
+
     public function create($entity) {
         $statement = $this->databaseService->pdo()->prepare('INSERT INTO tour_position (description,code) VALUES (:description,:code) RETURNING id');
 		$statement->execute([':description' => $entity->description(), ':code' => $entity->code()]);

@@ -34,7 +34,7 @@ if($path === '/') {
 		$router->redirect("/");
 	}
 
-	if($path === '/admin/tickets.php') {
+	if($path === '/admin/tickets') {
 
 		require_once './components/ticket/tickets.php';
 		page('tickets', function ($context) {
@@ -60,13 +60,6 @@ if($path === '/') {
 		require_once './components/designer/designer.php';
 		page('designer', function ($context) {
 			return new DesignerPage($context);
-		});
-	
-	} elseif($path === '/admin/tours.php') {
-	
-		require_once './components/tour/tours.php';
-		page('tours', function ($context) {
-			return new TourSearchPage($context);
 		});
 	
 	} elseif($path === '/admin/tour-positions') {
@@ -95,6 +88,20 @@ if($path === '/') {
 		require_once './components/tour-operators/tour-operator.php';
 		page('touroperator', function ($context) {
 			return new TouroperatorDetailPage($context);
+		});
+
+	} elseif($path === '/admin/tours') {
+	
+		require_once './components/tours/tours.php';
+		page('tours', function ($context) {
+			return new TourSearchPage($context);
+		});
+	
+	} elseif(substr($path, 0, strlen("/admin/tour")) === "/admin/tour") {
+		
+		require_once './components/tours/tour.php';
+		page('tourposition', function ($context) {
+			return new TourDetailPage($context);
 		});
 
 	} elseif(substr($path, 0, strlen("/admin/images/ticket-template/")) === "/admin/images/ticket-template/") {
