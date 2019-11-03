@@ -48,10 +48,10 @@ if($path === '/') {
 			return new TicketDetailPage($context);
 		});
 	
-	} else if($path === '/admin/designs.php') {
+	} else if($path === '/admin/templates') {
 	
 		require_once './components/designer/designs.php';
-		page('designs', function ($context) {
+		page('templates', function ($context) {
 			return new DesignSearchPage($context);
 		});
 	

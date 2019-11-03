@@ -107,7 +107,7 @@ export class Editor {
             })
             .then(res => {
                 if(res.ok) {
-                    window.location.href = "/admin/designs.php";
+                    window.location.href = "/admin/templates";
                 } else {
                     console.error('Error occured on template delete');
                 }

@@ -18,7 +18,7 @@ export class TicketTemplateForm {
         this._touroperatorInput.validator = (value) => this._validateTouroperator(value);
         this._imageInput = this._getInputElementByName('image');
         this._imageUpload = new FileUploadInput(this._imageInput);
-        this._imageUpload.validator = (value) => !!this._imageFile;
+        this._imageUpload.validator = (value) => this._validateImageFile();
         
         this._addEventListeners();
     }
@@ -138,6 +138,12 @@ export class TicketTemplateForm {
     _validateTouroperator(value) {
         return {
             valid: !!value
+        };
+    }
+
+    _validateImageFile() {
+        return {
+            valid: !!this._imageFile
         };
     }
 

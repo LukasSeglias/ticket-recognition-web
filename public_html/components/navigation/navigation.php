@@ -7,7 +7,7 @@ require_once './model/user.php';
 
 class Navigation implements Component {
 
-	const KEY_DESIGNS = 'designs';
+	const KEY_TEMPLATES = 'templates';
 	const KEY_TICKETS = 'tickets';
 	const KEY_TOURS = 'tours';
 	const KEY_TOURPOSITIONS = 'tourpositions';
@@ -20,7 +20,7 @@ class Navigation implements Component {
 
 		$this->component = new NavigationComponent(new NavigationComponentState(
 			[
-				new NavigationItem(self::KEY_DESIGNS, '/admin/designs.php', Texts::navigation_designer, []),
+				new NavigationItem(self::KEY_TEMPLATES, '/admin/templates', Texts::navigation_templates, []),
 				new NavigationItem(self::KEY_TICKETS, '/admin/tickets', Texts::navigation_tickets, []),
 				new NavigationItem(self::KEY_TOURS, '/admin/tours', Texts::navigation_tours, []),
 				new NavigationItem(self::KEY_TOURPOSITIONS, '/admin/tour-positions', Texts::navigation_tourpositions, []),

@@ -54,7 +54,7 @@ class TicketTemplateResource {
 		return $this->mapper->toJson($template);
 	}
 
-	private function create($id) {
+	private function create() {
 
 		$uploadedFile = $_FILES['templateImage'];
 		$fileExtension = $this->imageRepository->getFileExtension($uploadedFile);
@@ -66,6 +66,7 @@ class TicketTemplateResource {
 		// TODO: validation
 
 		$id = $this->service->create($entity);
+		$entity = $this->findById($id);
 		$this->imageRepository->create($entity, $uploadedFile);
 		
 		var_dump($entity);
@@ -136,10 +137,10 @@ class TicketTemplateResource {
 		return $template;
 	}
 
-	private function getId() : string {
-		$url = explode('/', getenv('REQUEST_URI'));
-        return end($url);
-	}
+	private function getId() {
+        $id = end(explode('/', getenv('REQUEST_URI')));
+        return $id === 'ticket-templates' ? NULL : $id;
+    }
 
 }
 ?>

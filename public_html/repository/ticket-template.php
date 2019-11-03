@@ -54,30 +54,23 @@ class TicketTemplateRepository {
 
 	public function create($entity) {
 		$pdo = $this->databaseService->pdo();
-		try {
-			$pdo->beginTransaction();
 
-			$statement = $pdo->prepare("INSERT INTO ticket_template(key, image_file_extension, tour_operator_id) VALUES(:key, :imageFileExtension, :tourOperatorId) RETURNING id");
-			$statement->execute(array(
-				':key' => $entity->key(), 
-				':imageFileExtension' => $entity->imageFileExtension(),
-				':tourOperatorId' => $entity->touroperator()->id())
-			);
-			$this->insertTextDefinitions($pdo, $entity->id(), $entity->textDefinitions());
-
-			$pdo->commit();
-
-			if ($row = $statement->fetch()) {
-				return $row['id'];
-			}
-			return -1;
-		} 
-		catch (\Exception $e) {
-			if ($pdo->inTransaction()) {
-				$pdo->rollback();
-			}
-			throw $e;
+		$statement = $pdo->prepare("INSERT INTO ticket_template(key, image_file_extension, tour_operator_id) VALUES(:key, :imageFileExtension, :tourOperatorId) RETURNING id");
+		$statement->execute(array(
+			':key' => $entity->key(), 
+			':imageFileExtension' => $entity->imageFileExtension(),
+			':tourOperatorId' => $entity->touroperator()->id())
+		);
+		$id = NULL;
+		if ($row = $statement->fetch()) {
+			$id = $row['id'];
 		}
+
+		if($id) {
+			$this->insertTextDefinitions($pdo, $id, $entity->textDefinitions());
+			return $id;
+		}
+		return -1;
 	}
 
 	public function update($entity) {
@@ -107,9 +100,9 @@ class TicketTemplateRepository {
 
 	private function insertTextDefinitions($pdo, $ticketTemplateId, $textDefinitions) {
 		foreach($textDefinitions as &$textDefinition) {
-			$statement = $pdo->prepare("INSERT INTO text_definition(ticket_template_id, key, description, x, y, width, height) VALUES (:ticketTemplateId, :key, :description,:x, :y, :width, :height)");
+			$statement = $pdo->prepare("INSERT INTO text_definition(ticket_template_id, key, description, x, y, width, height) VALUES (:ticketTemplateId, :key, :description, :x, :y, :width, :height)");
 			$statement->execute(array(
-				":ticketTemplateId" => $textDefinition->ticketTemplateId(), 
+				":ticketTemplateId" => $ticketTemplateId, 
 				':key' => $textDefinition->key(), 
 				':description' => $textDefinition->description(), 
 				':x' => $textDefinition->rectangle()->x(), 

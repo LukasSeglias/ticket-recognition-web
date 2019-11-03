@@ -66,11 +66,11 @@
 						<div class="form-row">
 							<div class="col">
 								<div class="form-group">
-									<label>{{ "designer_key"|translated }}</label>
-									<input type="text" class="form-control" name="key" placeholder="{{ 'designer_key'|translated }}" required>
+									<label>{{ "tickettemplate_key"|translated }}</label>
+									<input type="text" class="form-control" name="key" placeholder="{{ 'tickettemplate_key'|translated }}" required>
 								</div>
 								<div class="form-group">
-									<label>{{ "touroperator"|translated }}</label>
+									<label>{{ "tickettemplate_touroperator"|translated }}</label>
 									<select class="form-control" name="touroperator" required>
 										{% for touroperator in touroperators %}
 										<option value="{{ touroperator.id() }}" {{ touroperator.id() == selectedTouroperatorId ? "selected" : "" }}>{{ touroperator.name() }}</option>
@@ -78,7 +78,7 @@
 									</select>
 								</div>
 								<div class="form-group">
-									<label>{{ "designer_tickettemplate_image"|translated }}</label>
+									<label>{{ "tickettemplate_image"|translated }}</label>
 									<div class="custom-file">
 										<input type="file" class="custom-file-input" accept="image/*" name="image" id="template-image-upload">
 										<label class="custom-file-label">{{ "designer_choose_image"|translated }}</label>
@@ -107,44 +107,44 @@
 						<div class="form-row">
 							<div class="col">
 								<div class="form-group">
-									<label>{{ "designer_key"|translated }}</label>
-									<input type="text" class="form-control" name="key" placeholder="{{ 'designer_key'|translated }}" required disabled>
+									<label>{{ "textdefinition_key"|translated }}</label>
+									<input type="text" class="form-control" name="key" placeholder="{{ 'textdefinition_key'|translated }}" required disabled>
 								</div>
 							</div>
 						</div>
 						<div class="form-row">
 							<div class="col">
 								<div class="form-group">
-									<label>{{ "designer_description"|translated }}</label>
-									<input type="text" class="form-control" name="description" placeholder="{{ 'designer_description'|translated }}" required disabled>
+									<label>{{ "textdefinition_description"|translated }}</label>
+									<input type="text" class="form-control" name="description" placeholder="{{ 'textdefinition_description'|translated }}" required disabled>
 								</div>
 							</div>
 						</div>
 						<div class="form-row">
 							<div class="col">
 								<div class="form-group">
-									<label>{{ "designer_x"|translated }}</label>
-									<input type="number" class="form-control" name="x" placeholder="{{ 'designer_x'|translated }}" required disabled>
+									<label>{{ "textdefinition_x"|translated }}</label>
+									<input type="number" class="form-control" name="x" placeholder="{{ 'textdefinition_x'|translated }}" required disabled>
 								</div>
 							</div>
 							<div class="col">
 								<div class="form-group">
-									<label>{{ "designer_y"|translated }}</label>
-									<input type="number" class="form-control" name="y" placeholder="{{ 'designer_y'|translated }}" required disabled>
+									<label>{{ "textdefinition_y"|translated }}</label>
+									<input type="number" class="form-control" name="y" placeholder="{{ 'textdefinition_y'|translated }}" required disabled>
 								</div>
 							</div>
 						</div>
 						<div class="form-row">
 							<div class="col">
 								<div class="form-group">
-									<label>{{ "designer_width"|translated }}</label>
-									<input type="number" class="form-control" name="width" placeholder="{{ 'designer_width'|translated }}" required disabled>
+									<label>{{ "textdefinition_width"|translated }}</label>
+									<input type="number" class="form-control" name="width" placeholder="{{ 'textdefinition_width'|translated }}" required disabled>
 								</div>
 							</div>
 							<div class="col">
 								<div class="form-group">
-									<label>{{ "designer_height"|translated }}</label>
-									<input type="number" class="form-control" name="height" placeholder="{{ 'designer_height'|translated }}" required disabled>
+									<label>{{ "textdefinition_height"|translated }}</label>
+									<input type="number" class="form-control" name="height" placeholder="{{ 'textdefinition_height'|translated }}" required disabled>
 								</div>
 							</div>
 						</div>
