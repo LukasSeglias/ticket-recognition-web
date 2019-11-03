@@ -13,8 +13,15 @@ class DesignSearchPage implements Page {
 	}
 
 	public function update() {
-		$templates = $this->context->ticketTemplateService()->findAll();
-		$this->state = new DesignSearchPageState($templates);
+		
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+			$filter = new DesignSearchPageFilter($_POST['key']);
+			$results = $this->context->ticketTemplateService()->findBy($filter->key);
+			$this->state = new DesignSearchPageState($results, $filter);
+		} else {
+			$templates = $this->context->ticketTemplateService()->findAll();
+			$this->state = new DesignSearchPageState($templates, new DesignSearchPageFilter(NULL));
+		}
 	}
 	
 	public function template() : string {
@@ -23,21 +30,27 @@ class DesignSearchPage implements Page {
 	
 	public function context() : array {
 		return [
-			'templates' => $this->state->templates()
+			'state' => $this->state
 		];
 	}
 }
 
 class DesignSearchPageState {
 
-	private $templates;
+	public $items;
+	public $filter;
 
-	function __construct($templates) {
-		$this->templates = $templates;
+	function __construct($items, $filter) {
+		$this->items = $items;
+		$this->filter = $filter;
 	}
+}
 
-	public function templates() : Array {
-		return $this->templates;
+class DesignSearchPageFilter {
+	public $key;
+
+	function __construct($key) {
+		$this->key = $key;
 	}
 }
 ?>

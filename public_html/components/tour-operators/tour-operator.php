@@ -59,42 +59,29 @@ class TouroperatorDetailPage implements Page {
         $this->findById($id); // Check existence
         $entity = new Touroperator($id, $_POST['name']);
 
-        $validation = $this->context->touroperatorValidator()->validate($entity);
-        if($validation->hasErrors()) {
-
+        try {
+            $this->context->touroperatorValidator()->validate($entity);
+            $this->context->touroperatorRepository()->update($entity);
+            $this->context->messageService()->add(Message::success(Texts::tourposition_updated));
             $this->state = new TouroperatorDetailState($entity, CrudMode::edit());
-        } else {
-
-            try {
-                $this->context->touroperatorRepository()->update($entity);
-                $this->context->messageService()->add(Message::success(Texts::tourposition_updated));
-                $this->state = new TouroperatorDetailState($entity, CrudMode::edit());
-            } catch(\PDOException $ex) {
-                $messages = $this->context->exceptionMapper()->getMessages($ex);
-                $this->context->messageService()->addAll($messages);
-                $this->state = new TouroperatorDetailState($entity, CrudMode::edit());
-            }
+        } catch(\Exception $ex) {
+            $messages = $this->context->exceptionMapper()->getMessages($ex);
+            $this->context->messageService()->addAll($messages);
+            $this->state = new TouroperatorDetailState($entity, CrudMode::edit());
         }
     }
 
     private function processCreate() {
         $entity = new Touroperator(NULL, $_POST['name']);
 
-        $validation = $this->context->touroperatorValidator()->validate($entity);
-        if($validation->hasErrors()) {
-            
-            $this->context->messageService()->addAll($validation->errors());
+        try {
+            $this->context->touroperatorValidator()->validate($entity);
+            $id = $this->context->touroperatorRepository()->create($entity);
+            $this->context->router()->redirect('/admin/tour-operator/'.$id);
+        } catch(\Exception $ex) {
+            $messages = $this->context->exceptionMapper()->getMessages($ex);
+            $this->context->messageService()->addAll($messages);
             $this->state = new TouroperatorDetailState($entity, CrudMode::create());
-        } else {
-
-            try {
-                $id = $this->context->touroperatorRepository()->create($entity);
-                $this->context->router()->redirect('/admin/tour-operator/'.$id);
-            } catch(\PDOException $ex) {
-                $messages = $this->context->exceptionMapper()->getMessages($ex);
-                $this->context->messageService()->addAll($messages);
-                $this->state = new TouroperatorDetailState($entity, CrudMode::create());
-            }
         }
     }
     

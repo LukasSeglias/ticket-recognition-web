@@ -127,8 +127,9 @@ if($path === '/') {
 
 	if(substr($path, 0, strlen("/rest/admin/ticket-templates")) === "/rest/admin/ticket-templates") {
 		
+		require_once './ws/ticket-template.php';
 		bootstrap(function ($context) {
-			echo $context->ticketTemplateResource()->process();
+			echo (new TicketTemplateResource($context))->process();
 		});
 	
 	}

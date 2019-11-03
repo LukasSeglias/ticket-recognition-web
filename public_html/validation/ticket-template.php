@@ -2,10 +2,8 @@
 namespace CTI;
 
 require_once './i18n/i18n.php';
-require_once './model/text-definition.php';
-require_once './model/tour-operator.php';
-require_once './model/ticket-template.php';
-require_once './validation/validation-error.php';
+require_once './validation/validation-context.php';
+require_once './validation/validation-exception.php';
 
 class TicketTemplateValidator {
 
@@ -14,32 +12,21 @@ class TicketTemplateValidator {
 	}
 
 	public function validate($entity) {
-		$errors = array();
+		$context = new ValidationContext();
 
-		if(is_null($entity)) {
-			$errors[] = new ValidationError(Texts::invalid_value);
-			return $errors;
-		}
-		if(is_null($entity->id())) {
-			$errors[] = new ValidationError(Texts::invalid_value);
-		}
-		if(empty($entity->key())) {
-			$errors[] = new ValidationError(Texts::invalid_value);
-		}
-		if(empty($entity->imageFilename())) {
-			$errors[] = new ValidationError(Texts::invalid_value);
-		}
-		if(is_null($entity->touroperator())) {
-			$errors[] = new ValidationError(Texts::invalid_value);
-		}
-		if(is_null($entity->textDefinitions())) {
-			$errors[] = new ValidationError(Texts::invalid_value);
-		}
+		$valid = $context->nonNull($entity, Texts::invalid_value);
+		$valid = $valid && $context->nonEmpty($entity->imageFilename(), Texts::invalid_value);
+		$valid = $context->nonNull($entity->touroperator(), Texts::invalid_value);
+		$valid = $context->nonNull($entity->textDefinitions(), Texts::invalid_value);
+		$keyValid = $valid && $context->nonEmpty($entity->key(), Texts::tickettemplate_key_invalid);
+		$keyValid = $keyValid && $context->maxLength($entity->key(), 50, Texts::tickettemplate_key_invalid);
 
-		// TODO: handle create case where ID is null
-		// TODO: handle duplicate key for create
-		// TODO: handle duplicate key for update
+		// TODO: handle duplicate key for create and update
 		// TODO: validate text-definitions
+
+		if($context->hasErrors()) {
+			throw new ValidationException($context->errors());
+		}
 	}
 
 }

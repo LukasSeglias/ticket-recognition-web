@@ -14,6 +14,19 @@ class TicketTemplateRepository {
 		$this->textDefinitionRepository = $textDefinitionRepository;
 		$this->touroperatorRepository = $touroperatorRepository;
 	}
+
+	public function findBy($key) {
+        $builder = new TicketTemplate\QueryBuilder;
+        $query = $builder->setKey($key)
+                     ->build();
+        $statement = $this->databaseService->pdo()->prepare($query);
+		$statement->execute($builder->mapping());
+        $results = array();
+		while($row = $statement->fetch()) {
+			$results[] = $this->map($row);
+		}
+		return $results;
+    }
 	
 	public function findById($id) {
 		$statement = $this->databaseService->pdo()->prepare("SELECT * FROM ticket_template where id = :id");
@@ -121,4 +134,37 @@ class TicketTemplateRepository {
 
 }
 
+
+namespace CTI\TicketTemplate;
+
+class QueryBuilder {
+    private $mapping = array();
+
+    public function setKey($key) : QueryBuilder {
+        if (!$this->isNullOrEmpty($key)) {
+            $this->mapping[':key'] = '%'.$key.'%';
+        }
+        return $this;
+    }
+
+    public function mapping() {
+        return $this->mapping;
+    }
+
+    public function build() {
+        $query = 'SELECT * FROM TICKET_TEMPLATE';
+        $and = 'WHERE';
+
+        if (array_key_exists(':key', $this->mapping)) {
+            $query .= ' ' . $and . ' KEY like :key';
+            $and = 'AND';
+		}
+
+        return $query;
+    }
+
+    function isNullOrEmpty($str){
+        return (!isset($str) || trim($str) === '');
+    }
+}
 ?>

@@ -8,16 +8,16 @@ require_once './io/ticket-template.php';
 
 class TicketTemplateResource {
 
-	private $router;
+	private $context;
 	private $service;
 	private $mapper;
 	private $imageRepository;
 
-	function __construct(Router $router, TicketTemplateService $service, TicketTemplateJsonMapper $mapper, TicketTemplateImageRepository $imageRepository) {
-		$this->router = $router;
-		$this->service = $service;
-		$this->mapper = $mapper;
-		$this->imageRepository = $imageRepository;
+	function __construct($context) {
+		$this->context = $context;
+		$this->service = $context->ticketTemplateService();
+		$this->mapper = $context->ticketTemplateJsonMapper();
+		$this->imageRepository = $context->ticketTemplateImageRepository();
 	}
 
 	public function process() {
@@ -34,9 +34,8 @@ class TicketTemplateResource {
 				return $this->update($id);
 
 			} elseif($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-				// Delete
-
-				// TODO: implement
+				
+				return $this->delete($id);
 			}
 		} else {
 
@@ -46,7 +45,7 @@ class TicketTemplateResource {
 			}
 
 		}
-		$this->router->notFound();
+		$this->context->router()->notFound();
 	}
 
 	private function get($id) {
@@ -56,57 +55,81 @@ class TicketTemplateResource {
 
 	private function create() {
 
-		$uploadedFile = $_FILES['templateImage'];
-		$fileExtension = $this->imageRepository->getFileExtension($uploadedFile);
+		try {
+			$uploadedFile = $_FILES['templateImage'];
+			$fileExtension = $this->imageRepository->getFileExtension($uploadedFile);
 
-		$jsonString = $_POST['template'];
-		$entity = $this->mapper->fromJsonObject($jsonString);
-		$entity = new TicketTemplate(NULL, $entity->key(), $entity->touroperator(), $entity->textDefinitions(), $fileExtension);		
+			$jsonString = $_POST['template'];
+			$entity = $this->mapper->fromJsonObject($jsonString);
+			$entity = new TicketTemplate(NULL, $entity->key(), $entity->touroperator(), $entity->textDefinitions(), $fileExtension);		
 
-		// TODO: validation
+			$this->context->ticketTemplateValidator()->validate($entity);
 
-		$id = $this->service->create($entity);
-		$entity = $this->findById($id);
-		$this->imageRepository->create($entity, $uploadedFile);
-		
-		var_dump($entity);
+			$id = $this->service->create($entity);
+			$entity = $this->findById($id);
+			$this->imageRepository->create($entity, $uploadedFile);
+			
+			var_dump($entity); // TODO: cleanup
 
-		// TODO: implement
+			// TODO: return id?
 
-		// TODO: return id?
+        } catch(\Exception $ex) {
+			$messages = $this->context->exceptionMapper()->getMessages($ex);
+			http_response_code(400);
+            return $this->context->messageJsonMapper()->toJson($messages);
+        }
 	}
 
 	private function update($id) {
 
-		$uploadedFile = $_FILES['templateImage'];
-		$fileExtension = $this->imageRepository->getFileExtension($uploadedFile);
+		try {
+			$uploadedFile = $_FILES['templateImage'];
+			$fileExtension = $this->imageRepository->getFileExtension($uploadedFile);
 
-		$oldEntity = $this->findById($id);
+			$oldEntity = $this->findById($id);
 
-		$jsonString = $_POST['template'];
-		$entity = $this->mapper->fromJsonObject($jsonString);
-		$entity = new TicketTemplate($id, $entity->key(), $entity->touroperator(), $entity->textDefinitions(), $fileExtension);
+			$jsonString = $_POST['template'];
+			$entity = $this->mapper->fromJsonObject($jsonString);
+			$entity = new TicketTemplate($id, $entity->key(), $entity->touroperator(), $entity->textDefinitions(), $fileExtension);
 
-		// TODO: validation
+			$validation = $this->context->ticketTemplateValidator()->validate($entity);
+			if($validation->hasErrors()) {
 
-		$this->service->update($entity);
-		$this->imageRepository->update($entity, $oldEntity, $uploadedFile);
+				
+			} else {
 
-		var_dump($entity);
+				$this->service->update($entity);
+				$this->imageRepository->update($entity, $oldEntity, $uploadedFile);
+			}
 
-		// TODO: implement
+			// TODO: validation		
 
-		return;
+			var_dump($entity);
+
+			// TODO: implement
+
+			return;
+
+		} catch(\Exception $ex) {
+			$messages = $this->context->exceptionMapper()->getMessages($ex);
+			http_response_code(400);
+			return $this->context->messageJsonMapper()->toJson($messages);
+		}
 	}
 
 	private function delete($id) {
 
-		$entity = $this->findById($id);
+		try {
+			$entity = $this->findById($id);
 
-		// TODO: validation
+			$this->service->delete($id);
+			$this->imageRepository->delete($entity);
 
-		$this->service->delete($entity);
-		$this->imageRepository->delete($entity);
+        } catch(\Exception $ex) {
+			$messages = $this->context->exceptionMapper()->getMessages($ex);
+			http_response_code(400);
+            return $this->context->messageJsonMapper()->toJson($messages);
+        }
 	}
 
 	private function saveTemplateImage($id, $fileExtension) {
@@ -132,7 +155,7 @@ class TicketTemplateResource {
 		
 		$template = $this->service->findById($id);
 		if($template === NULL) {
-			$this->router->notFound();
+			$this->context->router()->notFound();
 		}
 		return $template;
 	}

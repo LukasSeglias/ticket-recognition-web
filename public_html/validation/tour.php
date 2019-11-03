@@ -3,6 +3,7 @@ namespace CTI;
 
 require_once './i18n/i18n.php';
 require_once './validation/validation-context.php';
+require_once './validation/validation-exception.php';
 
 class TourValidator {
 
@@ -21,7 +22,9 @@ class TourValidator {
 
 		// TODO: handle duplicate code on create and edit
 
-		return $context;
+		if($context->hasErrors()) {
+			throw new ValidationException($context->errors());
+		}
 	}
 
 }

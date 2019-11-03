@@ -19,10 +19,12 @@ class Context {
 	private $tourPositionRepository;
 	private $tourpositionValidator;
 
+	private $messageJsonMapper;
+
+	private $ticketTemplateValidator;
 	private $ticketTemplateRepository;
 	private $ticketTemplateService;
 	private $ticketTemplateJsonMapper;
-	private $ticketTemplateResource;
 	private $ticketTemplateImageRepository;
 
 	function __construct($router, $authService, $ticketService, $databaseService, 
@@ -33,11 +35,12 @@ class Context {
 		$touroperatorRepository, 
 		$touroperatorValidator,
 		$ticketTemplateRepository,
+		$messageJsonMapper,
 		$tourPositionRepository,
 		$tourpositionValidator,
+		$ticketTemplateValidator,
 		$ticketTemplateService,
 		$ticketTemplateJsonMapper,
-		$ticketTemplateResource,
 		$ticketTemplateImageRepository,
 		$exceptionMapper) {
 			
@@ -54,11 +57,13 @@ class Context {
 		$this->touroperatorValidator = $touroperatorValidator;
 
 		$this->ticketTemplateRepository = $ticketTemplateRepository;
+		$this->messageJsonMapper = $messageJsonMapper;
 		$this->tourPositionRepository = $tourPositionRepository;
 		$this->tourpositionValidator = $tourpositionValidator;
+
+		$this->ticketTemplateValidator = $ticketTemplateValidator;
 		$this->ticketTemplateService = $ticketTemplateService;
 		$this->ticketTemplateJsonMapper = $ticketTemplateJsonMapper;
-		$this->ticketTemplateResource = $ticketTemplateResource;
 		$this->ticketTemplateImageRepository = $ticketTemplateImageRepository;
 
 		$this->exceptionMapper = $exceptionMapper;
@@ -104,10 +109,6 @@ class Context {
 		return $this->ticketTemplateJsonMapper;
 	}
 
-	function ticketTemplateResource() {
-		return $this->ticketTemplateResource;
-	}
-
 	function ticketTemplateImageRepository() {
 		return $this->ticketTemplateImageRepository;
 	}
@@ -134,6 +135,14 @@ class Context {
 
 	function tourValidator() {
 		return $this->tourValidator;
+	}
+
+	function messageJsonMapper() {
+		return $this->messageJsonMapper;
+	}
+
+	function ticketTemplateValidator() {
+		return $this->ticketTemplateValidator;
 	}
 }
 ?>

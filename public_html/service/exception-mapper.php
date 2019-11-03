@@ -3,6 +3,7 @@ namespace CTI;
 
 require_once './i18n/i18n.php';
 require_once './model/message.php';
+require_once './validation/validation-exception.php';
 
 class ExceptionMapper {
 
@@ -28,6 +29,10 @@ class ExceptionMapper {
 				return array(Message::error(Texts::errors_db_general));
 			}
 			
+		} elseif($ex instanceof ValidationException) {
+
+			return $ex->messages();
+
 		} elseif($ex instanceof \Exception) {
 			return array(Message::error(Texts::errors_general));
 		} else {
