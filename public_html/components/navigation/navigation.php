@@ -11,6 +11,7 @@ class Navigation implements Component {
 	const KEY_TICKETS = 'tickets';
 	const KEY_TOURS = 'tours';
 	const KEY_TOURPOSITIONS = 'tourpositions';
+	const KEY_TOUROPERATORS = 'touroperators';
 	const KEY_USERS = 'users';
 
 	private $component;
@@ -23,6 +24,7 @@ class Navigation implements Component {
 				new NavigationItem(self::KEY_TICKETS, '/admin/tickets.php', Texts::navigation_tickets, []),
 				new NavigationItem(self::KEY_TOURS, '/admin/tours.php', Texts::navigation_tours, []),
 				new NavigationItem(self::KEY_TOURPOSITIONS, '/admin/tour-positions', Texts::navigation_tourpositions, []),
+				new NavigationItem(self::KEY_TOUROPERATORS, '/admin/tour-operators', Texts::navigation_touroperators, []),
 				new NavigationItem(self::KEY_USERS, '/auth/', Texts::navigation_users, [])
 			],
 			$activeKey,

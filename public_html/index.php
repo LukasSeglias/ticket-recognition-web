@@ -83,6 +83,20 @@ if($path === '/') {
 			return new TourpositionDetailPage($context);
 		});
 
+	} elseif($path === '/admin/tour-operators') {
+		
+		require_once './components/tour-operators/tour-operators.php';
+		page('touroperators', function ($context) {
+			return new TouroperatorSearchPage($context);
+		});
+	
+	} elseif(substr($path, 0, strlen("/admin/tour-operator")) === "/admin/tour-operator") {
+		
+		require_once './components/tour-operators/tour-operator.php';
+		page('touroperator', function ($context) {
+			return new TouroperatorDetailPage($context);
+		});
+
 	} elseif(substr($path, 0, strlen("/admin/images/ticket-template/")) === "/admin/images/ticket-template/") {
 		
 		$filename = end(explode('/', getenv('REQUEST_URI')));

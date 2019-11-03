@@ -5,7 +5,7 @@ class ValidationError {
 	
 	private $message;
 	
-	private function __construct($message) {
+	public function __construct($message) {
 		$this->message = $message;
 	}
 

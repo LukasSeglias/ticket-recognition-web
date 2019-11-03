@@ -17,12 +17,12 @@
 				fetch(window.location.href, {
 					method: 'delete'
 				}).then((response) => {
-					goBack();
+					//goBack();
 				});
 			}
 
 			function goBack() {
-				window.location.href = '/admin/tour-positions';
+				window.location.href = '/admin/tour-operators';
 			}
 		</script>
 		<div class="container my-3">
@@ -31,10 +31,10 @@
 					<div class="card">
 						<div class="card-header d-flex justify-content-between align-items-center">
 							<div>
-								<a class="btn btn-info" href="/admin/tour-positions" role="button">
+								<a class="btn btn-info" href="/admin/tour-operators" role="button">
 									<span class="oi oi-chevron-left"></span>
 								</a>
-								<span class="title">{{ "tourpositions_title"|translated }}</span>
+								<span class="title">{{ "touroperators_title"|translated }}</span>
 							</div>
 							<div>
 								{% if state.mode.isEdit() %}
@@ -51,13 +51,9 @@
 						<div class="card-body">
 							<form method="POST" id="form">
 								<div class="form-row">
-									<div class="form-group col-12 col-sm-3">
-										<label for="code">{{ "tourpositions_code"|translated }}</label>
-										<input type="text" name="code" class="form-control" id="code" placeholder="Code" value="{{state.entity.code()}}">
-									</div>
 									<div class="form-group col-12 col-sm-6">
-										<label for="description">{{ "tourpositions_description"|translated }}</label>
-										<input type="text" name="description" class="form-control" id="description" placeholder="Description" value="{{state.entity.description()}}">
+										<label for="name">{{ "touroperators_name"|translated }}</label>
+										<input type="text" name="name" class="form-control" id="name" placeholder="Name" value="{{state.entity.name()}}">
 									</div>
 								</div>
 							</form>

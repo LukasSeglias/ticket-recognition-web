@@ -16,7 +16,7 @@ class TourpositionSearchPage implements Page {
 	public function update() {
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$filter = new TourpositionSearchPageFilter($_POST['description'], $_POST['code']);
-			$results = $this->context->tourPositionRepository()->findBy($filter->description(), $filter->code());
+			$results = $this->context->tourPositionRepository()->findBy($filter->description, $filter->code);
 			$this->state = new TourpositionSearchPageState($results, $filter);
 		} else {
 			$this->state = new TourpositionSearchPageState([], new TourpositionSearchPageFilter(NULL, NULL));
@@ -29,45 +29,28 @@ class TourpositionSearchPage implements Page {
 	
 	public function context() : array {
 		return [
-			'items' => $this->state->items(),
-			'filter' => $this->state->filter()
+			'state' => $this->state
 		];
 	}
 }
 
 class TourpositionSearchPageState {
-	private $items;
-	private $filter;
+	public $items;
+	public $filter;
 
-	function __construct(array $items, $filter) {
+	function __construct(array $items, TourpositionSearchPageFilter $filter) {
 		$this->items = $items;
 		$this->filter = $filter;
-	}
-
-	public function items() : array {
-		return $this->items;
-	}
-
-	public function filter() : TourpositionSearchPageFilter {
-		return $this->filter;
 	}
 }
 
 class TourpositionSearchPageFilter {
-	private $code;
-	private $description;
+	public $code;
+	public $description;
 
 	function __construct($description, $code) {
 		$this->description = $description;
 		$this->code = $code;
-	}
-
-	public function code() {
-		return $this->code;
-	}
-
-	public function description() {
-		return $this->description;
 	}
 }
 

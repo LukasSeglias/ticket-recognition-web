@@ -12,7 +12,7 @@ class TourPositionRepository {
 	}
 
     public function findBy($description, $code) {
-        $builder = new QueryBuilder;
+        $builder = new Tourposition\QueryBuilder;
         $query = $builder->setDescription($description)
                      ->setCode($code)
                      ->build();
@@ -61,6 +61,8 @@ class TourPositionRepository {
 	}
 
 }
+
+namespace CTI\Tourposition;
 
 class QueryBuilder {
     private $mapping = array();

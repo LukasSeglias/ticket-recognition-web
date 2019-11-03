@@ -5,7 +5,7 @@ class DatabaseService {
 
 	private $pdo;
 
-	function __construct($connection, $user, $password) {
+	public function __construct($connection, $user, $password) {
 		try {
 			$this->pdo = new \PDO($connection, $user, $password);
 			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -15,7 +15,7 @@ class DatabaseService {
 		}
 	}
 
-	function pdo() {
+	public function pdo() {
 		return $this->pdo;
 	}
 }

@@ -1,5 +1,5 @@
 # Heavily based on https://www.cloudreach.com/en/insights/blog/containerize-this-how-to-use-php-apache-mysql-within-docker-containers/
-version: "3.2"
+version: "3.4"
 services:
   php:
     build: 
@@ -73,6 +73,8 @@ services:
     restart: always
     ports:
       - "8080:8080"
+    extra_hosts:
+      - "${HOST_NAME}:${HOST_DOCKERNAT_IP}"
     networks:
       - backend
     container_name: java

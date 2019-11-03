@@ -9,8 +9,7 @@
 	<main class="mb-3">
 		<script>
 			function onClear() {
-				document.getElementById('code').value = "";
-				document.getElementById('description').value = "";
+				document.getElementById('name').value = "";
 			}
 		</script>
 		<div class="container">
@@ -19,9 +18,9 @@
 				<div class="col-12">
 					<div class="card my-3">
 						<div class="card-header d-flex justify-content-between align-items-center">
-							<span class="title">{{ "tourpositions_title"|translated }}</span>
+							<span class="title">{{ "touroperators_title"|translated }}</span>
 							<div>
-								<a class="btn btn-primary" href="/admin/tour-position" role="button">
+								<a class="btn btn-primary" href="/admin/tour-operator" role="button">
 									<span class="oi oi-plus"></span>
 								</a>
 							</div>
@@ -30,12 +29,8 @@
 							<form method="POST">
 								<div class="form-row">
 									<div class="form-group col-12 col-sm-3">
-										<label for="code">{{ "tourpositions_code"|translated }}</label>
-										<input type="text" name="code" class="form-control" id="code" placeholder="Code" value="{{state.filter.code}}">
-									</div>
-									<div class="form-group col-12 col-sm-6">
-										<label for="description">{{ "tourpositions_description"|translated }}</label>
-										<input type="text" name="description" class="form-control" id="description" placeholder="Description" value="{{state.filter.description}}">
+										<label for="name">{{ "touroperators_name"|translated }}</label>
+										<input type="text" name="name" class="form-control" id="name" placeholder="Name" value="{{state.filter.name}}">
 									</div>
 								</div>
 								<button type="submit" class="btn btn-primary">{{ "search"|translated }}</button>
@@ -56,13 +51,10 @@
 						
 						<ul class="list-group list-group-flush">
 							{% for item in state.items %}
-								<a href="tour-position/{{ item.id() }}" class="list-group-item list-group-item-action">
+								<a href="tour-operator/{{ item.id() }}" class="list-group-item list-group-item-action">
 									<div class="row">
-										<div class="col-3">
-											{{ item.code() }}
-										</div>
-										<div class="col-9">
-											{{ item.description() }}
+										<div class="col-12">
+											{{ item.name() }}
 										</div>
 									</div>
 								</a>
