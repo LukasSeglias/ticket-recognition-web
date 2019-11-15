@@ -10,7 +10,6 @@
 		<script>
 			function onClear() {
 				document.getElementById('tourcode').value = "";
-				document.getElementById('touroperator').value = "";
 			}
 		</script>
 		<div class="container">
@@ -22,11 +21,11 @@
 							<span class="title">{{ "tickets_title"|translated }}</span>
 						</div>
 						<div class="card-body">
-							<form>
+							<form method="POST">
 								<div class="form-row">
 									<div class="form-group col-12 col-sm-6">
 										<label for="tourcode">{{ 'ticket_tourcode'|translated }}</label>
-										<input type="text" class="form-control" id="tourcode" placeholder="{{ 'ticket_tourcode'|translated }}" value="{{state.filter.code}}">
+										<input name="tourcode" type="text" class="form-control" id="tourcode" placeholder="{{ 'ticket_tourcode'|translated }}" value="{{state.filter.code}}">
 									</div>
 								</div>
 								<button type="submit" class="btn btn-primary">{{ "search"|translated }}</button>

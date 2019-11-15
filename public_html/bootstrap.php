@@ -15,6 +15,8 @@ require_once './repository/text-definition.php';
 require_once './repository/ticket-template.php';
 require_once './repository/tour-position.php';
 require_once './repository/tour.php';
+require_once './repository/ticket.php';
+require_once './repository/ticket-position.php';
 require_once './json/ticket-template.php';
 require_once './json/message.php';
 require_once './ws/ticket-template.php';
@@ -23,6 +25,7 @@ require_once './validation/ticket-template.php';
 require_once './validation/tour-position.php';
 require_once './validation/tour-operator.php';
 require_once './validation/tour.php';
+require_once './validation/ticket.php';
 require_once './components/navigation/navigation.php';
 require_once './components/messages/messages.php';
 
@@ -40,6 +43,9 @@ function bootstrap($callback) {
 	$tourRepository = new TourRepository($databaseService, $tourPositionRepository);
 	$ticketTemplateRepository = new TicketTemplateRepository($databaseService, $textDefinitionRepository, $touroperatorRepository);
 	$ticketTemplateService = new TicketTemplateService($ticketTemplateRepository);
+	$ticketPositionRepository = new TicketPositionRepository($databaseService);
+	$ticketRepository = new TicketRepository($databaseService, $ticketPositionRepository);
+	$ticketValidator = new TicketValidator();
 	$ticketTemplateJsonMapper = new TicketTemplateJsonMapper();
 	$messageJsonMapper = new MessageJsonMapper();
 	$ticketTemplateImageRepository = new TicketTemplateImageRepository();
@@ -64,6 +70,9 @@ function bootstrap($callback) {
 		$ticketTemplateService,
 		$ticketTemplateJsonMapper,
 		$ticketTemplateImageRepository,
+		$ticketRepository,
+		$ticketPositionRepository,
+		$ticketValidator,
 		$exceptionMapper
 	);
 	$callback($context);

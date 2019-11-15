@@ -15,7 +15,7 @@ class TicketService {
 	public function ticket($ticketNumber) : Ticket {
 		// TODO: insert real implementation
 		if($ticketNumber === "1203") {
-			return new Ticket(1203, 'TO 3B', 'TC765', '2019-09-27', [
+			return new Ticket(1203, new TicketTemplateRef('id', 'TO 3B'), new TourRef('id', 'Desc', 'TC765'), '2019-09-27', [
 				new TourPosition(1, "B6123", "Bootsfahrt auf dem Bodensee"),
 				new TourPosition(2, "C2443", "Romantisches Abendessen"),
 				new TourPosition(3, "A1236", "Tageskarte Seilbahn")

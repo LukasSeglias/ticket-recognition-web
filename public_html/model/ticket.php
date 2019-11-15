@@ -1,6 +1,9 @@
 <?php
 namespace CTI;
 
+include_once "ticket-template-ref.php";
+include_once "tour-ref.php";
+
 class Ticket {
 	
 	private $id;
@@ -9,7 +12,7 @@ class Ticket {
 	private $scanDate;
 	private $positions;
 	
-	function __construct($id, $template, $tour, $scanDate, $positions) {
+	function __construct($id, TicketTemplateRef $template, TourRef $tour, $scanDate, $positions) {
 		$this->id = $id;
 		$this->template = $template;
 		$this->tour = $tour;

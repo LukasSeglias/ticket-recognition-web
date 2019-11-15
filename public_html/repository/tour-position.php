@@ -28,7 +28,7 @@ class TourPositionRepository {
     public function get($id) {
         $statement = $this->databaseService->pdo()->prepare('SELECT * FROM tour_position WHERE id = :id');
 		$statement->execute([':id' => $id]);
-        $entity;
+        $entity = null;
 		if($row = $statement->fetch()) {
 			$entity = $this->map($row);
 		}

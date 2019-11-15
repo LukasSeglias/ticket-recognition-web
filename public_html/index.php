@@ -41,7 +41,14 @@ if($path === '/') {
 			return new TicketSearchPage($context);
 		});
 	
-	} elseif($path === '/admin/ticket_detail.php') {
+	} elseif(substr($path, 0, strlen("/admin/ticket")) === "/admin/ticket") {
+
+        require_once './components/ticket/ticket_detail.php';
+        page('ticket', function ($context) {
+            return new TicketDetailPage($context);
+        });
+
+    } elseif($path === '/admin/ticket_detail.php') {
 	
 		require_once './components/ticket/ticket_detail.php';
 		page('tickets', function ($context) {
@@ -132,10 +139,16 @@ if($path === '/') {
 			echo (new TicketTemplateResource($context))->process();
 		});
 	
-	}
+	} else if(substr($path, 0, strlen("/rest/admin/ticket-positions")) === "/rest/admin/ticket-positions") {
+
+        require_once './ws/ticket-position.php';
+        bootstrap(function ($context) {
+            echo (new TicketPositionResource($context))->process();
+        });
+
+    }
 
 } else {
-
 	// TODO: NOT FOUND PAGE
 }
 ?>

@@ -36,6 +36,16 @@ class TourRepository {
 		return NULL;
 	}
 
+    public function findAll() : Array {
+        $statement = $this->databaseService->pdo()->prepare("SELECT * FROM tour");
+        $statement->execute(array());
+        $results = array();
+        while($row = $statement->fetch()) {
+            $results[] = $this->map($row);
+        }
+        return $results;
+    }
+
 	public function create($entity) {
         $statement = $this->databaseService->pdo()->prepare('INSERT INTO tour (CODE, DESCRIPTION) VALUES (:code, :description) RETURNING id');
 		$statement->execute([':code' => $entity->code(), ':description' => $entity->description()]);

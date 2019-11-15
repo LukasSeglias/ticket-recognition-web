@@ -39,6 +39,13 @@ class ValidationContext {
 		return $this->assert(mb_strlen($value) <= $maxLength, $message);
 	}
 
+	public function isDate($value, $message) : bool {
+	    $format = 'Y-m-d\TH:i:s';
+        $d = \DateTime::createFromFormat($format, $value);
+        $isValid = $d && $d->format($format) == $value;
+	    return $this->assert($isValid, $message);
+    }
+
 	public function errors() : array {
 		return $this->errors;
 	}
