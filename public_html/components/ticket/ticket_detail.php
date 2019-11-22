@@ -59,12 +59,12 @@ class TicketDetailPage implements Page {
     }
 
     private function processEdit($id) {
-        $this->findById($id); // Check existence
+        $existing =  $this->findById($id);// Check existence
         $entity = new Ticket($id,
-            new TicketTemplateRef($_POST['template'], NULL),
-            new TourRef($_POST['tour'], NULL, NULL),
+            new TicketTemplateRef($_POST['template'], $existing->template()->key()),
+            new TourRef($_POST['tour'], $existing->tour()->description(), $existing->tour()->code()),
             $_POST['scanDate'],
-            []);
+            $existing->positions());
 
         try {
             $this->context->ticketValidator()->validate($entity);
