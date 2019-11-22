@@ -16,6 +16,11 @@ RUN ./bin/jboss-cli.sh --file=cli/app-standalone-config.cli \
     && rm -rf /opt/jboss/wildfly/standalone/configuration/standalone_xml_history
 
 USER root
+RUN yum -y update && yum -y install dos2unix
+COPY libs/ /usr/local/lib/
+RUN dos2unix /usr/local/lib/* && \
+    mv /usr/local/lib/* /usr/lib/
+
 RUN chgrp -R 0 $JBOSS_HOME && \
     chmod -R g=u $JBOSS_HOME
 
