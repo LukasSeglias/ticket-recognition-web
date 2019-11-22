@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% from 'component.html' import component %}
+
+{% block title %}CTI{% endblock %}
+
+{% block content %}
+{{ component(navigation) }}
+
+<main class="mb-3">
+    <script>
+        function onClear() {
+            document.getElementById('positioncode').value = "";
+        }
+
+        function deletePositionById(ticketPositionId) {
+            fetch("/rest/admin/ticket-positions/" + ticketPositionId, {
+                method: 'delete'
+            }).then(() => {
+                location.reload();
+            });
+        }
+
+        function addPositionById(ticketId, positionId) {
+            fetch("/rest/admin/ticket-positions/" + ticketId + "/" + positionId, {
+                method: 'post'
+            }).then(() => {
+                location.reload();
+            });
+        }
+    </script>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card my-3">
+                    <div class="card-header">
+                        <a class="btn btn-info" href="/admin/ticket/{{state.ticketId}}" role="button">
+                            <span class="oi oi-chevron-left"></span>
+                        </a>
+                        <span class="title">{{ "ticketpositions_title"|translated }}</span>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="form-row">
+                                <div class="form-group col-12 col-sm-6">
+                                    <label for="positioncode">{{ 'ticketpositions_code'|translated }}</label>
+                                    <input name="positioncode" type="text" class="form-control" id="positioncode" placeholder="{{ 'ticketpositions_code'|translated }}" value="{{state.filter.code}}">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">{{ "search"|translated }}</button>
+                            <button type="button" class="btn" onclick="onClear()">{{ "reset"|translated }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if state.items is not empty %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        {{ "searchresults"|translated }}
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                        {% for item in state.items %}
+                        <a class="list-group-item list-group-item-action">
+                            <div class="row">
+                                <div class="col-3">
+                                    {{ item.code() }}
+                                </div>
+                                <div class="col-8">
+                                    {{ item.description() }}
+                                </div>
+
+                                <div class="col-1">
+                                    {% if item.ticketId() != null %}
+                                    <button type="button" class="btn btn-xs btn-danger" onclick="deletePositionById({{ item.id() }})">
+                                        <span class="oi oi-trash"></span>
+                                    </button>
+                                    {% else %}
+                                    <button type="button" class="btn btn-primary" onclick="addPositionById({{ state.ticketId }}, {{ item.id() }})">
+                                        <span class="oi oi-plus"></span>
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</main>
+{% endblock %}

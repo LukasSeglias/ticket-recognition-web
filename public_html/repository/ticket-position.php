@@ -38,6 +38,17 @@ class TicketPositionRepository {
         $statement->execute([':id' => $id]);
     }
 
+    public function create($ticketId, $position) {
+        $pdo = $this->databaseService->pdo();
+
+        $statement = $pdo->prepare("INSERT INTO ticket_position(description, code, ticket_id) VALUES(:description, :code, :ticket_id) RETURNING id");
+        $statement->execute(array(
+                ':description' => $position->description(),
+                ':code' => $position->code(),
+                ':ticket_id' => $ticketId)
+        );
+    }
+
     private function map($row) : TicketPosition {
         return new TicketPosition(
             $row['id'],
@@ -72,7 +83,7 @@ class QueryBuilder {
     }
 
     public function build() {
-        $query = 'SELECT id, description, code FROM ticket_position';
+        $query = 'SELECT id, description, code, ticket_id FROM ticket_position';
         $and = 'WHERE';
 
         if (array_key_exists(':ticket_id', $this->mapping)) {

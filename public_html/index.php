@@ -28,7 +28,6 @@ if($path === '/') {
 	});
 
 } elseif(substr($path, 0, strlen("/admin/")) === "/admin/") {
-
 	if (!$authorizer->verifyToken('admin')) {
 		error_log("Token not valid");
 		$router->redirect("/");
@@ -41,7 +40,14 @@ if($path === '/') {
 			return new TicketSearchPage($context);
 		});
 	
-	} elseif(substr($path, 0, strlen("/admin/ticket")) === "/admin/ticket") {
+	} elseif(substr($path, 0, strlen("/admin/ticket-position")) === "/admin/ticket-position") {
+	    require_once './components/ticket/ticket_position.php';
+
+        page('ticketpositions', function ($context) {
+            return new TicketPositionPage($context);
+        });
+
+    } elseif(substr($path, 0, strlen("/admin/ticket")) === "/admin/ticket") {
 
         require_once './components/ticket/ticket_detail.php';
         page('ticket', function ($context) {

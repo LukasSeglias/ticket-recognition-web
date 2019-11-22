@@ -15,7 +15,18 @@ class TicketPositionResource {
 
         if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
             return $this->delete($id);
+        } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $ticketId = $this->getTicketId();
+            $this->create($id, $ticketId);
         }
+    }
+
+    private function create($positionId, $ticketId) {
+        if ($positionId == NULL || $ticketId == NULL) {
+            $this->context->router()->notFound();
+        }
+        $position = $this->context->tourPositionRepository()->get($positionId);
+        $this->context->ticketPositionRepository()->create($ticketId, $position);
     }
 
     private function delete($id) {
@@ -40,6 +51,12 @@ class TicketPositionResource {
     private function getId() {
         $id = end(explode('/', getenv('REQUEST_URI')));
         return $id === 'ticket-positions' ? NULL : $id;
+    }
+
+    private function getTicketId() {
+        $explodedPath = explode('/', getenv('REQUEST_URI'));
+        $id = $explodedPath[count($explodedPath) - 2];
+        return $id === 'ticket-position' ? NULL : $id;
     }
 }
 
