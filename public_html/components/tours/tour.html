@@ -21,11 +21,11 @@
 				});
 			}
 
-			function deletePositionById(positionId) {
-				fetch(`${window.location.href}/tourposition/${positionId}`, {
+			function deletePositionById(tourId, tourPositionId) {
+				fetch("/rest/admin/tour/positions/" + tourId + "/" + tourPositionId, {
 					method: 'delete'
-				}).then((response) => {
-					window.location.reload();
+				}).then(() => {
+					location.reload();
 				});
 			}
 
@@ -80,7 +80,7 @@
 						<div class="card-header d-flex justify-content-between align-items-center">
 							<span class="title">{{ "tour_tourpositions"|translated }}</span>
 							<div>
-								<a class="btn btn-primary" href="/admin/tour/{{state.entity.id()}}/tourposition" role="button">
+								<a class="btn btn-primary" href="/admin/tour/position/{{state.entity.id()}}" role="button">
 									<span class="oi oi-plus"></span>
 								</a>
 							</div>
@@ -97,7 +97,7 @@
 										</div>
 										<div class="col-1">
 											<span class="float-right">
-												<button class="btn btn-danger" onclick="deletePositionById({{ tourposition.id() }})" type="button">
+												<button class="btn btn-danger" onclick="deletePositionById({{state.entity.id()}}, {{ tourposition.id() }})" type="button">
 													<span class="oi oi-trash"></span>
 												</button>
 											</span>

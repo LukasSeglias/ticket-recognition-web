@@ -41,8 +41,8 @@ if($path === '/') {
 		});
 	
 	} elseif(substr($path, 0, strlen("/admin/ticket-position")) === "/admin/ticket-position") {
-	    require_once './components/ticket/ticket_position.php';
-
+		
+		require_once './components/ticket/ticket_position.php';
         page('ticketpositions', function ($context) {
             return new TicketPositionPage($context);
         });
@@ -82,7 +82,14 @@ if($path === '/') {
 			return new TourpositionSearchPage($context);
 		});
 	
-	} elseif(substr($path, 0, strlen("/admin/tour-position")) === "/admin/tour-position") {
+	} elseif(substr($path, 0, strlen("/admin/tour/position")) === "/admin/tour/position") {
+		
+		require_once './components/tours/tour_position.php';
+        page('ticket', function ($context) {
+            return new TourPositionPage($context);
+        });
+
+    } elseif(substr($path, 0, strlen("/admin/tour-position")) === "/admin/tour-position") {
 		
 		require_once './components/tour-positions/tour-position.php';
 		page('tourposition', function ($context) {
@@ -150,6 +157,13 @@ if($path === '/') {
         require_once './ws/ticket-position.php';
         bootstrap(function ($context) {
             echo (new TicketPositionResource($context))->process();
+        });
+
+    } else if(substr($path, 0, strlen("/rest/admin/tour/positions")) === "/rest/admin/tour/positions") {
+
+        require_once './ws/tour-position.php';
+        bootstrap(function ($context) {
+            echo (new TourPositionResource($context))->process();
         });
 
     }

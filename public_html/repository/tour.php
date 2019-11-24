@@ -77,6 +77,16 @@ class TourRepository {
 			throw $e;
 		}
     }
+
+    public function addPosition($id, $positionId) {
+        $statement = $this->databaseService->pdo()->prepare('INSERT INTO tour_tour_position (tour_id, tour_position_id) VALUES (:tourId,:tourPositionId)');
+		$statement->execute([':tourId' => $id, ':tourPositionId' => $positionId]);
+    }
+
+    public function removePosition($id, $positionId) {
+        $statement = $this->databaseService->pdo()->prepare('DELETE FROM tour_tour_position WHERE tour_id = :tourId and tour_position_id = :tourPositionId');
+        $statement->execute([':tourId' => $id, ':tourPositionId' => $positionId]);
+    }
     
     private function map($row) : Tour {
 		$tourpositions = $this->tourpositionRepository->findByTourId($row['id']);

@@ -23,7 +23,9 @@ class TicketPositionPage implements Page {
             $results = $this->loadResults($filter, $id);
             $this->state = new TicketPositionPageState($results, $filter, $id);
         } else {
-            $this->state = new TicketPositionPageState([], new TicketPositionPageFilter(NULL), $id);
+            $filter = new TicketPositionPageFilter($_POST['positioncode']);
+            $results = $this->loadResults($filter, $id);
+            $this->state = new TicketPositionPageState($results, new TicketPositionPageFilter(NULL), $id);
         }
     }
 

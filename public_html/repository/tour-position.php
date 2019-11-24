@@ -46,7 +46,7 @@ class TourPositionRepository {
     }
 
     public function create($entity) {
-        $statement = $this->databaseService->pdo()->prepare('INSERT INTO tour_position (description,code) VALUES (:description,:code) RETURNING id');
+        $statement = $this->databaseService->pdo()->prepare('INSERT INTO tour_position (description, code) VALUES (:description,:code) RETURNING id');
 		$statement->execute([':description' => $entity->description(), ':code' => $entity->code()]);
         if ($row = $statement->fetch()) {
             return $row['id'];
