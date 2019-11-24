@@ -5,7 +5,6 @@ class Context {
 
 	private $router;
 	private $authService;
-	private $ticketService;
 	private $databaseService;
 	private $messageService;
 
@@ -31,7 +30,7 @@ class Context {
 	private $ticketPositionRepository;
 	private $ticketValidator;
 
-	function __construct($router, $authService, $ticketService, $databaseService, 
+	function __construct($router, $authService, $databaseService, 
 		$messageService,
 		$textDefinitionRepository, 
 		$tourRepository,
@@ -53,7 +52,6 @@ class Context {
 			
 		$this->router = $router;
 		$this->authService = $authService;
-		$this->ticketService = $ticketService;
 		$this->databaseService = $databaseService;
 		$this->messageService = $messageService;
 
@@ -87,11 +85,7 @@ class Context {
 	function authService() {
 		return $this->authService;
 	}
-
-	function ticketService() {
-		return $this->ticketService;
-	}
-
+	
 	function pdo() {
 		return $this->databaseService->pdo();
 	}

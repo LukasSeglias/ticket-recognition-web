@@ -19,6 +19,7 @@ class TicketValidator {
         $valid = $context->nonNull($entity->tour(), Texts::invalid_value);
         $valid = $valid && $context->nonNull($entity->scanDate(), Texts::invalid_value);
         $valid = $valid && $context->isDate($entity->scanDate(), Texts::invalid_value);
+        
         // TODO: handle duplicate key for create and update
         // TODO: validate text-definitions
 

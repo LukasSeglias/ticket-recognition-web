@@ -31,7 +31,7 @@ export class DrawingCanvas {
     }
     
     drawableRectangle(topLeft, bottomRight) {
-        let minSize = 10; // TODO: move somewhere else
+        let minSize = 10;
         let boundingBox = new RestrictedBoundingBox(topLeft, bottomRight, minSize, this.boundingBox);
 
         if(this.boundingBox.containsBoundingBox(boundingBox)) {

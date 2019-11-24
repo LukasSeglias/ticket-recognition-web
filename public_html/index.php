@@ -135,7 +135,8 @@ if($path === '/') {
 
 	} else {
 
-		// TODO: NOT FOUND PAGE
+		http_response_code(404);
+		die();
 	}
 
 } elseif(substr($path, 0, strlen("/rest/admin/")) === "/rest/admin/") {
@@ -169,6 +170,7 @@ if($path === '/') {
     }
 
 } else {
-	// TODO: NOT FOUND PAGE
+	http_response_code(404);
+	die();
 }
 ?>

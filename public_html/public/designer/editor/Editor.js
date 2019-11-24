@@ -94,6 +94,9 @@ export class Editor {
             }).then(response => {
                 if(response.ok) {
                     $("#toast-save-successful").toast('show');
+                    response.json().then(data => {
+                        window.location = `/admin/designer/${data.id}`;
+                    });
                 }
                 // TODO: handle error
             });

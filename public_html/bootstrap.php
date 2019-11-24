@@ -6,7 +6,6 @@ require_once './context.php';
 require_once './service/database.php';
 require_once './service/router.php';
 require_once './service/auth.php';
-require_once './service/ticket.php';
 require_once './service/ticket-template.php';
 require_once './service/message.php';
 require_once './service/exception-mapper.php';
@@ -36,7 +35,6 @@ function bootstrap($callback) {
 
 	$router = new Router();
 	$authService = new AuthService();
-	$ticketService = new TicketService($databaseService);
 	$textDefinitionRepository = new TextDefinitionRepository($databaseService);
 	$touroperatorRepository = new TouroperatorRepository($databaseService);
 	$tourPositionRepository = new TourPositionRepository($databaseService);
@@ -55,7 +53,7 @@ function bootstrap($callback) {
 	$tourValidator = new TourValidator();
 	$messageService = new MessageService();
 	$exceptionMapper = new ExceptionMapper();
-	$context = new Context($router, $authService, $ticketService, $databaseService,
+	$context = new Context($router, $authService, $databaseService,
 		$messageService,
 		$textDefinitionRepository, 
 		$tourRepository,

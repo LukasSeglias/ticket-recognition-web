@@ -68,10 +68,8 @@ class TicketTemplateResource {
 			$id = $this->service->create($entity);
 			$entity = $this->findById($id);
 			$this->imageRepository->create($entity, $uploadedFile);
-			
-			var_dump($entity); // TODO: cleanup
 
-			// TODO: return id?
+			return $this->mapper->toJson($entity);
 
         } catch(\Exception $ex) {
 			$messages = $this->context->exceptionMapper()->getMessages($ex);
@@ -95,20 +93,15 @@ class TicketTemplateResource {
 			$validation = $this->context->ticketTemplateValidator()->validate($entity);
 			if($validation->hasErrors()) {
 
-				
+				// TODO: return errors
+
 			} else {
 
 				$this->service->update($entity);
 				$this->imageRepository->update($entity, $oldEntity, $uploadedFile);
+
+				return $this->mapper->toJson($entity);
 			}
-
-			// TODO: validation		
-
-			var_dump($entity);
-
-			// TODO: implement
-
-			return;
 
 		} catch(\Exception $ex) {
 			$messages = $this->context->exceptionMapper()->getMessages($ex);
