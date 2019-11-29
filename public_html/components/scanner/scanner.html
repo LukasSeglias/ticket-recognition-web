@@ -4,10 +4,126 @@
 {% block title %}{{ "scanner_title"|translated }}{% endblock %}
 
 {% block content %}
+	{{ component(navigation) }}
+
+	<style>
+		h1 {
+			text-align: center;
+		}
+
+		.vertical-container {
+			height: 50vh;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.image-upload-input {
+			max-width: 30em;
+			margin: 0 auto 0 auto;
+		}
+
+		.success-mark {
+			width: 7em;
+			height: 7em;
+			background-color: #09e862;
+			border-radius: 50%;
+			color: white;
+			display: block;
+    		margin: 0 auto 0 auto;
+		}
+
+		.failure-mark {
+			width: 7em;
+			height: 7em;
+			background-color: #e80909;
+			border-radius: 50%;
+			color: white;
+			display: block;
+    		margin: 0 auto 0 auto;
+		}
+	</style>
 
 	<main class="my-3">
 		<div class="container">
-			Scanner is a work in progress.
+
+			<div class="row">
+				<div class="col-12 vertical-container">
+					<!-- Source: https://github.com/twbs/icons/blob/master/icons/check.svg -->
+					<svg class="success-mark" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+						<path fill-rule="evenodd" d="M15.854 5.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L8.5 12.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+					</svg>
+
+					<h1>{{ "scanner_success"|translated }}</h1>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-12 vertical-container">
+					<!-- Source: https://github.com/twbs/icons/blob/master/icons/x.svg -->
+					<svg class="failure-mark" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+						<path fill-rule="evenodd" d="M5.646 5.646a.5.5 0 000 .708l8 8a.5.5 0 00.708-.708l-8-8a.5.5 0 00-.708 0z" clip-rule="evenodd"/>
+						<path fill-rule="evenodd" d="M14.354 5.646a.5.5 0 010 .708l-8 8a.5.5 0 01-.708-.708l8-8a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+					</svg>
+
+					<h1>{{ "scanner_failure"|translated }}</h1>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-12">
+					<h1>{{ "scanner_subtitle"|translated }}</h1>
+					<div class="vertical-container">
+						<form method="POST" enctype="multipart/form-data" class="mb-0" id="image-form">
+							<div class="form-row">
+								<div class="col">
+									<div class="form-group image-upload-input">
+										<div class="custom-file">
+											<input type="file" class="custom-file-input" accept="image/*" name="image" id="image-upload" capture />
+											<label class="custom-file-label">{{ "scanner_choose_image"|translated }}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-12">
+					<div class="card mb-3">
+						<div class="card-header">
+							{{ "scanner_last_tickets"|translated }}
+						</div>
+						
+						<ul class="list-group list-group-flush">
+							{% for item in state.items %}
+								<a href="ticket/{{ item.id() }}" class="list-group-item list-group-item-action">
+									<div class="row">
+										<div class="col-2">
+											{{ item.tour().code() }}
+										</div>
+										<div class="col-3">
+											{{ item.template().key() }}
+										</div>
+										<div class="col-7" style="text-align: right;">
+											{{ item.scanDate() | date('Y-m-d H:i:s') }}
+										</div>
+									</div>
+								</a>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+
 		</div>
 	</main>
+
+	<script>
+		document.getElementById("image-upload").onchange = function() {
+			document.getElementById("image-form").submit();
+		};
+	</script>
 {% endblock %}

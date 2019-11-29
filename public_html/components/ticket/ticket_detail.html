@@ -5,6 +5,7 @@
 
 {% block content %}
 {{ component(navigation) }}
+{{ component(messages) }}
 
 <main class="mb-3">
     <script>
@@ -13,18 +14,30 @@
         }
 
         function deleteById() {
-            fetch(window.location.href, {
+            fetch('/rest/admin/tickets/{{ state.ticket.id() }}', {
                 method: 'delete'
-            }).then(() => {
-                goBack();
+            }).then((response) => {
+                if(response.ok) {
+                    goBack();
+                } else if(response.status == 400) {
+                    response.json().then(data => {
+                        showMessages(data);
+                    });
+                }
             });
         }
 
         function deletePositionById(positionId) {
         	fetch("/rest/admin/ticket-positions/" + positionId, {
         		method: 'delete'
-			}).then(() => {
-				location.reload();
+			}).then((response) => {
+                if(response.ok) {
+                    location.reload();
+                } else if(response.status == 400) {
+                    response.json().then(data => {
+                        showMessages(data);
+                    });
+                }
 			});
 		}
 

@@ -13,8 +13,8 @@
             document.getElementById('positioncode').value = "";
         }
 
-        function deletePositionById(ticketPositionId) {
-            fetch("/rest/admin/ticket-positions/" + ticketPositionId, {
+        function deletePositionById(tourId, tourPositionId) {
+            fetch("/rest/admin/tours/" + tourId + "/positions/" + tourPositionId, {
                 method: 'delete'
             }).then((response) => {
                 if(response.ok) {
@@ -27,8 +27,8 @@
             });
         }
 
-        function addPositionById(ticketId, positionId) {
-            fetch("/rest/admin/ticket-positions/" + ticketId + "/" + positionId, {
+        function addPositionById(tourId, positionId) {
+            fetch("/rest/admin/tours/" + tourId + "/positions/" + positionId, {
                 method: 'post'
             }).then((response) => {
                 if(response.ok) {
@@ -47,17 +47,17 @@
             <div class="col-12">
                 <div class="card my-3">
                     <div class="card-header">
-                        <a class="btn btn-info" href="/admin/ticket/{{state.ticketId}}" role="button">
+                        <a class="btn btn-info" href="/admin/tour/{{state.tourId}}" role="button">
                             <span class="oi oi-chevron-left"></span>
                         </a>
-                        <span class="title">{{ "ticketpositions_title"|translated }}</span>
+                        <span class="title">{{ "tourpositions_title"|translated }}</span>
                     </div>
                     <div class="card-body">
                         <form method="POST">
                             <div class="form-row">
                                 <div class="form-group col-12 col-sm-6">
-                                    <label for="positioncode">{{ 'ticketpositions_code'|translated }}</label>
-                                    <input name="positioncode" type="text" class="form-control" id="positioncode" placeholder="{{ 'ticketpositions_code'|translated }}" value="{{state.filter.code}}">
+                                    <label for="positioncode">{{ 'tourpositions_code'|translated }}</label>
+                                    <input name="positioncode" type="text" class="form-control" id="positioncode" placeholder="{{ 'tourpositions_code'|translated }}" value="{{state.filter.code}}">
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary">{{ "search"|translated }}</button>
@@ -88,12 +88,12 @@
                                 </div>
 
                                 <div class="col-1">
-                                    {% if item.ticketId() != null %}
-                                    <button type="button" class="btn btn-xs btn-danger" onclick="deletePositionById({{ item.id() }})">
+                                    {% if item.tourId() != null %}
+                                    <button type="button" class="btn btn-xs btn-danger" onclick="deletePositionById({{ state.tourId }}, {{ item.id() }})">
                                         <span class="oi oi-trash"></span>
                                     </button>
                                     {% else %}
-                                    <button type="button" class="btn btn-primary" onclick="addPositionById({{ state.ticketId }}, {{ item.id() }})">
+                                    <button type="button" class="btn btn-primary" onclick="addPositionById({{ state.tourId }}, {{ item.id() }})">
                                         <span class="oi oi-plus"></span>
                                     </button>
                                     {% endif %}

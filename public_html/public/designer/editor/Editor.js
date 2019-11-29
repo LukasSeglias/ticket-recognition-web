@@ -94,8 +94,14 @@ export class Editor {
             }).then(response => {
                 if(response.ok) {
                     $("#toast-save-successful").toast('show');
+                    response.json().then(data => {
+                        window.location = `/admin/designer/${data.id}`;
+                    });
+                } else if(response.status == 400) {
+                    response.json().then(data => {
+                        showMessages(data);
+                    });
                 }
-                // TODO: handle error
             });
         }
     }
@@ -105,11 +111,13 @@ export class Editor {
             fetch(`/rest/admin/ticket-templates/${this._id}`, {
                 method: 'DELETE'
             })
-            .then(res => {
-                if(res.ok) {
+            .then(response => {
+                if(response.ok) {
                     window.location.href = "/admin/templates";
-                } else {
-                    console.error('Error occured on template delete');
+                } else if(response.status == 400) {
+                    response.json().then(data => {
+                        showMessages(data);
+                    });
                 }
             });
         }

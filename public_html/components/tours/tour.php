@@ -25,11 +25,7 @@ class TourDetailPage implements Page {
             
             $this->processSave();
 
-		} elseif($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-            
-            $this->processDelete();
-
-        } else {
+		} else {
 
             $this->context->router()->notFound();
         }
@@ -82,22 +78,6 @@ class TourDetailPage implements Page {
             $messages = $this->context->exceptionMapper()->getMessages($ex);
             $this->context->messageService()->addAll($messages);
             $this->state = new TourDetailState($entity, CrudMode::create());
-        }
-    }
-    
-    private function processDelete() {
-        $id = $this->getId();
-        if ($id) {
-            $this->findById($id); // Check that entity exists
-            try {
-                $this->context->tourRepository()->delete($id);
-            } catch(\PDOException $e) {
-                // TODO: cleanup
-                echo "EXCEPTION PDO: ";
-                var_dump($e);
-            }
-        } else {
-            $this->context->router()->notFound();
         }
     }
 	

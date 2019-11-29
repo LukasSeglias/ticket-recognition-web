@@ -14,8 +14,11 @@ class TicketPositionResource {
         $id = $this->getId();
 
         if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+
             return $this->delete($id);
+
         } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            
             $ticketId = $this->getTicketId();
             $this->create($id, $ticketId);
         }

@@ -4,7 +4,7 @@
 {% block title %}CTI{% endblock %}
 
 {% block content %}
-	{{ component(navigation) }}
+	{{ component(navigation) }}	
 
 	<style>
 		#canvas-container {
@@ -46,6 +46,7 @@
 			<canvas tabindex='1'></canvas>
 		</div>
 		<div id="editor-tools">
+			{{ component(messages) }}
 			<div class="card mb-3">
 				<div class="card-header d-flex justify-content-between align-items-center">
 					{{ "designer_template"|translated }}
