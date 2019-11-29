@@ -1,32 +1,17 @@
 <?php
 namespace CTI;
 
-require_once './i18n/i18n.php';
 require_once './components/component.php';
 require_once './model/user.php';
 
 class Navigation implements Component {
 
-	const KEY_TEMPLATES = 'templates';
-	const KEY_TICKETS = 'tickets';
-	const KEY_TOURS = 'tours';
-	const KEY_TOURPOSITIONS = 'tourpositions';
-	const KEY_TOUROPERATORS = 'touroperators';
-	const KEY_USERS = 'users';
-
 	private $component;
 
-	function __construct($context, $activeKey) {
+	function __construct($context, $navigationItems, $activeKey) {
 
 		$this->component = new NavigationComponent(new NavigationComponentState(
-			[
-				new NavigationItem(self::KEY_TEMPLATES, '/admin/templates', Texts::navigation_templates, []),
-				new NavigationItem(self::KEY_TICKETS, '/admin/tickets', Texts::navigation_tickets, []),
-				new NavigationItem(self::KEY_TOURS, '/admin/tours', Texts::navigation_tours, []),
-				new NavigationItem(self::KEY_TOURPOSITIONS, '/admin/tour-positions', Texts::navigation_tourpositions, []),
-				new NavigationItem(self::KEY_TOUROPERATORS, '/admin/tour-operators', Texts::navigation_touroperators, []),
-				new NavigationItem(self::KEY_USERS, '/auth/', Texts::navigation_users, [])
-			],
+			$navigationItems,
 			$activeKey,
 			$context->authService()->currentUser()
 		));

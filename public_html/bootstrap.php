@@ -18,6 +18,7 @@ require_once './repository/ticket.php';
 require_once './repository/ticket-position.php';
 require_once './json/ticket-template.php';
 require_once './json/message.php';
+require_once './i18n/i18n.php';
 require_once './ws/ticket-template.php';
 require_once './io/ticket-template.php';
 require_once './validation/ticket-template.php';
@@ -76,9 +77,17 @@ function bootstrap($callback) {
 	$callback($context);
 }
 
-function page($activeKey, $pageConstructionFunction) {
-	bootstrap(function($context) use (&$activeKey, &$pageConstructionFunction) {
-		$navigation = new Navigation($context, $activeKey);
+function resource($resourceConstructionFunction) {
+	bootstrap(function($context) use (&$resourceConstructionFunction) {
+		$resource = $resourceConstructionFunction($context);
+		echo $resource->process();
+	});
+};
+
+function page($navigationItems, $activeKey, $pageConstructionFunction) {
+	bootstrap(function($context) use (&$navigationItems, &$activeKey, &$pageConstructionFunction) {
+
+		$navigation = new Navigation($context, $navigationItems, $activeKey);
 		$messages = new MessagesComponent($context);
 		$page = $pageConstructionFunction($context);
 		$app = new App($context, $page, [
@@ -88,5 +97,24 @@ function page($activeKey, $pageConstructionFunction) {
 		$app->update();
 		echo $app->render();
 	});
+};
+
+function scannerPage($activeKey, $pageConstructionFunction) {
+	$navigationItems = [
+		new NavigationItem('scanner', '/scanner', Texts::navigation_scanner, [])
+	];
+	page($navigationItems, $activeKey, $pageConstructionFunction);
+};
+
+function adminPage($activeKey, $pageConstructionFunction) {
+	$navigationItems = [
+		new NavigationItem('templates', '/admin/templates', Texts::navigation_templates, []),
+		new NavigationItem('tickets', '/admin/tickets', Texts::navigation_tickets, []),
+		new NavigationItem('tours', '/admin/tours', Texts::navigation_tours, []),
+		new NavigationItem('tourpositions', '/admin/tour-positions', Texts::navigation_tourpositions, []),
+		new NavigationItem('touroperators', '/admin/tour-operators', Texts::navigation_touroperators, []),
+		new NavigationItem('users', '/auth/', Texts::navigation_users, [])
+	];
+	page($navigationItems, $activeKey, $pageConstructionFunction);
 };
 ?>

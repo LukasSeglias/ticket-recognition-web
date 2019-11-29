@@ -14,6 +14,18 @@ class TicketRepository {
         $this->ticketPositionRepository = $ticketPositionRepository;
     }
 
+    public function find($limit) {
+        $builder = new Ticket\QueryBuilder;
+        $query = $builder->limit($limit)->build();
+        $statement = $this->databaseService->pdo()->prepare($query);
+        $statement->execute($builder->mapping());
+        $results = array();
+        while($row = $statement->fetch()) {
+            $results[] = $this->map($row);
+        }
+        return $results;
+    }
+
     public function findBy($code) {
         $builder = new Ticket\QueryBuilder;
         $query = $builder->setCode($code)
@@ -83,6 +95,7 @@ namespace CTI\Ticket;
 
 class QueryBuilder {
     private $mapping = array();
+    private $limit = NULL;
 
     public function setCode($code) : QueryBuilder {
         if (!$this->isNullOrEmpty($code)) {
@@ -94,6 +107,13 @@ class QueryBuilder {
     public function setId($id) : QueryBuilder {
         if (!$this->isNullOrEmpty($id)) {
             $this->mapping[':tiId'] = $id;
+        }
+        return $this;
+    }
+
+    public function limit(int $limit) : QueryBuilder {
+        if ($limit >= 0) {
+            $this->limit = $limit;
         }
         return $this;
     }
@@ -122,6 +142,12 @@ class QueryBuilder {
 
         if (array_key_exists(':tiId', $this->mapping)) {
             $query .= ' ' . $and . ' ti.id = :tiId';
+        }
+
+        $query .= ' ORDER BY scan_date desc';
+
+        if(!is_null($this->limit)) {
+            $query .= ' LIMIT ' . strval($this->limit);
         }
 
         return $query;
