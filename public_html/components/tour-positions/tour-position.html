@@ -14,10 +14,16 @@
 			}
 
 			function deleteById() {
-				fetch(window.location.href, {
+				fetch('/rest/admin/tour-positions/{{ state.entity.id() }}', {
 					method: 'delete'
 				}).then((response) => {
-					goBack();
+					if(response.ok) {
+						goBack();
+					} else if(response.status == 400) {
+						response.json().then(data => {
+							showMessages(data);
+						});
+					}
 				});
 			}
 

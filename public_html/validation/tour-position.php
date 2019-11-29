@@ -20,8 +20,6 @@ class TourpositionValidator {
 		$descValid = $valid && $context->nonEmpty($entity->description(), Texts::tourposition_description_invalid);
 		$descValid = $descValid && $context->maxLength($entity->description(), 100, Texts::tourposition_description_invalid);
 
-		// TODO: handle duplicate code on create and edit
-
 		if($context->hasErrors()) {
 			throw new ValidationException($context->errors());
 		}

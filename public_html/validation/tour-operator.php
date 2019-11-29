@@ -18,8 +18,6 @@ class TouroperatorValidator {
 		$descValid = $valid && $context->nonEmpty($entity->name(), Texts::touroperator_name_invalid);
 		$descValid = $descValid && $context->maxLength($entity->name(), 100, Texts::touroperator_name_invalid);
 
-		// TODO: handle duplicate name on create and edit
-
 		if($context->hasErrors()) {
 			throw new ValidationException($context->errors());
 		}

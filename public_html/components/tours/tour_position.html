@@ -5,6 +5,7 @@
 
 {% block content %}
 {{ component(navigation) }}
+{{ component(messages) }}
 
 <main class="mb-3">
     <script>
@@ -13,18 +14,30 @@
         }
 
         function deletePositionById(tourId, tourPositionId) {
-            fetch("/rest/admin/tour/positions/" + tourId + "/" + tourPositionId, {
+            fetch("/rest/admin/tours/" + tourId + "/positions/" + tourPositionId, {
                 method: 'delete'
-            }).then(() => {
-                location.reload();
+            }).then((response) => {
+                if(response.ok) {
+                    location.reload();
+                } else if(response.status == 400) {
+                    response.json().then(data => {
+                        showMessages(data);
+                    });
+                }
             });
         }
 
         function addPositionById(tourId, positionId) {
-            fetch("/rest/admin/tour/positions/" + tourId + "/" + positionId, {
+            fetch("/rest/admin/tours/" + tourId + "/positions/" + positionId, {
                 method: 'post'
-            }).then(() => {
-                location.reload();
+            }).then((response) => {
+                if(response.ok) {
+                    location.reload();
+                } else if(response.status == 400) {
+                    response.json().then(data => {
+                        showMessages(data);
+                    });
+                }
             });
         }
     </script>

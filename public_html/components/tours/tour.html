@@ -14,18 +14,30 @@
 			}
 
 			function deleteById() {
-				fetch(window.location.href, {
+				fetch('/rest/admin/tours/{{ state.entity.id() }}', {
 					method: 'delete'
 				}).then((response) => {
-					goBack();
+					if(response.ok) {
+						goBack();
+					} else if(response.status == 400) {
+						response.json().then(data => {
+							showMessages(data);
+						});
+					}
 				});
 			}
 
 			function deletePositionById(tourId, tourPositionId) {
-				fetch("/rest/admin/tour/positions/" + tourId + "/" + tourPositionId, {
+				fetch("/rest/admin/tours/" + tourId + "/positions/" + tourPositionId, {
 					method: 'delete'
-				}).then(() => {
-					location.reload();
+				}).then((response) => {
+					if(response.ok) {
+						location.reload();
+					} else if(response.status == 400) {
+						response.json().then(data => {
+							showMessages(data);
+						});
+					}
 				});
 			}
 
@@ -49,7 +61,7 @@
 								<button type="button" onclick="deleteById()" class="btn btn-danger">
 									<span class="oi oi-trash"></span>
 								</button>
-								
+
 								{% endif %}
 								<button type="button" onclick="submitForm()" class="btn btn-success ml-2">
 									<span class="oi oi-check"></span>
@@ -74,15 +86,18 @@
 				</div>
 			</div>
 			
+			{% if state.mode.isEdit() %}
 			<div class="row mt-3">
 				<div class="col-12">
 					<div class="card mb-3">
 						<div class="card-header d-flex justify-content-between align-items-center">
 							<span class="title">{{ "tour_tourpositions"|translated }}</span>
 							<div>
+								{% if state.mode.isEdit() %}
 								<a class="btn btn-primary" href="/admin/tour/position/{{state.entity.id()}}" role="button">
 									<span class="oi oi-plus"></span>
 								</a>
+								{% endif %}
 							</div>
 						</div>
 						<ul class="list-group list-group-flush">
@@ -109,6 +124,7 @@
 					</div>
 				</div>
 			</div>
+			{% endif %}
 
 		</div>
     </main>

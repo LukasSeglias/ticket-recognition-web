@@ -28,6 +28,7 @@ if($path === '/') {
 	});
 
 } elseif(substr($path, 0, strlen("/admin/")) === "/admin/") {
+	
 	if (!$authorizer->verifyToken('admin')) {
 		error_log("Token not valid");
 		$router->redirect("/");
@@ -43,14 +44,14 @@ if($path === '/') {
 	} elseif(substr($path, 0, strlen("/admin/ticket-position")) === "/admin/ticket-position") {
 		
 		require_once './components/ticket/ticket_position.php';
-        page('ticketpositions', function ($context) {
+        page('tickets', function ($context) {
             return new TicketPositionPage($context);
         });
 
     } elseif(substr($path, 0, strlen("/admin/ticket")) === "/admin/ticket") {
 
         require_once './components/ticket/ticket_detail.php';
-        page('ticket', function ($context) {
+        page('tickets', function ($context) {
             return new TicketDetailPage($context);
         });
 
@@ -71,7 +72,7 @@ if($path === '/') {
 	} else if(substr($path, 0, strlen("/admin/designer")) === "/admin/designer") {
 	
 		require_once './components/designer/designer.php';
-		page('designer', function ($context) {
+		page('templates', function ($context) {
 			return new DesignerPage($context);
 		});
 	
@@ -85,14 +86,14 @@ if($path === '/') {
 	} elseif(substr($path, 0, strlen("/admin/tour/position")) === "/admin/tour/position") {
 		
 		require_once './components/tours/tour_position.php';
-        page('ticket', function ($context) {
+        page('tourpositions', function ($context) {
             return new TourPositionPage($context);
         });
 
     } elseif(substr($path, 0, strlen("/admin/tour-position")) === "/admin/tour-position") {
 		
 		require_once './components/tour-positions/tour-position.php';
-		page('tourposition', function ($context) {
+		page('tourpositions', function ($context) {
 			return new TourpositionDetailPage($context);
 		});
 
@@ -106,7 +107,7 @@ if($path === '/') {
 	} elseif(substr($path, 0, strlen("/admin/tour-operator")) === "/admin/tour-operator") {
 		
 		require_once './components/tour-operators/tour-operator.php';
-		page('touroperator', function ($context) {
+		page('touroperators', function ($context) {
 			return new TouroperatorDetailPage($context);
 		});
 
@@ -120,7 +121,7 @@ if($path === '/') {
 	} elseif(substr($path, 0, strlen("/admin/tour")) === "/admin/tour") {
 		
 		require_once './components/tours/tour.php';
-		page('tourposition', function ($context) {
+		page('tours', function ($context) {
 			return new TourDetailPage($context);
 		});
 
@@ -160,14 +161,38 @@ if($path === '/') {
             echo (new TicketPositionResource($context))->process();
         });
 
-    } else if(substr($path, 0, strlen("/rest/admin/tour/positions")) === "/rest/admin/tour/positions") {
+    } else if(substr($path, 0, strlen("/rest/admin/tickets")) === "/rest/admin/tickets") {
+
+        require_once './ws/ticket.php';
+        bootstrap(function ($context) {
+            echo (new TicketResource($context))->process();
+        });
+
+    } else if(substr($path, 0, strlen("/rest/admin/tour-operators")) === "/rest/admin/tour-operators") {
+
+        require_once './ws/tour-operator.php';
+        bootstrap(function ($context) {
+            echo (new TouroperatorResource($context))->process();
+        });
+
+    } else if(substr($path, 0, strlen("/rest/admin/tour-positions")) === "/rest/admin/tour-positions") {
 
         require_once './ws/tour-position.php';
         bootstrap(function ($context) {
-            echo (new TourPositionResource($context))->process();
+            echo (new TourpositionResource($context))->process();
         });
 
-    }
+    } else if(substr($path, 0, strlen("/rest/admin/tours")) === "/rest/admin/tours") {
+
+        require_once './ws/tour.php';
+        bootstrap(function ($context) {
+            echo (new TourResource($context))->process();
+        });
+
+    } else {
+		http_response_code(404);
+		die();
+	}
 
 } else {
 	http_response_code(404);

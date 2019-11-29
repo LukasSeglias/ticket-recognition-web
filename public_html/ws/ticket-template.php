@@ -90,18 +90,12 @@ class TicketTemplateResource {
 			$entity = $this->mapper->fromJsonObject($jsonString);
 			$entity = new TicketTemplate($id, $entity->key(), $entity->touroperator(), $entity->textDefinitions(), $fileExtension);
 
-			$validation = $this->context->ticketTemplateValidator()->validate($entity);
-			if($validation->hasErrors()) {
+			$this->context->ticketTemplateValidator()->validate($entity);
+			
+			$this->service->update($entity);
+			$this->imageRepository->update($entity, $oldEntity, $uploadedFile);
 
-				// TODO: return errors
-
-			} else {
-
-				$this->service->update($entity);
-				$this->imageRepository->update($entity, $oldEntity, $uploadedFile);
-
-				return $this->mapper->toJson($entity);
-			}
+			return $this->mapper->toJson($entity);
 
 		} catch(\Exception $ex) {
 			$messages = $this->context->exceptionMapper()->getMessages($ex);

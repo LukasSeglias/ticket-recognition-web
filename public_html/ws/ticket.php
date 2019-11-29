@@ -2,7 +2,7 @@
 
 namespace CTI;
 
-class TourpositionResource {
+class TicketResource {
 
     private $context;
 
@@ -21,7 +21,7 @@ class TourpositionResource {
     private function delete($id) {
         try {
             $this->findById($id);
-            $this->context->tourpositionRepository()->delete($id);
+            $this->context->ticketRepository()->delete($id);
         } catch(\Exception $ex) {
             $messages = $this->context->exceptionMapper()->getMessages($ex);
             http_response_code(400);
@@ -30,7 +30,7 @@ class TourpositionResource {
     }
 
     private function findById($id) {
-        $entity = $this->context->tourpositionRepository()->get($id);
+        $entity = $this->context->ticketRepository()->get($id);
         if($entity === NULL) {
             $this->context->router()->notFound();
         }
@@ -39,7 +39,7 @@ class TourpositionResource {
 
     private function getId() {
         $id = end(explode('/', getenv('REQUEST_URI')));
-        return $id === 'tour-positions' ? NULL : $id;
+        return $id === 'tickets' ? NULL : $id;
     }
 }
 

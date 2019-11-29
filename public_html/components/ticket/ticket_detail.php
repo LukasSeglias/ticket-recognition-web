@@ -28,10 +28,6 @@ class TicketDetailPage implements Page {
 
             $this->processSave();
 
-        } elseif($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-
-            $this->processDelete();
-
         } else {
 
             $this->context->router()->notFound();
@@ -89,22 +85,6 @@ class TicketDetailPage implements Page {
             $messages = $this->context->exceptionMapper()->getMessages($ex);
             $this->context->messageService()->addAll($messages);
             $this->state = new TicketDetailState($entity, CrudMode::create());
-        }
-    }
-
-    private function processDelete() {
-        $id = $this->getId();
-        if ($id) {
-            $this->findById($id); // Check that entity exists
-            try {
-                $this->context->ticketRepository()->delete($id);
-            } catch(\PDOException $e) {
-                // TODO: cleanup
-                echo "EXCEPTION PDO: ";
-                var_dump($e);
-            }
-        } else {
-            $this->context->router()->notFound();
         }
     }
 
