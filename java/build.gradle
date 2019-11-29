@@ -1,3 +1,6 @@
+import java.util.function.Consumer
+import java.util.function.Predicate
+
 plugins {
     id 'java'
     id 'maven-publish'
@@ -21,6 +24,33 @@ dependencies {
     providedCompile 'org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.1_spec:2.0.1.Final'
     providedCompile 'javax:javaee-api:8.0'
     implementation name: 'ticket_recognition_lib-1.0'
+}
+
+task addExternalLibraries {
+    project.delete(files("src/main/resources/imported/"))
+
+    final Set<String> expectedDirectories = new HashSet<>()
+    expectedDirectories.add("libs")
+    expectedDirectories.add("tessdata")
+
+    FileTree tree = zipTree("libs/ticket_recognition_lib-1.0.jar");
+    tree.visit(new FileVisitor() {
+        @Override
+        void visitDir(FileVisitDetails fileVisitDetails) {
+            File file = fileVisitDetails.file
+            if (expectedDirectories.contains(file.getName())) {
+                copy {
+                    from(file)
+                    into("src/main/resources/imported/" + file.getName())
+                }
+            }
+        }
+
+        @Override
+        void visitFile(FileVisitDetails fileVisitDetails) {
+            // NOOP
+        }
+    })
 }
 
 group = 'ticket-recognition'

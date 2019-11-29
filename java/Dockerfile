@@ -17,12 +17,16 @@ RUN ./bin/jboss-cli.sh --file=cli/app-standalone-config.cli \
 
 USER root
 RUN yum -y update && yum -y install dos2unix
-COPY libs/ /usr/local/lib/
+COPY src/main/resources/imported/libs/linux/ /usr/local/lib/
 RUN dos2unix /usr/local/lib/* && \
     mv /usr/local/lib/* /usr/lib/
+COPY src/main/resources/imported/tessdata/ /usr/local/resources/tessdata/
+ENV TESSDATA_PREFIX=/usr/local/resources/tessdata/
 
 RUN chgrp -R 0 $JBOSS_HOME && \
     chmod -R g=u $JBOSS_HOME
+
+RUN chmod -R 777 /usr/lib/
 
 USER 1000
 
