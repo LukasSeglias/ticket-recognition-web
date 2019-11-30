@@ -5,7 +5,7 @@ use \i18n;
 require_once './vendor/autoload.php';
 
 $i18n = new i18n();
-$i18n->setCachePath('./tmp/cache/i18n');
+$i18n->setCachePath(getenv('CTI_TEMP_DIRECTORY') . '/cache/i18n');
 $i18n->setFilePath('./i18n/lang_{LANGUAGE}.ini');
 
 if (isset($_COOKIE['USER_LANGUAGE'])) {

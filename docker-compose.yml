@@ -14,6 +14,7 @@ services:
       DB_USER: "${DB_USERNAME}"
       DB_PASSWORD_FILE: /run/secrets/db_password
       CTI_IMAGE_DIRECTORY: ${CTI_IMAGE_DIRECTORY}
+      CTI_TEMP_DIRECTORY: ${CTI_TEMP_DIRECTORY}
     volumes:
       - ${PROJECT_ROOT}/:/var/www/html/
       - images:${CTI_IMAGE_DIRECTORY}
