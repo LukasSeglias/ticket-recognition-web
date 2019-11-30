@@ -1,4 +1,6 @@
 import {TicketText} from '/public/designer/ticket/TicketText.js';
+import {BoundingBox} from '/public/designer/canvas/primitives/BoundingBox.js';
+import {DrawableRectangle} from '/public/designer/canvas/drawables/DrawableRectangle.js';
 
 export class TicketTextEditor  {
 	
@@ -173,14 +175,12 @@ export class TicketTextEditor  {
 
         textDefinitions.forEach((textDefinition) => {
 
-            let newRectangle = this._convertRectangle(textDefinition.rectangle);
-            if(newRectangle) {
-                let newText = new TicketText(textDefinition.key, textDefinition.description, newRectangle);
-                this._drawingCanvas.add(newText);
-            } else {
-                console.error('TextDefinition has invalid rectangle');
-                console.dir(textDefinition);
-            }
+            let rectangle = new DrawableRectangle(BoundingBox.ofRectangle(
+                textDefinition.rectangle.x, textDefinition.rectangle.y,
+                textDefinition.rectangle.width, textDefinition.rectangle.height
+            ));
+            let newText = new TicketText(textDefinition.key, textDefinition.description, rectangle);
+            this._drawingCanvas.add(newText);
         });
     }
 

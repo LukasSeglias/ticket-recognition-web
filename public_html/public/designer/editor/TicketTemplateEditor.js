@@ -57,6 +57,10 @@ export class TicketTemplateEditor  {
         this._deleteButton.disabled = !this._isEdit(value);
     }
 
+    get image() {
+        return this._templateForm.image;
+    }
+
     async _getTemplateImage(imageFilename) {
         return (new ImageLoader()).fromUrl(`/admin/images/ticket-template/${imageFilename}`);
     }

@@ -107,6 +107,10 @@ export class TicketTemplateForm {
         }
     }
 
+    get image() {
+        return this._image;
+    }
+
     _notifyChange() {
         
         if(this.validate()) {

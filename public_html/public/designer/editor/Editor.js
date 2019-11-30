@@ -1,5 +1,6 @@
 import {SelectAndMoveMode} from '/public/designer/editor/mode/SelectAndMoveMode.js';
 import {TextCreateMode} from '/public/designer/editor/mode/TextCreateMode.js';
+import {BoundingBox} from '/public/designer/canvas/primitives/BoundingBox.js';
 
 export class Editor {
     
@@ -72,7 +73,36 @@ export class Editor {
 
     validate() {
         return this._ticketTemplateEditor.validate()
-            && this._ticketTextEditor.validate();
+            && this._ticketTextEditor.validate()
+            && this._validateTextDefinitions();
+    }
+
+    _validateTextDefinitions() {
+        if(!this._textDefinitionsInsideImageBounds()) {
+            $("#toast-textdefinitions-outside-image-bounds").toast('show');
+            return false;
+        }
+        return true;
+    }
+
+    _textDefinitionsInsideImageBounds() {
+        let template = this.value;
+        let image = this._ticketTemplateEditor.image;
+        let imageBoundingBox = BoundingBox.ofRectangle(image.x, image.y, image.width, image.height);
+
+        for(let i = 0; i < template.textDefinitions.length; i++) {
+
+            let textDefinition = template.textDefinitions[i];
+            let boundingBox = BoundingBox.ofRectangle(
+                textDefinition.rectangle.x, textDefinition.rectangle.y, 
+                textDefinition.rectangle.width, textDefinition.rectangle.height
+            );
+
+            if(!imageBoundingBox.containsBoundingBox(boundingBox)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     _save() {
@@ -95,7 +125,9 @@ export class Editor {
                 if(response.ok) {
                     $("#toast-save-successful").toast('show');
                     response.json().then(data => {
-                        window.location = `/admin/designer/${data.id}`;
+                        if(this._id === undefined) {
+                            window.location = `/admin/designer/${data.id}`;
+                        }
                     });
                 } else if(response.status == 400) {
                     response.json().then(data => {
