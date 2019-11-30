@@ -28,7 +28,7 @@ services:
       - backend
     environment:
       KEYCLOAK_USER: "admin"
-      KEYCLOAK_PASSWORD: "admin"
+      KEYCLOAK_PASSWORD: "supersecret!"
       DB_VENDOR: "h2"
     container_name: auth
   apache:

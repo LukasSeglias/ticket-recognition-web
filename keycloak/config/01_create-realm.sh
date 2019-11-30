@@ -18,7 +18,7 @@ $KCADM create realms -s id=cti -s realm=cti -s displayName=cti -s enabled=true -
     -s loginWithEmailAllowed=false -s duplicateEmailsAllowed=true \
     -s loginTheme=keycloak -s accountTheme=keycloak -s adminTheme=keycloak -s emailTheme=keycloak \
     -s internationalizationEnabled=true -s 'supportedLocales=["de"]' -s defaultLocale=de \
-    -s 'passwordPolicy="hashIterations(25000) and lowerCase(1) and digits(1) and length(8) and specialChars(1)"' \
+    -s 'passwordPolicy="hashIterations(25000) and lowerCase(1) and length(8) and specialChars(1)"' \
     -s 'bruteForceProtected=true' \
     -s 'quickLoginCheckMilliSeconds=10000' \
     -s 'failureFactor=5' \
