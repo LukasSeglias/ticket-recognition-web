@@ -14,7 +14,6 @@ public class TicketRecognitionService {
     static {
         LOG.log(Level.INFO, "Load library {}", LIBRARY_NAME);
         try {
-            System.loadLibrary("ticket_recognition_lib");
             System.loadLibrary(LIBRARY_NAME);
         } catch (UnsatisfiedLinkError exc) {
             LOG.log(Level.SEVERE, "Failed loading library", exc);
