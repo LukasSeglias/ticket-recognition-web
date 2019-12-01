@@ -14,3 +14,8 @@ $KCADM create users -r cti -s username=sc -s enabled=true \
     -s firstName="System" -s lastName="Mitarbeiter Scanner" -s attributes.locale=de
 $KCADM set-password -r cti --username sc --new-password ascotel123$
 $KCADM add-roles -r cti --uusername sc --rolename scanner
+
+$KCADM create users -r cti -s username=admin -s enabled=true \
+    -s firstName="System" -s lastName="Admin" -s attributes.locale=de
+$KCADM set-password -r cti --username admin --new-password supersecret!
+$KCADM add-roles -r cti --uusername admin --rolename admin --rolename scanner

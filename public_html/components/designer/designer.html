@@ -24,22 +24,34 @@
 			overflow: auto;
 			padding-top: 15px;
 			padding-right: 15px;
+			width: 30vw;
 		}
 
 		.cursor-pointer {
 			cursor: pointer;
 		}
+
+		.toast-container {
+			position: absolute; 
+			bottom: 15px; 
+			left: 15px;
+		}
 	</style>
 
 	<main>
-		<div style="position: absolute; bottom: 15px; left: 15px;">
-
+		<div class="toast-container">
 			<div class="toast" id="toast-save-successful" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
 				<div class="toast-body">
 					{{ "designer_save_successfull"|translated }}
 				</div>
 			</div>
-
+		</div>
+		<div class="toast-container">
+			<div class="toast" id="toast-textdefinitions-outside-image-bounds" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+				<div class="toast-body">
+					{{ "designer_textdefinitions_outside_image_bounds"|translated }}
+				</div>
+			</div>
 		</div>
 
 		<div id="canvas-container">

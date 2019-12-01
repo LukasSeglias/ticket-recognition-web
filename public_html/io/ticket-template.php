@@ -17,7 +17,6 @@ class TicketTemplateImageRepository {
 
 	public function update($entity, $oldEntity, $uploadedFile) {
 		$oldFilePath = $this->getFilePath($oldEntity);
-		echo "REPLACE FILE ".$oldFilePath." WITH ".$this->getFilePath($entity). " USING UPLOADED ".$uploadedFile['tmp_name'];
 
 		if(file_exists($oldFilePath)) {
 			unlink($oldFilePath);
