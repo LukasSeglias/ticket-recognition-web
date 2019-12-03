@@ -27,30 +27,22 @@ dependencies {
 }
 
 task addExternalLibraries {
-    project.delete(files("src/main/resources/imported/"))
+    doFirst {
+        project.delete(files("src/main/resources/imported/"))
+    }
 
-    final Set<String> expectedDirectories = new HashSet<>()
-    expectedDirectories.add("libs")
-    expectedDirectories.add("tessdata")
-
-    FileTree tree = zipTree("libs/ticket_recognition_lib-1.0.jar");
-    tree.visit(new FileVisitor() {
-        @Override
-        void visitDir(FileVisitDetails fileVisitDetails) {
-            File file = fileVisitDetails.file
-            if (expectedDirectories.contains(file.getName())) {
-                copy {
-                    from(file)
-                    into("src/main/resources/imported/" + file.getName())
-                }
+    doLast {
+        final Set<String> expectedDirectories = new HashSet<>()
+        expectedDirectories.add("libs")
+        expectedDirectories.add("tessdata")
+        copy {
+            from(zipTree("libs/ticket_recognition_lib-1.0.jar")) {
+                include 'libs/**'
+                include 'tessdata/**'
             }
+            into "src/main/resources/imported/"
         }
-
-        @Override
-        void visitFile(FileVisitDetails fileVisitDetails) {
-            // NOOP
-        }
-    })
+    }
 }
 
 group = 'ticket-recognition'

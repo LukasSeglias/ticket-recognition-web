@@ -5,9 +5,7 @@ import ticketrecognition.dto.MetadataDto;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,8 +18,9 @@ public class TicketResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-    public MetadataDto match(InputStream image) throws IOException {
-        return service.match(image);
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto match(InputStream image, @HeaderParam("TypeOfFile") String typeOfFile) throws IOException {
+        return service.match(image, typeOfFile);
     }
 
     @Inject

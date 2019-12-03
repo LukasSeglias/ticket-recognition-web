@@ -71,13 +71,16 @@ services:
   java:
     build:
       context: './java/'
-    restart: always
     ports:
       - "8080:8080"
     extra_hosts:
       - "${HOST_NAME}:${HOST_DOCKERNAT_IP}"
     networks:
       - backend
+    environment:
+      TESSDATA_PREFIX: "/usr/local/resources/tessdata/"
+    volumes:
+      - ./java/src/main/resources/imported/:/usr/local/resources
     container_name: java
 networks:
   frontend:

@@ -12,7 +12,7 @@ public class TicketRecognitionService {
     private static final String LIBRARY_NAME = "ticket_recognition_jcpp";
 
     static {
-        LOG.log(Level.INFO, "Load library {}", LIBRARY_NAME);
+        LOG.log(Level.INFO, "Load library " + LIBRARY_NAME);
         try {
             System.loadLibrary(LIBRARY_NAME);
         } catch (UnsatisfiedLinkError exc) {

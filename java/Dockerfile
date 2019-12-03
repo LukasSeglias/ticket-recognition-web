@@ -55,7 +55,7 @@ EXPOSE 8080
 
 # Set the default command to run on boot
 # This will boot WildFly in the standalone mode and bind to all interface
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
+CMD ["/usr/local/execute.sh"]
 
 ENV KEYCLOAK_VERSION 7.0.0
 
@@ -74,18 +74,13 @@ RUN ./bin/jboss-cli.sh --file=cli/app-standalone-config.cli \
 
 USER root
 RUN apt-get -y update && apt-get -y install dos2unix
-COPY src/main/resources/imported/libs/linux/ /usr/local/lib/
-RUN dos2unix /usr/local/lib/* && \
-    mv /usr/local/lib/* /usr/lib/
-
-COPY src/main/resources/imported/tessdata/ /usr/local/resources/tessdata/
-ENV TESSDATA_PREFIX=/usr/local/resources/tessdata/
+COPY src/main/resources/execute.sh /usr/local/execute.sh
+RUN dos2unix /usr/local/execute.sh
+RUN chmod 777 /opt/jboss/wildfly/bin/standalone.sh && \
+    chmod -R 777 /usr/lib/ && \
+    chmod 777 /usr/lib
 
 RUN chgrp -R 0 $JBOSS_HOME && \
     chmod -R g=u $JBOSS_HOME
-
-RUN chmod -R 777 /usr/lib/
-
-USER 1000
 
 ADD build/libs/web-*.war /opt/jboss/wildfly/standalone/deployments/

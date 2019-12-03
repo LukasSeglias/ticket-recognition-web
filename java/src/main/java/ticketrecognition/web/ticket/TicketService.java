@@ -16,8 +16,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class TicketService {
+
+    private static final Logger LOG = Logger.getLogger(TicketService.class.getName());
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("YYYYMMddHHmmss");
     private static final Random RAND = new Random();
@@ -29,16 +32,21 @@ public class TicketService {
         this.service = service;
     }
 
-    MetadataDto match(InputStream stream) throws IOException {
-        java.nio.file.Path targetPath = Paths.get(System.getProperty("java.io.tmpdir"), randomFileName());
+    MetadataDto match(InputStream stream, String typeOfFile) throws IOException {
+        java.nio.file.Path targetPath = Paths.get(System.getProperty("java.io.tmpdir"), randomFileName() + "." + typeOfFile);
         Files.copy(stream, targetPath, StandardCopyOption.REPLACE_EXISTING);
+        LOG.info("File created: " + targetPath.toAbsolutePath().toString());
         TicketImage ticketImage = new TicketImage(targetPath.toAbsolutePath().toString());
 
+        LOG.info("Do matching");
         Optional<TicketMatch> matching = service.matcher().match(ticketImage);
+        LOG.info("Matching done. Found something: " + matching.isPresent());
 
         MetadataDto dto = new MetadataDto();
         if (matching.isPresent()) {
+            LOG.info("Try to read information");
             Metadata metadata = service.reader().read(matching.get().getTicket(), ticketImage);
+            LOG.info("Finished reading");
             dto.setData(metadata.getTexts());
         }
         return dto;
