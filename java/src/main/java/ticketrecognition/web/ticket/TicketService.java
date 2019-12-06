@@ -51,7 +51,6 @@ public class TicketService {
             LOG.info("Finished reading");
             dto.setData(metadata.getTexts());
             dto.setTemplateKey(ticket.getName());
-            ticket.delete();
         }
         return dto;
     }
