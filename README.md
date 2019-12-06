@@ -26,3 +26,43 @@ Set-NetConnectionProfile -interfacealias "vEthernet (DockerNAT)" -NetworkCategor
 ```
 After that, in the Docker Desktop settings, disable and re-enable shared drives.
 
+# Getting started
+Go to http://jolaya.han-solo.net/
+
+# Feature description
+## Templates
+* Search templates.
+* Edit templates.
+* Create new templates.
+
+## Template Designer
+* Upload template image
+* Draw named text-sections.
+* Edit and move named text-sections.
+
+## Ticketscanner
+* Upload image.
+* Edit scanned information.
+* Create Ticket based on the extracted information.
+
+## Tickets
+* Search tickets.
+* Edit tickets.
+
+## Tours
+* Search tours.
+* Edit tours.
+* Create tour.
+
+## Tourpositions
+* Search tourpositions.
+* Edit tourpositions.
+* Create tourpositions.
+
+## Touroperators
+* Search touroperators.
+* Create touroperator.
+* Edit touroperators.
+
+## Language
+* Change language
