@@ -44,6 +44,15 @@ class AuthService {
         return false;
    }
 
+   public function issuer() {
+       $decoded_token;
+       $success = $this->decodeToken($decoded_token);
+       if ($success) {
+           return $decoded_token->{'iss'};
+       }
+       return '';
+   }
+
    private function decodeToken(&$decoded_token) : bool {
 		if (!isset($_COOKIE['ACCESS_TOKEN'])) {
            error_log("Cookie not set");

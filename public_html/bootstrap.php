@@ -28,6 +28,7 @@ require_once './validation/tour.php';
 require_once './validation/ticket.php';
 require_once './components/navigation/navigation.php';
 require_once './components/messages/messages.php';
+require_once './service/cti-service.php';
 
 function bootstrap($callback) {
 
@@ -54,6 +55,7 @@ function bootstrap($callback) {
 	$tourValidator = new TourValidator();
 	$messageService = new MessageService();
 	$exceptionMapper = new ExceptionMapper();
+	$ctiService = new CtiService($authService);
 	$context = new Context($router, $authService, $databaseService,
 		$messageService,
 		$textDefinitionRepository, 
@@ -72,7 +74,8 @@ function bootstrap($callback) {
 		$ticketRepository,
 		$ticketPositionRepository,
 		$ticketValidator,
-		$exceptionMapper
+		$exceptionMapper,
+        $ctiService
 	);
 	$callback($context);
 }

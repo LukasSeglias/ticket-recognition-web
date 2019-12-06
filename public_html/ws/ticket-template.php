@@ -5,6 +5,9 @@ require_once './service/router.php';
 require_once './json/ticket-template.php';
 require_once './service/ticket-template.php';
 require_once './io/ticket-template.php';
+require_once './model/cti-point.php';
+require_once './model/cti-template.php';
+require_once './model/cti-text.php';
 
 class TicketTemplateResource {
 
@@ -53,6 +56,22 @@ class TicketTemplateResource {
 		return $this->mapper->toJson($template);
 	}
 
+	private function uploadTemplate($uploadedFileName, $entity, $fileExtension) {
+	    $texts = [];
+	    foreach ($entity->textDefinitions() as $textDefinition) {
+	        $topLeft = new CtiPoint($textDefinition->rectangle()->x(), $textDefinition->rectangle()->y());
+	        $bottomX = $topLeft->getX() + $textDefinition->rectangle()->width();
+	        $bottomY = $topLeft->getY() + $textDefinition->rectangle()->height();
+	        $bottomRight = new CtiPoint($bottomX, $bottomY);
+
+	        $text = new CtiText($textDefinition->key(), $topLeft, $bottomRight);
+	        array_push($texts, $text);
+        }
+	    $template = new CtiTemplate($entity->key(), $entity->id() . '.' . $fileExtension, $texts);
+
+        $this->context->ctiService()->uploadTemplate($template, $uploadedFileName, $_COOKIE['ACCESS_TOKEN']);
+    }
+
 	private function create() {
 
 		try {
@@ -67,6 +86,7 @@ class TicketTemplateResource {
 
 			$id = $this->service->create($entity);
 			$entity = $this->findById($id);
+            $this->uploadTemplate($uploadedFile['tmp_name'], $entity, $fileExtension);
 			$this->imageRepository->create($entity, $uploadedFile);
 
 			return $this->mapper->toJson($entity);
@@ -91,8 +111,9 @@ class TicketTemplateResource {
 			$entity = new TicketTemplate($id, $entity->key(), $entity->touroperator(), $entity->textDefinitions(), $fileExtension);
 
 			$this->context->ticketTemplateValidator()->validate($entity);
-			
+
 			$this->service->update($entity);
+            $this->uploadTemplate($uploadedFile['tmp_name'], $entity, $fileExtension);
 			$this->imageRepository->update($entity, $oldEntity, $uploadedFile);
 
 			return $this->mapper->toJson($entity);

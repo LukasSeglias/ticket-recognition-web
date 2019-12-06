@@ -7,6 +7,8 @@ services:
       args:
        PHP_VERSION: ${PHP_VERSION}
        CTI_IMAGE_DIRECTORY: ${CTI_IMAGE_DIRECTORY}
+    extra_hosts:
+      - "${HOST_NAME}:${HOST_DOCKERNAT_IP}"
     networks:
       - backend
     environment:
