@@ -30,14 +30,17 @@ public class TemplateService {
     void create(TemplateDto templateDto) throws IOException {
         String filePath = findFile(templateDto.getFileName());
         LOG.info("File path to train: " + filePath);
-        service.matcher().train(new Ticket(templateDto.getName(), new TicketImage(filePath), map(templateDto.getTexts())));
+        if (filePath != null) {
+            service.matcher().train(new Ticket(templateDto.getName(), new TicketImage(filePath), map(templateDto.getTexts())));
+        } else {
+            LOG.info("File path is null. Nothing trained!");
+        }
     }
 
     String findFile(String fileName) throws IOException {
         return Files.list(Paths.get(tempPath))
                 .filter(file -> {
                     if (Files.isRegularFile(file)) {
-                        LOG.info("is file " + file.toAbsolutePath().toString() + " expected file (" + fileName + ")? ");
                         return file.getFileName().toString().equals(fileName);
                     }
                     return false;

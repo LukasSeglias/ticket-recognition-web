@@ -1,6 +1,7 @@
 package ticketrecognition.web.ticket;
 
 import com.bfh.ticket.Metadata;
+import com.bfh.ticket.Ticket;
 import com.bfh.ticket.TicketImage;
 import com.bfh.ticket.TicketMatch;
 import ticketrecognition.dto.MetadataDto;
@@ -45,9 +46,12 @@ public class TicketService {
         MetadataDto dto = new MetadataDto();
         if (matching.isPresent()) {
             LOG.info("Try to read information");
-            Metadata metadata = service.reader().read(matching.get().getTicket(), ticketImage);
+            Ticket ticket = matching.get().getTicket();
+            Metadata metadata = service.reader().read(ticket, ticketImage);
             LOG.info("Finished reading");
             dto.setData(metadata.getTexts());
+            dto.setTemplateKey(ticket.getName());
+            ticket.delete();
         }
         return dto;
     }
