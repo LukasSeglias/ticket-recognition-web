@@ -9,8 +9,7 @@ public class MatcherService {
     private final Matcher matcher;
 
     public MatcherService() {
-        Cti cti = new Cti();
-        this.matcher = cti.matcher(Algorithms.SIFT.name());
+        this.matcher = new Matcher(Algorithm.SIFT);
     }
 
     public void train(Ticket ticket) {
