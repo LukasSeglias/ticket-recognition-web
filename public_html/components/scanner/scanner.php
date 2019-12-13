@@ -30,15 +30,21 @@ class ScannerPage implements Page {
 
 	private function processView() {
         $results = $this->context->ticketRepository()->find(10);
-		$this->state = new ScannerPageState($results);
+		$this->state = new ScannerPageState($results, NULL, ScannerResult::VIEW);
     }
 
     private function processUpload() {
 		$uploadedFile = $_FILES['image'];
-		var_dump($uploadedFile);
+
+		$ticket = $this->context->scannerService()->match($uploadedFile);
+
+		$result = ScannerResult::FAILURE;
+		if(!is_null($ticket)) {
+			$result = ScannerResult::SUCCESS;
+		}
 
 		$results = $this->context->ticketRepository()->find(10);
-		$this->state = new ScannerPageState($results);
+		$this->state = new ScannerPageState($results, $ticket, $result);
     }
 	
 	public function template() : string {
@@ -52,12 +58,34 @@ class ScannerPage implements Page {
 	}
 }
 
-class ScannerPageState {
-    public $items;
+class ScannerResult {
+	const VIEW = 'view';
+	const SUCCESS = 'success';
+	const FAILURE = 'failure';
+}
 
-    function __construct(array $items) {
-        $this->items = $items;
-    }
+class ScannerPageState {
+	public $items;
+	public $ticket;
+	public $result;
+
+    function __construct(array $items, $ticket, $result) {
+		$this->items = $items;
+		$this->ticket = $ticket;
+		$this->result = $result;
+	}
+	
+	function isView() {
+		return strcmp($this->result, ScannerResult::VIEW) === 0;
+	}
+
+	function isSuccess() {
+		return strcmp($this->result, ScannerResult::SUCCESS) === 0;
+	}
+
+	function isFailure() {
+		return strcmp($this->result, ScannerResult::FAILURE) === 0;
+	}
 }
 
 ?>

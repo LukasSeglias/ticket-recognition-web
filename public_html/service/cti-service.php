@@ -36,23 +36,23 @@ require_once './model/cti-template.php';
                     error_log("Error uploading file!");
                 }
             } catch (GuzzleException $e) {
-                echo $e->getMessage();
                 error_log("guzzle exc");
             }
         }
 
-        public function match($file, $accessToken) {
+        public function match($file, $fileExtension, $accessToken) {
             $response = $this->client()->request('POST',
                 'java/ticket-recognition/rest/tickets/',
                 [
                     'headers' => [
-                        'Authorization' => 'Bearer ' . $accessToken
+                        'Authorization' => 'Bearer ' . $accessToken,
+                        'TypeOfFile' => $fileExtension
                     ],
                     'body' => fopen($file, 'r'),
                 ]);
 
-            if ($response == 200) {
-                $array = $response->json();
+            if ($response->getStatusCode() == 200) {
+                $array = json_decode($response->getBody());
                 var_dump($array);
             }
         }

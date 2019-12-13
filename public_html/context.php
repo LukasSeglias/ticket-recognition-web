@@ -30,6 +30,7 @@ class Context {
 	private $ticketPositionRepository;
 	private $ticketValidator;
 
+	private $scannerService;
 	private $ctiService;
 
 	function __construct($router, $authService, $databaseService, 
@@ -51,6 +52,7 @@ class Context {
 		$ticketPositionRepository,
 		$ticketValidator,
 		$exceptionMapper,
+		$scannerService,
         $ctiService) {
 			
 		$this->router = $router;
@@ -79,6 +81,7 @@ class Context {
         $this->ticketValidator = $ticketValidator;
 
 		$this->exceptionMapper = $exceptionMapper;
+		$this->scannerService = $scannerService;
 		$this->ctiService = $ctiService;
 	}
 
@@ -164,6 +167,10 @@ class Context {
 
     function ticketValidator() {
 	    return $this->ticketValidator;
+    }
+
+	function scannerService() {
+	    return $this->scannerService;
     }
 
     function ctiService() {

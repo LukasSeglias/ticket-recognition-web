@@ -15,13 +15,13 @@ if($path === '/') {
 		return new HomePage($context);
 	});
 
-} elseif($path === '/scanner') {
+} elseif(substr($path, 0, strlen("/scanner")) === "/scanner") {
 
 	if (!$authorizer->verifyToken('scanner')) {
 		error_log("Token not valid");
 		$router->redirect("/");
 	}
-
+	
 	require_once './components/scanner/scanner.php';
 	scannerPage('scanner', function ($context) {
 		return new ScannerPage($context);

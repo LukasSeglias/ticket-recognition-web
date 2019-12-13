@@ -52,12 +52,12 @@ class TicketRepository {
         return $entity;
     }
 
-    public function create($entity) {
+    public function create($ticketTemplateId, $tourId) {
         $statement = $this->databaseService->pdo()->prepare('INSERT INTO ticket (ticket_template_id, tour_id, scan_date) VALUES (:ticket_template_id,:tour_id,:scan_date) RETURNING id');
         $statement->execute([
-            ':ticket_template_id' => $entity->template()->id(),
-            ':tour_id' => $entity->tour()->id(),
-            ':scan_date' => $entity->scanDate()]);
+            ':ticket_template_id' => $ticketTemplateId,
+            ':tour_id' => $tourId,
+            ':scan_date' => time()]);
         if ($row = $statement->fetch()) {
             return $row['id'];
         }
@@ -78,6 +78,11 @@ class TicketRepository {
         $statement->execute([':id' => $id]);
         $statement = $this->databaseService->pdo()->prepare('DELETE FROM ticket WHERE id = :id');
         $statement->execute([':id' => $id]);
+    }
+
+    public function addPosition($ticketId, $description, $code) {
+        $statement = $this->databaseService->pdo()->prepare('INSERT INTO ticket_position (ticket_id, description, code) VALUES (:ticketId,:description,:code)');
+		$statement->execute([':ticketId' => $ticketId, ':description' => $description, ':code' => $code]);
     }
 
     private function map($row) : Ticket {

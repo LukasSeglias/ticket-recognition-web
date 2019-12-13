@@ -47,6 +47,7 @@
 	<main class="my-3">
 		<div class="container">
 
+			{% if state.isSuccess() %}
 			<div class="row">
 				<div class="col-12 vertical-container">
 					<!-- Source: https://github.com/twbs/icons/blob/master/icons/check.svg -->
@@ -57,7 +58,9 @@
 					<h1>{{ "scanner_success"|translated }}</h1>
 				</div>
 			</div>
+			{% endif %}
 
+			{% if state.isFailure() %}
 			<div class="row">
 				<div class="col-12 vertical-container">
 					<!-- Source: https://github.com/twbs/icons/blob/master/icons/x.svg -->
@@ -69,6 +72,7 @@
 					<h1>{{ "scanner_failure"|translated }}</h1>
 				</div>
 			</div>
+			{% endif %}
 
 			<div class="row">
 				<div class="col-12">
