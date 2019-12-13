@@ -49,7 +49,9 @@ public class TicketService {
             Ticket ticket = matching.get().getTicket();
             Metadata metadata = service.reader().read(ticket, ticketImage);
             LOG.info("Finished reading");
-            dto.setData(metadata.getTexts());
+            if (metadata != null) {
+                dto.setData(metadata.getTexts());
+            }
             dto.setTemplateKey(ticket.getName());
         }
         return dto;
