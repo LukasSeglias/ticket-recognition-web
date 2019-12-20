@@ -53,7 +53,8 @@ class TouroperatorDetailPage implements Page {
 
     private function processEdit($id) {
         $this->findById($id); // Check existence
-        $entity = new Touroperator($id, $_POST['name']);
+        $name = strip_tags($_POST['name']);
+        $entity = new Touroperator($id, $name);
 
         try {
             $this->context->touroperatorValidator()->validate($entity);
@@ -68,7 +69,8 @@ class TouroperatorDetailPage implements Page {
     }
 
     private function processCreate() {
-        $entity = new Touroperator(NULL, $_POST['name']);
+        $name = strip_tags($_POST['name']);
+        $entity = new Touroperator(NULL, $name);
 
         try {
             $this->context->touroperatorValidator()->validate($entity);

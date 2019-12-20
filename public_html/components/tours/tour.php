@@ -53,7 +53,9 @@ class TourDetailPage implements Page {
 
     private function processEdit($id) {
         $oldEntity = $this->findById($id); // Check existence
-        $entity = new Tour($id, $_POST['description'], $_POST['code'], $oldEntity->tourpositions());
+        $description = strip_tags($_POST['description']);
+        $code = strip_tags($_POST['code']);
+        $entity = new Tour($id, $description, $code, $oldEntity->tourpositions());
 
         try {
             $this->context->tourValidator()->validate($entity);
@@ -68,7 +70,9 @@ class TourDetailPage implements Page {
     }
 
     private function processCreate() {
-        $entity = new Tour(NULL, $_POST['description'], $_POST['code'], array());
+        $description = strip_tags($_POST['description']);
+        $code = strip_tags($_POST['code']);
+        $entity = new Tour(NULL, $description, $code, array());
 
         try {
             $this->context->tourValidator()->validate($entity);

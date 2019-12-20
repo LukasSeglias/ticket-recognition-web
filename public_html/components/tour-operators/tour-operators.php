@@ -15,7 +15,8 @@ class TouroperatorSearchPage implements Page {
 
 	public function update() {
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			$filter = new TouroperatorSearchPageFilter($_POST['name']);
+			$name = strip_tags($_POST['name']);
+			$filter = new TouroperatorSearchPageFilter($name);
 			$results = $this->context->touroperatorRepository()->findBy($filter->name);
 			$this->state = new TouroperatorSearchPageState($results, $filter);
 		} else {
