@@ -68,24 +68,24 @@ class TicketTemplateJsonMapper {
 	
 	private function ticketTemplateFromJson($jsonObj) {
 		return new TicketTemplate(
-			$jsonObj->id, $jsonObj->key, $this->tourOperatorFromJson($jsonObj->touroperator), 
+			$jsonObj->id, strip_tags($jsonObj->key), $this->tourOperatorFromJson($jsonObj->touroperator), 
 			$this->mapList($jsonObj->textDefinitions, function($item) use(&$jsonObj) {
 				return $this->textDefinitionFromJson($jsonObj->id, $item);
 			}),
-			$jsonObj->imageFilename
+			strip_tags($jsonObj->imageFilename)
 		);
 	}
 
 	private function textDefinitionFromJson($ticketTemplateId, $jsonObj) {
 		$rectangle = $jsonObj->rectangle;
 		return new TextDefinition(
-			$jsonObj->id, $jsonObj->key, $ticketTemplateId, $jsonObj->description,
+			$jsonObj->id, strip_tags($jsonObj->key), $ticketTemplateId, strip_tags($jsonObj->description),
 			new Rectangle($rectangle->x, $rectangle->y, $rectangle->width, $rectangle->height)
 		);
 	}
 
 	private function tourOperatorFromJson($jsonObj) {
-		return new TourOperator($jsonObj->id, $jsonObj->name);
+		return new TourOperator($jsonObj->id, strip_tags($jsonObj->name));
 	}
 
 	private function mapList(array $list, $mappingFunction) {

@@ -19,7 +19,8 @@ class TourPositionPage implements Page {
                 $this->context->router()->redirect("/admin/tours");
             }
 
-            $filter = new TourPositionPageFilter($_POST['positioncode']);
+            $positioncode = strip_tags($_POST['positioncode']);
+            $filter = new TourPositionPageFilter($positioncode);
             $results = $this->loadResults($filter, $id);
             $this->state = new TourPositionPageState($results, $filter, $id);
         } else {

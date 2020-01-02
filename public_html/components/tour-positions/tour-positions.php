@@ -15,7 +15,9 @@ class TourpositionSearchPage implements Page {
 
 	public function update() {
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			$filter = new TourpositionSearchPageFilter($_POST['description'], $_POST['code']);
+			$description = strip_tags($_POST['description']);
+			$code = strip_tags($_POST['code']);
+			$filter = new TourpositionSearchPageFilter($description, $code);
 			$results = $this->context->tourPositionRepository()->findBy($filter->description, $filter->code);
 			$this->state = new TourpositionSearchPageState($results, $filter);
 		} else {

@@ -19,11 +19,13 @@ class TicketPositionPage implements Page {
                 $this->context->router()->redirect("/admin/tickets");
             }
 
-            $filter = new TicketPositionPageFilter($_POST['positioncode']);
+            $positioncode = strip_tags($_POST['positioncode']);
+            $filter = new TicketPositionPageFilter($positioncode);
             $results = $this->loadResults($filter, $id);
             $this->state = new TicketPositionPageState($results, $filter, $id);
         } else {
-            $filter = new TicketPositionPageFilter($_POST['positioncode']);
+            $positioncode = strip_tags($_POST['positioncode']);
+            $filter = new TicketPositionPageFilter($positioncode);
             $results = $this->loadResults($filter, $id);
             $this->state = new TicketPositionPageState($results, new TicketPositionPageFilter(NULL), $id);
         }

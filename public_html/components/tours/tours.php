@@ -14,7 +14,9 @@ class TourSearchPage implements Page {
 
 	public function update() {
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			$filter = new TourSearchPageFilter($_POST['code'], $_POST['description']);
+			$description = strip_tags($_POST['description']);
+        	$code = strip_tags($_POST['code']);
+			$filter = new TourSearchPageFilter($code, $description);
 			$results = $this->context->tourRepository()->findBy($filter->code, $filter->description);
 			$this->state = new TourSearchPageState($results, $filter);
 		} else {

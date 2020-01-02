@@ -14,7 +14,8 @@ class TicketSearchPage implements Page {
 
 	public function update() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $filter = new TicketSearchPageFilter($_POST['tourcode']);
+            $tourcode = strip_tags($_POST['tourcode']);
+            $filter = new TicketSearchPageFilter($tourcode);
             $results = $this->context->ticketRepository()->findBy($filter->code);
             $this->state = new TicketSearchPageState($results, $filter);
         } else {

@@ -75,7 +75,9 @@ class TicketDetailPage implements Page {
     }
 
     private function processCreate() {
-        $entity = new TourPosition(NULL, $_POST['description'], $_POST['code']);
+        $description = strip_tags($_POST['description']);
+        $code = strip_tags($_POST['code']);
+        $entity = new TourPosition(NULL, $description, $code);
 
         try {
             $this->context->ticketValidator()->validate($entity);
