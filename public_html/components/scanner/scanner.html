@@ -74,6 +74,10 @@
 			</div>
 			{% endif %}
 
+			{% if state.isSuccess() %}
+			{{ component(ticket_form) }}
+			{% endif %}
+
 			<div class="row">
 				<div class="col-12">
 					<h1>{{ "scanner_subtitle"|translated }}</h1>
@@ -103,7 +107,7 @@
 						
 						<ul class="list-group list-group-flush">
 							{% for item in state.items %}
-								<a href="ticket/{{ item.id() }}" class="list-group-item list-group-item-action">
+								<div class="list-group-item list-group-item-action">
 									<div class="row">
 										<div class="col-2">
 											{{ item.tour().code() }}
@@ -115,7 +119,7 @@
 											{{ item.scanDate() | date('Y-m-d H:i:s') }}
 										</div>
 									</div>
-								</a>
+								</div>
 							{% endfor %}
 						</ul>
 					</div>

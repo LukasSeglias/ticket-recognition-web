@@ -19,8 +19,6 @@ class TicketValidator {
         $valid = $context->nonNull($entity->tour(), Texts::invalid_value);
         $valid = $valid && $context->nonNull($entity->scanDate(), Texts::invalid_value);
         $valid = $valid && $context->isDate($entity->scanDate(), Texts::invalid_value);
-        
-        // TODO: validate text-definitions
 
         if($context->hasErrors()) {
             throw new ValidationException($context->errors());

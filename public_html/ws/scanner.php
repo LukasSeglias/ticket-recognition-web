@@ -33,7 +33,7 @@ class ScannerResource {
 		try {
 			$uploadedFile = $_FILES['templateImage'];
 
-			$result = $this->service->create();
+			$result = $this->service->match($uploadedFile);
 
 			return $this->mapper->toJson($result);
 

@@ -22,19 +22,16 @@ class ScannerService {
 		$fileExtension = pathinfo($file['name'])['extension'];
 		$result = $this->ctiService->match($file['tmp_name'], $fileExtension, $_COOKIE['ACCESS_TOKEN']);
 		
-		echo "TOURCODE: ".$result->{'data'}->{'tourcode'};
 		if(!isset($result->{'data'}) || !isset($result->{'data'}->{'tourcode'}) || !isset($result->{'templateKey'})) {
 			return NULL;
 		}
 		$tourcode = $result->{'data'}->{'tourcode'};
 		$templateKey = $result->{'templateKey'};
 
-		echo "Tourcode: " . $tourcode . " Templatekey: " . $templateKey;
-
 		$tours = $this->tourRepository->findBy($tourcode, NULL);
 		$templates = $this->ticketTemplateService->findBy($templateKey);
 
-		if(empty($tour) || empty($template)) {
+		if(empty($tours) || empty($templates)) {
 			return NULL;
 		}
 		$tour = $tours[0];
@@ -43,8 +40,11 @@ class ScannerService {
 		$ticketTemplateId = $template->id();
 		$tourId = $tour->id();
 		$ticketId = $this->ticketRepository->create($ticketTemplateId, $tourId);
+		foreach($tour->tourpositions() as $tourposition) {
+			$this->ticketRepository->addPosition($ticketId, $tourposition->description(), $tourposition->code());
+		}
 
-		return $this->ticketRepository->findById($ticketId);
+		return $this->ticketRepository->get($ticketId);
 	}
 }
 
