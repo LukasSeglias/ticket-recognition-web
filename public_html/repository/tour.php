@@ -15,7 +15,7 @@ class TourRepository {
 
 	public function findBy($code, $description) {
         $builder = new Tour\QueryBuilder;
-        $query = $builder->setCode($code)
+        $query = $builder->setCode((int)$code)
                     ->setDescription($description)
 					->build();
         $statement = $this->databaseService->pdo()->prepare($query);
