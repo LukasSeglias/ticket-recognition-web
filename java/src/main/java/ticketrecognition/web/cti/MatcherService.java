@@ -3,6 +3,9 @@ package ticketrecognition.web.cti;
 import com.bfh.ticket.*;
 import com.bfh.ticket.exception.CtiException;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -36,10 +39,12 @@ public class MatcherService {
         }
 
         try {
-            matcher.untrain(currentTemplates.get(templateName));
+            Ticket ticket = currentTemplates.get(templateName);
+            Files.delete(Paths.get(ticket.getImage().getImagePath()));
+            matcher.untrain(ticket);
             currentTemplates.remove(templateName);
             LOG.info("Untrained template: " + templateName);
-        } catch(CtiException exc) {
+        } catch(CtiException | IOException exc) {
             LOG.severe(exc.getMessage());
         }
     }
