@@ -37,6 +37,16 @@ public class TemplateService {
         }
     }
 
+    void delete(String templateKey) {
+        if (templateKey == null) {
+            LOG.warning("No template key given");
+            return;
+        }
+
+        LOG.info("Delete template key: " + templateKey);
+        service.matcher().untrain(templateKey);
+    }
+
     String findFile(String fileName) throws IOException {
         return Files.list(Paths.get(tempPath))
                 .filter(file -> {

@@ -5,9 +5,7 @@ import ticketrecognition.dto.TemplateDto;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 
@@ -21,6 +19,12 @@ public class TemplateResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public void create(TemplateDto templateDto) throws IOException {
         service.create(templateDto);
+    }
+
+    @DELETE
+    @Path("/{templateKey}")
+    public void delete(@PathParam("templateKey") String templateKey) {
+        service.delete(templateKey);
     }
 
     @Inject
