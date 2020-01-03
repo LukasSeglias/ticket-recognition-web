@@ -53,7 +53,7 @@ require_once './model/cti-template.php';
 
             if ($response->getStatusCode() == 200) {
                 $array = json_decode($response->getBody());
-                var_dump($array);
+                return $array;
             }
         }
 

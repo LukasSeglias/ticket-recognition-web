@@ -15,7 +15,8 @@ class DesignSearchPage implements Page {
 	public function update() {
 		
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			$filter = new DesignSearchPageFilter($_POST['key']);
+			$key = strip_tags($_POST['key']);
+			$filter = new DesignSearchPageFilter($key);
 			$results = $this->context->ticketTemplateService()->findBy($filter->key);
 			$this->state = new DesignSearchPageState($results, $filter);
 		} else {

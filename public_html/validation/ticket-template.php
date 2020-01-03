@@ -21,8 +21,6 @@ class TicketTemplateValidator {
 		$keyValid = $valid && $context->nonEmpty($entity->key(), Texts::tickettemplate_key_invalid);
 		$keyValid = $keyValid && $context->maxLength($entity->key(), 50, Texts::tickettemplate_key_invalid);
 
-		// TODO: validate text-definitions
-
 		if($context->hasErrors()) {
 			throw new ValidationException($context->errors());
 		}

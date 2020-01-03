@@ -2,11 +2,13 @@
 namespace CTI;
 
 require_once './components/page.php';
+require_once './components/scanner/ticket_view.php';
 
 class ScannerPage implements Page {
 	
 	private $context;
 	private $state;
+	private $form;
 	
 	function __construct($context) {
 		$this->context = $context;
@@ -37,6 +39,8 @@ class ScannerPage implements Page {
 		$uploadedFile = $_FILES['image'];
 
 		$ticket = $this->context->scannerService()->match($uploadedFile);
+		$templates = $this->context->ticketTemplateRepository()->findAll();
+	    $tours = $this->context->tourRepository()->findAll();
 
 		$result = ScannerResult::FAILURE;
 		if(!is_null($ticket)) {
@@ -45,6 +49,7 @@ class ScannerPage implements Page {
 
 		$results = $this->context->ticketRepository()->find(10);
 		$this->state = new ScannerPageState($results, $ticket, $result);
+		$this->form = new TicketViewComponent($ticket, $templates, $tours);
     }
 	
 	public function template() : string {
@@ -53,7 +58,8 @@ class ScannerPage implements Page {
 	
 	public function context() : array {
 		return [
-			'state' => $this->state
+			'state' => $this->state,
+			'ticket_form' => $this->form
 		];
 	}
 }

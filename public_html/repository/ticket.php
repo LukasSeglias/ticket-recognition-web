@@ -53,11 +53,10 @@ class TicketRepository {
     }
 
     public function create($ticketTemplateId, $tourId) {
-        $statement = $this->databaseService->pdo()->prepare('INSERT INTO ticket (ticket_template_id, tour_id, scan_date) VALUES (:ticket_template_id,:tour_id,:scan_date) RETURNING id');
+        $statement = $this->databaseService->pdo()->prepare('INSERT INTO ticket (ticket_template_id, tour_id, scan_date) VALUES (:ticket_template_id,:tour_id, NOW()) RETURNING id');
         $statement->execute([
             ':ticket_template_id' => $ticketTemplateId,
-            ':tour_id' => $tourId,
-            ':scan_date' => time()]);
+            ':tour_id' => $tourId]);
         if ($row = $statement->fetch()) {
             return $row['id'];
         }
