@@ -15,7 +15,8 @@ class TourRepository {
 
 	public function findBy($code, $description) {
         $builder = new Tour\QueryBuilder;
-        $query = $builder->setCode((int)$code)
+        $code = is_numeric($code) ? $code : NULL;
+        $query = $builder->setCode($code)
                     ->setDescription($description)
 					->build();
         $statement = $this->databaseService->pdo()->prepare($query);
@@ -23,7 +24,7 @@ class TourRepository {
         $results = array();
 		while($row = $statement->fetch()) {
 			$results[] = $this->map($row);
-		}
+        }
 		return $results;
     }
 	
