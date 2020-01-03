@@ -132,6 +132,7 @@ class TicketTemplateResource {
 
 			$this->service->delete($id);
 			$this->imageRepository->delete($entity);
+			$this->context->ctiService()->deleteTemplate($entity->key(), $_COOKIE['ACCESS_TOKEN']);
 
         } catch(\Exception $ex) {
 			$messages = $this->context->exceptionMapper()->getMessages($ex);

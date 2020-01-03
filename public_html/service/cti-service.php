@@ -40,6 +40,20 @@ require_once './model/cti-template.php';
             }
         }
 
+        public function deleteTemplate($templateKey, $accessToken) {
+            try {
+                $response = $this->client()->request('DELETE',
+                        'java/ticket-recognition/rest/templates/'.$templateKey,
+                        [
+                            'headers' => [
+                                'Authorization' => 'Bearer ' . $accessToken
+                            ]
+                        ]);
+            } catch (GuzzleException $e) {
+                error_log("guzzle exc");
+            }
+        }
+
         public function match($file, $fileExtension, $accessToken) {
             $response = $this->client()->request('POST',
                 'java/ticket-recognition/rest/tickets/',
